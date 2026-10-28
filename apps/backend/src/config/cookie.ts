@@ -7,19 +7,18 @@ import type { CookieOptions } from "express";
 export const ACCESS_TOKEN_COOKIE = "access_token";
 export const REFRESH_TOKEN_COOKIE = "refresh_token";
 
-export const accessTokenCookieOptions: CookieOptions = {
+const sessionCookieOptions = (): CookieOptions => ({
   httpOnly: true,
   secure: env.cookieSecure,
-  sameSite: "none",
+  // SameSite=None requires Secure. Local HTTP uses COOKIE_SECURE=false, so Lax.
+  // Production (COOKIE_SECURE=true) keeps None for Vercel ↔ Render until Plan 5.
+  sameSite: env.cookieSecure ? "none" : "lax",
   path: "/",
-};
+});
 
-export const refreshTokenCookieOptions: CookieOptions = {
-  httpOnly: true,
-  secure: env.cookieSecure,
-  sameSite: "none",
-  path: "/",
-};
+export const accessTokenCookieOptions: CookieOptions = sessionCookieOptions();
+
+export const refreshTokenCookieOptions: CookieOptions = sessionCookieOptions();
 
 export const getAccessTokenMaxAge = (): number => {
   return parseDurationToMs(env.jwtExpiresIn);
