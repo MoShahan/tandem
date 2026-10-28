@@ -60,4 +60,22 @@ describe("SessionExpiredHandler", () => {
       state: { from: "/" },
     });
   });
+
+  it("does not send public pages to login after an anonymous /me 401", async () => {
+    mockNavigate.mockReset();
+    onSessionExpired.mockClear();
+
+    const originalPath = window.location.pathname;
+    window.history.replaceState({}, "", "/guide");
+
+    renderWithProviders(<SessionExpiredHandler />, {
+      route: "/guide",
+    });
+
+    const handler = onSessionExpired.mock.calls[0]?.[0];
+    await handler?.();
+
+    expect(mockNavigate).not.toHaveBeenCalled();
+    window.history.replaceState({}, "", originalPath);
+  });
 });
