@@ -41,7 +41,7 @@ docs/assets/      Screenshots and other documentation assets
 
 ## Prerequisites
 
-- **Node.js** 20 or later
+- **Node.js** 22 or later
 - **Docker Desktop** (for PostgreSQL)
 
 ## Installation Steps
@@ -64,7 +64,7 @@ npm run setup
 | -------------------------- | -------------------------------------------- | ------------------------------------------------------ |
 | `PORT`                     | API server port                              | `3000`                                                 |
 | `DATABASE_URL`             | PostgreSQL connection string                 | `postgresql://tandem:tandem@localhost:5432/tandem`     |
-| `JWT_SECRET`               | Secret used to sign access tokens            | `change-me`                                            |
+| `JWT_SECRET`               | Secret used to sign access tokens            | `change-me` locally. Production refuses to start if this is still `change-me`. |
 | `JWT_EXPIRES_IN`           | Access token lifetime                        | `1d`                                                   |
 | `REFRESH_TOKEN_EXPIRES_IN` | Refresh token lifetime                       | `7d`                                                   |
 | `FRONTEND_URL`             | Allowed frontend origin for CORS and cookies | `http://localhost:5173`                                |
@@ -79,7 +79,11 @@ For local HTTP development (`http://localhost:5173`), set `COOKIE_SECURE=false` 
 | -------------- | -------------------- | ----------------------- |
 | `VITE_API_URL` | Backend API base URL | `http://localhost:3000` |
 
+`VITE_API_URL` is baked into the SPA at **build** time. On Vercel, set it on **Production** and **Preview** (not Development) **before** the build. Changing the API host later requires a new frontend deploy.
+
 Copy the `.env.example` files to `.env` in each app directory and adjust values as needed.
+
+Vercel: leave **Root Directory** empty (repo root). `vercel.json` runs `npm ci` here so `packages/shared` and the Vite alias resolve, builds `apps/frontend`, and rewrites unknown paths to `index.html` so `/login` and `/leads/:id` do not 404 on refresh.
 
 ## Running the Application
 
@@ -96,9 +100,27 @@ This starts PostgreSQL (if not already running), the API, and the web app togeth
 - API: [http://localhost:3000](http://localhost:3000)
 - Frontend: [http://localhost:5173](http://localhost:5173)
 
-Production frontend: [https://tandemcrm.vercel.app](https://tandemcrm.vercel.app)
-
 Press **Ctrl+C** to stop the API and frontend. PostgreSQL keeps running in the background until you run `npm run db:down`.
+
+## Production hosting
+
+Browser → **Vercel** (SPA) → **Render** (Express API) → **Neon** (Postgres). Local Docker Postgres is not used in production.
+
+| Piece | Host | Project / service | Public URL |
+| ----- | ---- | ----------------- | ---------- |
+| Frontend | [Vercel](https://vercel.com) | `tandemcrm` | [https://tandemcrm.vercel.app](https://tandemcrm.vercel.app) |
+| Backend | [Render](https://render.com) | Project `tandem`, web service `tandem-api` | `https://tandem-api.onrender.com` *(placeholder until Plan 3 deploy)* |
+| Database | [Neon](https://neon.tech) | Project `tandem`, Postgres 16 | No public URL. Only the API holds `DATABASE_URL` / `DIRECT_URL` (pooled + direct, `sslmode=require`) |
+
+How they connect:
+
+- Vercel `VITE_API_URL` = Render origin (baked in at frontend build)
+- Render `FRONTEND_URL` = `https://tandemcrm.vercel.app` (CORS + cookies)
+- Render `DATABASE_URL` = Neon pooled string; `DIRECT_URL` = Neon direct string for migrations
+
+Health (after the API is live): `GET https://tandem-api.onrender.com/health`
+
+Do not put Neon connection strings, `JWT_SECRET`, or Render/Vercel tokens in this file.
 
 ### Other useful commands
 
@@ -108,7 +130,8 @@ Press **Ctrl+C** to stop the API and frontend. PostgreSQL keeps running in the b
 | `npm run db:up`       | Start PostgreSQL                                       |
 | `npm run db:down`     | Stop PostgreSQL                                        |
 | `npm run db:ps`       | Check PostgreSQL status                                |
-| `npm run db:migrate`  | Run database migrations                                |
+| `npm run db:migrate`  | Run database migrations (dev)                          |
+| `npm run db:migrate:deploy` | Apply migrations non-interactively (production)  |
 | `npm run db:generate` | Regenerate Prisma client from schema                   |
 | `npm run db:seed`     | Seed development data                                  |
 | `npm run db:studio`   | Open Prisma Studio                                     |
