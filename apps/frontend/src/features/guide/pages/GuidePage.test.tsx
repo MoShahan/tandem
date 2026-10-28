@@ -59,6 +59,13 @@ describe("GuidePage", () => {
     expect(
       screen.getByText(/person at the front desk or site office/i),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "A day in the life" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Capture a walk-in")).toBeInTheDocument();
+    expect(
+      screen.getByText(/she cannot create a lead of her own/i),
+    ).toBeInTheDocument();
     expect(screen.getAllByText("Priya Shah").length).toBeGreaterThan(0);
     expect(
       screen.getByLabelText(/67 percent win rate/i),

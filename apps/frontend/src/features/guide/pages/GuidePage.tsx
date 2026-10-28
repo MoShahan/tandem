@@ -13,6 +13,7 @@ import {
   GuideRoleProfiles,
 } from "../components/GuideRoleProfiles";
 import { GuideRolesTable } from "../components/GuideRolesTable";
+import { GuideDayInTheLife } from "../components/GuideDayInTheLife";
 import { GuideTeamTree } from "../components/GuideTeamTree";
 import {
   GuideDashboardScopes,
@@ -261,6 +262,21 @@ export const GuidePage = () => {
             </p>
           </Prose>
           <GuideCustomRoleExamples />
+        </section>
+
+        <section className="space-y-4" aria-labelledby="a-day-in-the-life">
+          <SectionHeading id="a-day-in-the-life">
+            A day in the life
+          </SectionHeading>
+          <Prose>
+            <p>
+              Roles are easier to remember as a morning on the sales floor.
+              Kavya is the <strong>team leader</strong>. Asha is the{" "}
+              <strong>executive</strong> — the salesperson, not a CEO. They
+              share Priya Shah as a walk-in. They do not share the same buttons.
+            </p>
+          </Prose>
+          <GuideDayInTheLife />
         </section>
 
         <section className="space-y-4" aria-labelledby="modules">

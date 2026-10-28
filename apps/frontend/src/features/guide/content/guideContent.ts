@@ -9,6 +9,7 @@ export const GUIDE_SECTIONS = [
   { id: "activities", label: "Activities" },
   { id: "teams", label: "Teams" },
   { id: "roles", label: "Roles" },
+  { id: "a-day-in-the-life", label: "A day in the life" },
   { id: "modules", label: "Modules" },
   { id: "notifications-and-audit", label: "Notifications vs audit" },
   { id: "dashboards", label: "Dashboards" },
@@ -263,5 +264,83 @@ export const CUSTOM_ROLE_EXAMPLES: GuideRoleProfile[] = [
       "Be scoped to a single building by the permission system today",
       "Replace a real project-management app",
     ],
+  },
+];
+
+export type GuideDayStep = {
+  time: string;
+  title: string;
+  body: string;
+};
+
+export type GuideDayInTheLife = {
+  id: string;
+  role: string;
+  person: string;
+  setting: string;
+  steps: GuideDayStep[];
+  limit: string;
+};
+
+export const DAY_IN_THE_LIFE: GuideDayInTheLife[] = [
+  {
+    id: "team-leader",
+    role: "Team leader",
+    person: "Kavya",
+    setting: "North site team",
+    steps: [
+      {
+        time: "9:00",
+        title: "Check the team board",
+        body: "Kavya opens the team dashboard. Three site visits are still “scheduled,” with no notes since Monday. That is her cue to chase the executives, not to call every customer herself.",
+      },
+      {
+        time: "9:15",
+        title: "Capture a walk-in",
+        body: "A couple stops at the site office. Kavya creates Priya Shah as a New lead for North site. Priya sits on the team pile, unassigned.",
+      },
+      {
+        time: "9:20",
+        title: "Hand the work to someone",
+        body: "She assigns Priya to Asha. Asha’s bell lights up. Kavya can still see the lead; Asha now owns the follow-up.",
+      },
+      {
+        time: "16:00",
+        title: "Keep the roster tidy",
+        body: "On My team she adds a new executive who joined this week. She cannot see other teams’ leads or hire for the whole company.",
+      },
+    ],
+    limit:
+      "If Kavya calls a customer herself, she cannot log that activity unless an org admin grants it. Team leaders create and assign; executives keep the diary.",
+  },
+  {
+    id: "executive",
+    role: "Executive",
+    person: "Asha",
+    setting: "Salesperson on North site",
+    steps: [
+      {
+        time: "9:25",
+        title: "See what is on her plate",
+        body: "Asha opens My dashboard, then Leads. Priya Shah is new and assigned to her. Rohan’s leads are hidden. She cannot create a lead of her own.",
+      },
+      {
+        time: "9:30",
+        title: "Call and write it down",
+        body: "She phones Priya, logs a Call activity, and moves the status to Contacted. That diary entry is how the rest of the team knows the follow-up happened.",
+      },
+      {
+        time: "11:00",
+        title: "Book the visit",
+        body: "Priya agrees to see the site on Saturday. Asha sets Visit scheduled and leaves a note with the time. The team dashboard will pick this up for Kavya.",
+      },
+      {
+        time: "14:00",
+        title: "Stay in her lane",
+        body: "A second couple walks in. Asha cannot add them. She tells Kavya, who creates the lead and may assign it to Asha or to Rohan.",
+      },
+    ],
+    limit:
+      "Executives work assigned leads, log activities, and close or lose deals. Intake and assignment stay with the team leader.",
   },
 ];
