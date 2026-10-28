@@ -2,6 +2,10 @@
 
 A multi-tenant sales CRM / Sales OS I built as a personal full-stack learning project.
 
+**Use it:** [https://tandemcrm.vercel.app](https://tandemcrm.vercel.app) · [How Tandem works](https://tandemcrm.vercel.app/guide) (no login) · [API health](https://tandem-api-4eal.onrender.com/health)
+
+Sample login (same as local seed): `tandem.admin@yopmail.com` / `Admin@123`
+
 ## Project Overview
 
 Tandem is a **multi-tenant sales platform** where each organization (tenant) gets isolated users, teams, roles, leads, and dashboards. A **platform** layer above tenants handles cross-organization administration. User identity is global (one email per person); org access is modeled via `organization_members` so the same user can belong to multiple organizations in the future. See [Multi-Org Readiness](docs/architecture.md#multi-org-readiness).
@@ -105,7 +109,7 @@ Press **Ctrl+C** to stop the API and frontend. PostgreSQL keeps running in the b
 
 ## Production hosting
 
-Browser → **Vercel** (SPA) → **Render** (Express API) → **Neon** (Postgres). Local Docker Postgres is not used in production.
+Live app and health links are at the **top** of this file. Hosting: Browser → **Vercel** (SPA) → **Render** (Express API) → **Neon** (Postgres). Local Docker Postgres is not used in production.
 
 | Piece | Host | Project / service | Public URL |
 | ----- | ---- | ----------------- | ---------- |
