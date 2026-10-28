@@ -171,7 +171,7 @@ export const CreatePlatformAdminDialog = ({
                   <FormControl>
                     <Input
                       type="email"
-                      placeholder="admin@hilite.com"
+                      placeholder="admin@tandem.com"
                       autoComplete="off"
                       {...field}
                     />

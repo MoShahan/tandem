@@ -96,6 +96,8 @@ This starts PostgreSQL (if not already running), the API, and the web app togeth
 - API: [http://localhost:3000](http://localhost:3000)
 - Frontend: [http://localhost:5173](http://localhost:5173)
 
+Production frontend: [https://tandemcrm.vercel.app](https://tandemcrm.vercel.app)
+
 Press **Ctrl+C** to stop the API and frontend. PostgreSQL keeps running in the background until you run `npm run db:down`.
 
 ### Other useful commands
@@ -113,12 +115,17 @@ Press **Ctrl+C** to stop the API and frontend. PostgreSQL keeps running in the b
 
 ### Seed credentials (development)
 
-After running `npm run db:seed`, these users are available for auth testing:
+After running `npm run db:seed`, these users are available for auth testing. Inboxes are at [yopmail.com](https://yopmail.com).
 
-| Email                      | Role                        | Password        |
-| -------------------------- | --------------------------- | --------------- |
-| `admin@hilite.com`         | Platform Admin              | `Admin@123`     |
-| `admin@hilitebuilders.com` | Org Admin (HiLite Builders) | `HBuilders@123` |
+| Email | Role | Password |
+| ----- | ---- | -------- |
+| `tandem.admin@yopmail.com` | Platform Admin | `Admin@123` |
+| `tandem.oracle@yopmail.com` | Platform Admin | `Tandem@123` |
+| `wayne@yopmail.com` | Org Admin (Wayne Enterprises) | `Wayne@123` |
+| `daggett@yopmail.com` | Org Admin (Daggett Industries) | `Daggett@123` |
+| `ace@yopmail.com` | Org Admin (Ace Chemicals) | `Ace@123` |
+| `janus@yopmail.com` | Org Admin (Janus Cosmetics) | `Janus@123` |
+| `lexcorp@yopmail.com` | Org Admin (LexCorp) | `Lex@123` |
 
 ## Theme
 

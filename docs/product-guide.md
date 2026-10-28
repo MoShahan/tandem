@@ -164,15 +164,14 @@ There are **three ways** a platform admin account can exist:
 
 #### 1. Database seed (development)
 
-Running `npm run db:seed` creates the initial platform admin:
+Running `npm run db:seed` creates two platform admins. Open their inboxes at [yopmail.com](https://yopmail.com).
 
-| Field    | Value              |
-| -------- | ------------------ |
-| Email    | `admin@hilite.com` |
-| Password | `Admin@123`        |
-| Name     | Platform Admin     |
+| Email | Name | Password |
+| ----- | ---- | -------- |
+| `tandem.admin@yopmail.com` | Platform Admin | `Admin@123` |
+| `tandem.oracle@yopmail.com` | Oracle | `Tandem@123` |
 
-This is intended for local development and demos only.
+This is intended for local development and demos only. Org admin accounts from the same seed are listed in [Development seed accounts](#19-development-seed-accounts).
 
 #### 2. Another platform admin creates them (production path)
 
@@ -1194,12 +1193,17 @@ Items below are **not implemented** in the MVP but are documented as evolution p
 
 After `npm run db:seed`:
 
-| Email                      | Role           | Password        | Scope               |
-| -------------------------- | -------------- | --------------- | ------------------- |
-| `admin@hilite.com`         | Platform Admin | `Admin@123`     | Platform            |
-| `admin@hilitebuilders.com` | Org Admin      | `HBuilders@123` | HiLite Builders org |
+| Email | Role | Password | Scope |
+| ----- | ---- | -------- | ----- |
+| `tandem.admin@yopmail.com` | Platform Admin | `Admin@123` | Platform |
+| `tandem.oracle@yopmail.com` | Platform Admin | `Tandem@123` | Platform |
+| `wayne@yopmail.com` | Org Admin | `Wayne@123` | Wayne Enterprises (`wayne-enterprises`) |
+| `daggett@yopmail.com` | Org Admin | `Daggett@123` | Daggett Industries (`daggett-industries`) |
+| `ace@yopmail.com` | Org Admin | `Ace@123` | Ace Chemicals (`ace-chemicals`) |
+| `janus@yopmail.com` | Org Admin | `Janus@123` | Janus Cosmetics (`janus-cosmetics`) |
+| `lexcorp@yopmail.com` | Org Admin | `Lex@123` | LexCorp (`lexcorp`) |
 
-The seed also creates sample organization **HiLite Builders** (`hilite-builders`) with default roles and all modules enabled.
+The seed creates those five organizations with default roles and all modules enabled. It does not create teams, executives, or leads. All seed inboxes are `@yopmail.com`.
 
 ---
 

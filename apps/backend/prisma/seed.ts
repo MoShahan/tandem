@@ -19,8 +19,8 @@ const PLATFORM_ADMINS = [
     password: "Admin@123",
   },
   {
-    email: "tandem.admin2@yopmail.com",
-    name: "Platform Admin 2",
+    email: "tandem.oracle@yopmail.com",
+    name: "Oracle",
     password: "Tandem@123",
   },
 ] as const;
