@@ -13,7 +13,7 @@ import {
   selectHasPermission,
 } from "@/features/auth/authSelectors";
 import { rolesService } from "@/features/roles/rolesService";
-import { ApiClientError } from "@/lib/api-client";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { PAGE_SIZE_OPTIONS, TABLE_SKELETON_ROW_COUNT } from "@/lib/pagination";
 
 import { AddTeamMemberDialog } from "../components/AddTeamMemberDialog";
@@ -62,11 +62,7 @@ export const MyTeamPage = () => {
         setRoles(result.roles.map((role) => ({ id: role.id, name: role.name })));
       } catch (error) {
         setRoles([]);
-        if (error instanceof ApiClientError) {
-          toast.error(error.message);
-        } else {
-          toast.error("Failed to load roles");
-        }
+        toast.error(getApiErrorMessage(error, "Failed to load roles"));
       }
     };
 

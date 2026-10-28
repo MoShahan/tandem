@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { selectAuthUser } from "@/features/auth/authSelectors";
 import { fetchMe } from "@/features/auth/authSlice";
-import { ApiClientError } from "@/lib/api-client";
+import { getApiErrorDetails, getApiErrorMessage } from "@/lib/apiError";
 
 import { accountService } from "../accountService";
 
@@ -120,13 +120,8 @@ export const EditProfileDialog = ({
       toast.success("Profile updated");
       handleOpenChange(false);
     } catch (error) {
-      if (error instanceof ApiClientError) {
-        applyApiFieldErrors(error.details);
-        toast.error(error.message);
-        return;
-      }
-
-      toast.error("Failed to update profile");
+      applyApiFieldErrors(getApiErrorDetails(error));
+      toast.error(getApiErrorMessage(error, "Failed to update profile"));
     }
   };
 

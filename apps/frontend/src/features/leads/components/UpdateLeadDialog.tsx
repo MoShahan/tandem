@@ -22,22 +22,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { getApiErrorDetails, getApiErrorMessage } from "@/lib/apiError";
 
 import { updateLeadSchema, type UpdateLeadFormValues } from "../leadFormSchema";
 import { updateLead } from "../leadsSlice";
 
 import type { Lead } from "../leadsTypes";
-
-type ApiRejection = {
-  message: string;
-  details?: { field?: string; message: string }[];
-};
-
-const isApiRejection = (value: unknown): value is ApiRejection =>
-  typeof value === "object" &&
-  value !== null &&
-  "message" in value &&
-  typeof value.message === "string";
 
 type UpdateLeadDialogProps = {
   lead: Lead | null;
@@ -99,18 +89,14 @@ export const UpdateLeadDialog = ({
       onOpenChange(false);
       onUpdated?.();
     } catch (error) {
-      if (isApiRejection(error)) {
-        error.details?.forEach((detail) => {
-          if (detail.field) {
-            form.setError(detail.field as keyof UpdateLeadFormValues, {
-              message: detail.message,
-            });
-          }
-        });
-        toast.error(error.message);
-      } else {
-        toast.error("Failed to update lead");
-      }
+      getApiErrorDetails(error)?.forEach((detail) => {
+        if (detail.field) {
+          form.setError(detail.field as keyof UpdateLeadFormValues, {
+            message: detail.message,
+          });
+        }
+      });
+      toast.error(getApiErrorMessage(error, "Failed to update lead"));
     }
   };
 

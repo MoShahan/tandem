@@ -12,6 +12,7 @@ import {
   selectHasPermission,
 } from "@/features/auth/authSelectors";
 import { UpdateUserStatusDialog } from "@/features/users/components/UpdateUserStatusDialog";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { PAGE_SIZE_OPTIONS, TABLE_SKELETON_ROW_COUNT } from "@/lib/pagination";
 
 import { CreatePlatformAdminDialog } from "../components/CreatePlatformAdminDialog";
@@ -29,16 +30,6 @@ import { updatePlatformUserStatus } from "../platformSlice";
 import { hasActivePlatformUserListFilters } from "../platformUserListParams";
 
 import type { PlatformUser } from "../platformTypes";
-
-type ApiRejection = {
-  message: string;
-};
-
-const isApiRejection = (value: unknown): value is ApiRejection =>
-  typeof value === "object" &&
-  value !== null &&
-  "message" in value &&
-  typeof value.message === "string";
 
 export const PlatformAdminsPage = () => {
   const dispatch = useAppDispatch();
@@ -97,9 +88,7 @@ export const PlatformAdminsPage = () => {
       refetch();
     } catch (error) {
       toast.error(
-        isApiRejection(error)
-          ? error.message
-          : "Failed to update platform admin status",
+        getApiErrorMessage(error, "Failed to update platform admin status"),
       );
     }
   };

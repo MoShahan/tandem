@@ -19,22 +19,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ApiClientError } from "@/lib/api-client";
+import { getApiErrorMessage } from "@/lib/apiError";
 
 import { leadsService } from "../leadsService";
 import { assignLead } from "../leadsSlice";
 
 import type { AssigneeOption, Lead } from "../leadsTypes";
-
-type ApiRejection = {
-  message: string;
-};
-
-const isApiRejection = (value: unknown): value is ApiRejection =>
-  typeof value === "object" &&
-  value !== null &&
-  "message" in value &&
-  typeof value.message === "string";
 
 type AssignLeadDialogProps = {
   lead: Lead | null;
@@ -70,11 +60,7 @@ export const AssignLeadDialog = ({
         }
       } catch (error) {
         if (!cancelled) {
-          if (error instanceof ApiClientError) {
-            toast.error(error.message);
-          } else {
-            toast.error("Failed to load assignees");
-          }
+          toast.error(getApiErrorMessage(error, "Failed to load assignees"));
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -108,9 +94,7 @@ export const AssignLeadDialog = ({
       onOpenChange(false);
       onAssigned?.();
     } catch (error) {
-      toast.error(
-        isApiRejection(error) ? error.message : "Failed to update assignment",
-      );
+      toast.error(getApiErrorMessage(error, "Failed to update assignment"));
     } finally {
       setIsSubmitting(false);
     }

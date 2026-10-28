@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PERMISSIONS } from "@/constants/permissions";
 import { selectHasPermission } from "@/features/auth/authSelectors";
-import { ApiClientError } from "@/lib/api-client";
+import { getApiErrorMessage } from "@/lib/apiError";
 
 import { platformService } from "../platformService";
 
@@ -28,11 +28,13 @@ export const OrganizationModulesPanel = ({
   const [data, setData] = useState<OrganizationModulesResponse | null>(null);
   const [draft, setDraft] = useState<OrganizationModulesMap | null>(null);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     setStatus("loading");
+    setLoadError(null);
 
     const loadModules = async () => {
       try {
@@ -43,8 +45,14 @@ export const OrganizationModulesPanel = ({
           setDraft(response.modules);
           setStatus("idle");
         }
-      } catch {
+      } catch (error) {
         if (!cancelled) {
+          setLoadError(
+            getApiErrorMessage(
+              error,
+              "Failed to load organization modules. Please try again.",
+            ),
+          );
           setStatus("error");
         }
       }
@@ -89,11 +97,9 @@ export const OrganizationModulesPanel = ({
       setDraft(response.modules);
       toast.success("Organization modules updated");
     } catch (error) {
-      const message =
-        error instanceof ApiClientError
-          ? error.message
-          : "Failed to update organization modules";
-      toast.error(message);
+      toast.error(
+        getApiErrorMessage(error, "Failed to update organization modules"),
+      );
     } finally {
       setSaving(false);
     }
@@ -121,7 +127,7 @@ export const OrganizationModulesPanel = ({
   if (status === "error") {
     return (
       <p className="text-sm text-destructive">
-        Failed to load organization modules. Please try again.
+        {loadError ?? "Failed to load organization modules. Please try again."}
       </p>
     );
   }

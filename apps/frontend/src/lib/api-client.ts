@@ -33,6 +33,7 @@ export class ApiClientError extends Error {
     message: string,
     public code?: string,
     public details?: ApiErrorDetail[],
+    public status?: number,
   ) {
     super(message);
     this.name = "ApiClientError";
@@ -49,11 +50,15 @@ export const apiClient = axios.create({
   headers: { "Content-Type": "application/json" },
 });
 
-const toApiClientError = (body?: ApiErrorResponse): ApiClientError => {
+const toApiClientError = (
+  body?: ApiErrorResponse,
+  status?: number,
+): ApiClientError => {
   return new ApiClientError(
     body?.message ?? "An unexpected error occurred",
     body?.data?.code,
     body?.data?.details,
+    status,
   );
 };
 
@@ -157,9 +162,11 @@ apiClient.interceptors.response.use(
         return apiClient(originalRequest);
       } catch (refreshError) {
         isRefreshing = false;
+        const refreshResponse = (refreshError as AxiosError<ApiErrorResponse>)
+          .response;
         const apiError = toApiClientError(
-          (refreshError as AxiosError<ApiErrorResponse>).response?.data ??
-            error.response?.data,
+          refreshResponse?.data ?? error.response?.data,
+          refreshResponse?.status ?? status,
         );
         flushRefreshQueue(apiError);
         notifySessionExpired();
@@ -167,7 +174,7 @@ apiClient.interceptors.response.use(
       }
     }
 
-    return Promise.reject(toApiClientError(error.response?.data));
+    return Promise.reject(toApiClientError(error.response?.data, status));
   },
 );
 

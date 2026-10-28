@@ -14,7 +14,7 @@ import {
 } from "@/features/auth/authSelectors";
 import { rolesService } from "@/features/roles/rolesService";
 import { teamsService } from "@/features/teams/teamsService";
-import { ApiClientError } from "@/lib/api-client";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { PAGE_SIZE_OPTIONS, TABLE_SKELETON_ROW_COUNT } from "@/lib/pagination";
 
 import { CreateUserDialog } from "../components/CreateUserDialog";
@@ -37,16 +37,6 @@ import type {
   TeamFilterOption,
   User,
 } from "../usersTypes";
-
-type ApiRejection = {
-  message: string;
-};
-
-const isApiRejection = (value: unknown): value is ApiRejection =>
-  typeof value === "object" &&
-  value !== null &&
-  "message" in value &&
-  typeof value.message === "string";
 
 export const UsersPage = () => {
   const dispatch = useAppDispatch();
@@ -84,11 +74,7 @@ export const UsersPage = () => {
         const result = await rolesService.listRoleOptions();
         setRoles(result.roles);
       } catch (error) {
-        if (error instanceof ApiClientError) {
-          toast.error(error.message);
-        } else {
-          toast.error("Failed to load roles");
-        }
+        toast.error(getApiErrorMessage(error, "Failed to load roles"));
       }
     };
 
@@ -103,11 +89,7 @@ export const UsersPage = () => {
         const result = await teamsService.listTeamOptions();
         setTeams(result.teams);
       } catch (error) {
-        if (error instanceof ApiClientError) {
-          toast.error(error.message);
-        } else {
-          toast.error("Failed to load teams");
-        }
+        toast.error(getApiErrorMessage(error, "Failed to load teams"));
       }
     };
 
@@ -151,11 +133,7 @@ export const UsersPage = () => {
       setSelectedUser(null);
       refetch();
     } catch (error) {
-      toast.error(
-        isApiRejection(error)
-          ? error.message
-          : "Failed to update user status",
-      );
+      toast.error(getApiErrorMessage(error, "Failed to update user status"));
     }
   };
 

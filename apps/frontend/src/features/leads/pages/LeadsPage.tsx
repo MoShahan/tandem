@@ -16,7 +16,7 @@ import {
 } from "@/features/auth/authSelectors";
 import { teamsService } from "@/features/teams/teamsService";
 import { usersService } from "@/features/users/usersService";
-import { ApiClientError } from "@/lib/api-client";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { PAGE_SIZE_OPTIONS, TABLE_SKELETON_ROW_COUNT } from "@/lib/pagination";
 
 import { CreateLeadDialog } from "../components/CreateLeadDialog";
@@ -78,11 +78,7 @@ export const LeadsPage = () => {
         const result = await teamsService.listTeamOptions();
         setTeams(result.teams);
       } catch (error) {
-        if (error instanceof ApiClientError) {
-          toast.error(error.message);
-        } else {
-          toast.error("Failed to load teams");
-        }
+        toast.error(getApiErrorMessage(error, "Failed to load teams"));
       }
     };
 
@@ -100,11 +96,7 @@ export const LeadsPage = () => {
         });
         setAssignees(result.users);
       } catch (error) {
-        if (error instanceof ApiClientError) {
-          toast.error(error.message);
-        } else {
-          toast.error("Failed to load assignees");
-        }
+        toast.error(getApiErrorMessage(error, "Failed to load assignees"));
       }
     };
 

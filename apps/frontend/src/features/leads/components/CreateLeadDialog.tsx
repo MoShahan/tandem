@@ -37,24 +37,13 @@ import {
   selectHasPermission,
 } from "@/features/auth/authSelectors";
 import { teamsService } from "@/features/teams/teamsService";
-import { ApiClientError } from "@/lib/api-client";
+import { getApiErrorDetails, getApiErrorMessage } from "@/lib/apiError";
 
 import { createLeadSchema } from "../leadFormSchema";
 import { leadsService } from "../leadsService";
 import { createLead } from "../leadsSlice";
 
 import type { AssigneeOption, TeamFilterOption } from "../leadsTypes";
-
-type ApiRejection = {
-  message: string;
-  details?: { field?: string; message: string }[];
-};
-
-const isApiRejection = (value: unknown): value is ApiRejection =>
-  typeof value === "object" &&
-  value !== null &&
-  "message" in value &&
-  typeof value.message === "string";
 
 type CreateLeadFormValues = z.infer<typeof createLeadSchema>;
 
@@ -119,11 +108,7 @@ export const CreateLeadDialog = ({
         }
       } catch (error) {
         if (!cancelled) {
-          if (error instanceof ApiClientError) {
-            toast.error(error.message);
-          } else {
-            toast.error("Failed to load teams");
-          }
+          toast.error(getApiErrorMessage(error, "Failed to load teams"));
         }
       } finally {
         if (!cancelled) setTeamsLoading(false);
@@ -159,11 +144,7 @@ export const CreateLeadDialog = ({
         }
       } catch (error) {
         if (!cancelled) {
-          if (error instanceof ApiClientError) {
-            toast.error(error.message);
-          } else {
-            toast.error("Failed to load assignees");
-          }
+          toast.error(getApiErrorMessage(error, "Failed to load assignees"));
         }
       } finally {
         if (!cancelled) setAssigneesLoading(false);
@@ -209,18 +190,14 @@ export const CreateLeadDialog = ({
       onOpenChange(false);
       onCreated?.();
     } catch (error) {
-      if (isApiRejection(error)) {
-        error.details?.forEach((detail) => {
-          if (detail.field) {
-            form.setError(detail.field as keyof CreateLeadFormValues, {
-              message: detail.message,
-            });
-          }
-        });
-        toast.error(error.message);
-      } else {
-        toast.error("Failed to create lead");
-      }
+      getApiErrorDetails(error)?.forEach((detail) => {
+        if (detail.field) {
+          form.setError(detail.field as keyof CreateLeadFormValues, {
+            message: detail.message,
+          });
+        }
+      });
+      toast.error(getApiErrorMessage(error, "Failed to create lead"));
     } finally {
       setIsSubmitting(false);
     }

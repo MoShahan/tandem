@@ -22,7 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ApiClientError } from "@/lib/api-client";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { cn } from "@/lib/utils";
 
 import {
@@ -158,11 +158,7 @@ export const CreateRoleDialog = ({
       onCreated(role);
       handleOpenChange(false);
     } catch (error) {
-      toast.error(
-        error instanceof ApiClientError
-          ? error.message
-          : "Failed to create role",
-      );
+      toast.error(getApiErrorMessage(error, "Failed to create role"));
     } finally {
       setIsSubmitting(false);
     }

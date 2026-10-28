@@ -24,7 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PasswordInput } from "@/components/ui/password-input";
-import { ApiClientError } from "@/lib/api-client";
+import { getApiErrorDetails, getApiErrorMessage } from "@/lib/apiError";
 import { PASSWORD_HELPER_TEXT, passwordFieldSchema } from "@/lib/password";
 
 import { accountService } from "../accountService";
@@ -104,13 +104,8 @@ export const ChangePasswordDialog = ({
       toast.success("Password updated");
       onOpenChange(false);
     } catch (error) {
-      if (error instanceof ApiClientError) {
-        applyApiFieldErrors(error.details);
-        toast.error(error.message);
-        return;
-      }
-
-      toast.error("Failed to change password");
+      applyApiFieldErrors(getApiErrorDetails(error));
+      toast.error(getApiErrorMessage(error, "Failed to change password"));
     }
   };
 

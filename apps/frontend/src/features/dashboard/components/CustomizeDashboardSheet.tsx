@@ -33,6 +33,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { cn } from "@/lib/utils";
 
 import { selectDashboardLayoutMutationStatus } from "../dashboardSelectors";
@@ -201,9 +202,7 @@ export const CustomizeDashboardSheet = ({
       setOpen(false);
       toast.success("Dashboard layout saved");
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to save layout",
-      );
+      toast.error(getApiErrorMessage(error, "Failed to save layout"));
     }
   };
 
@@ -213,9 +212,7 @@ export const CustomizeDashboardSheet = ({
       setDraft(saved.widgets);
       toast.success("Dashboard reset to default");
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to reset layout",
-      );
+      toast.error(getApiErrorMessage(error, "Failed to reset layout"));
     }
   };
 

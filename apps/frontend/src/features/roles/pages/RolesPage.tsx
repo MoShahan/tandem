@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PERMISSIONS } from "@/constants/permissions";
 import { selectHasPermission } from "@/features/auth/authSelectors";
-import { ApiClientError } from "@/lib/api-client";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { TABLE_SKELETON_ROW_COUNT } from "@/lib/pagination";
 
 import { CreateRoleDialog } from "../components/CreateRoleDialog";
@@ -53,11 +53,7 @@ export const RolesPage = () => {
       await saveChanges();
       toast.success("Role permissions updated");
     } catch (saveError) {
-      toast.error(
-        saveError instanceof ApiClientError
-          ? saveError.message
-          : "Failed to save role",
-      );
+      toast.error(getApiErrorMessage(saveError, "Failed to save role"));
     }
   };
 
@@ -74,11 +70,7 @@ export const RolesPage = () => {
       setDeleteDialogOpen(false);
       toast.success("Role deleted");
     } catch (deleteError) {
-      toast.error(
-        deleteError instanceof ApiClientError
-          ? deleteError.message
-          : "Failed to delete role",
-      );
+      toast.error(getApiErrorMessage(deleteError, "Failed to delete role"));
     } finally {
       setIsDeleting(false);
     }

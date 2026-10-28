@@ -23,7 +23,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { ApiClientError } from "@/lib/api-client";
+import { getApiErrorDetails, getApiErrorMessage } from "@/lib/apiError";
 
 import { createTeam } from "../teamsSlice";
 
@@ -67,22 +67,12 @@ export const CreateTeamDialog = ({
       handleOpenChange(false);
       onCreated?.();
     } catch (error) {
-      if (error instanceof ApiClientError) {
-        error.details?.forEach((detail) => {
-          if (detail.field === "name") {
-            form.setError("name", { message: detail.message });
-          }
-        });
-        toast.error(error.message);
-      } else if (
-        typeof error === "object" &&
-        error !== null &&
-        "message" in error
-      ) {
-        toast.error(String(error.message));
-      } else {
-        toast.error("Failed to create team");
-      }
+      getApiErrorDetails(error)?.forEach((detail) => {
+        if (detail.field === "name") {
+          form.setError("name", { message: detail.message });
+        }
+      });
+      toast.error(getApiErrorMessage(error, "Failed to create team"));
     } finally {
       setIsSubmitting(false);
     }

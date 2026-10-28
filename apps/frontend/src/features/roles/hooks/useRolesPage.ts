@@ -5,6 +5,7 @@ import {
   selectHasPermission,
   selectHasAnyPermission,
 } from "@/features/auth/authSelectors";
+import { getApiErrorMessage } from "@/lib/apiError";
 
 import { rolesService } from "../rolesService";
 
@@ -78,11 +79,7 @@ export const useRolesPage = () => {
       });
     } catch (loadError) {
       setStatus("error");
-      setError(
-        loadError instanceof Error
-          ? loadError.message
-          : "Failed to load roles",
-      );
+      setError(getApiErrorMessage(loadError, "Failed to load roles"));
     }
   }, [listRolesOptions]);
 

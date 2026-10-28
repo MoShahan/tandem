@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { ListPagination } from "@/components/ListPagination";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ApiClientError } from "@/lib/api-client";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { PAGE_SIZE_OPTIONS, TABLE_SKELETON_ROW_COUNT } from "@/lib/pagination";
 
 import { CreateOrganizationDialog } from "../components/CreateOrganizationDialog";
@@ -74,9 +74,7 @@ export const OrganizationsPage = () => {
       refetch();
     } catch (error) {
       toast.error(
-        error instanceof ApiClientError
-          ? error.message
-          : "Failed to update organization status",
+        getApiErrorMessage(error, "Failed to update organization status"),
       );
     } finally {
       setIsUpdatingStatus(false);

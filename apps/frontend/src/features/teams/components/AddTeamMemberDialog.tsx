@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { rolesService } from "@/features/roles/rolesService";
+import { getApiErrorDetails, getApiErrorMessage } from "@/lib/apiError";
 import {
   DEFAULT_NEW_USER_PASSWORD,
   PASSWORD_HELPER_TEXT,
@@ -43,17 +44,6 @@ import {
 import { createTeamMember } from "../teamsSlice";
 
 type RoleOption = { id: string; name: string; slug: string };
-
-type ApiRejection = {
-  message: string;
-  details?: { field?: string; message: string }[];
-};
-
-const isApiRejection = (value: unknown): value is ApiRejection =>
-  typeof value === "object" &&
-  value !== null &&
-  "message" in value &&
-  typeof value.message === "string";
 
 const schema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -111,8 +101,10 @@ export const AddTeamMemberDialog = ({
         if (!cancelled) {
           setRoles(teamRoles.roles);
         }
-      } catch {
-        if (!cancelled) setRolesError("Failed to load roles");
+      } catch (error) {
+        if (!cancelled) {
+          setRolesError(getApiErrorMessage(error, "Failed to load roles"));
+        }
       } finally {
         if (!cancelled) setRolesLoading(false);
       }
@@ -168,12 +160,8 @@ export const AddTeamMemberDialog = ({
       handleOpenChange(false);
       onCreated?.();
     } catch (error) {
-      if (isApiRejection(error)) {
-        applyApiFieldErrors(error.details);
-        toast.error(error.message);
-      } else {
-        toast.error("Failed to create team member");
-      }
+      applyApiFieldErrors(getApiErrorDetails(error));
+      toast.error(getApiErrorMessage(error, "Failed to create team member"));
     } finally {
       setIsSubmitting(false);
     }

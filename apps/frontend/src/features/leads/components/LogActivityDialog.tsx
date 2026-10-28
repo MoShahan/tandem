@@ -30,21 +30,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { getApiErrorMessage } from "@/lib/apiError";
 
 import { createActivity } from "../leadsSlice";
 import { ACTIVITY_TYPE_OPTIONS } from "../leadsTypes";
 
 import type { ActivityType } from "../leadsTypes";
-
-type ApiRejection = {
-  message: string;
-};
-
-const isApiRejection = (value: unknown): value is ApiRejection =>
-  typeof value === "object" &&
-  value !== null &&
-  "message" in value &&
-  typeof value.message === "string";
 
 const activitySchema = z.object({
   type: z.string().min(1, "Activity type is required"),
@@ -102,9 +93,7 @@ export const LogActivityDialog = ({
       onOpenChange(false);
       onCreated?.();
     } catch (error) {
-      toast.error(
-        isApiRejection(error) ? error.message : "Failed to log activity",
-      );
+      toast.error(getApiErrorMessage(error, "Failed to log activity"));
     } finally {
       setIsSubmitting(false);
     }

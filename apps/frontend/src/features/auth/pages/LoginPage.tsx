@@ -29,7 +29,8 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { selectAuthUser } from "@/features/auth/authSelectors";
 import { login } from "@/features/auth/authSlice";
-import { ApiClientError, resetSessionExpiredState } from "@/lib/api-client";
+import { resetSessionExpiredState } from "@/lib/api-client";
+import { getApiErrorMessage } from "@/lib/apiError";
 
 type LoginFormValues = LoginInput;
 
@@ -71,16 +72,18 @@ export const LoginPage = () => {
           : "Welcome back. You're ready to go.",
       });
 
+      const rawFrom = (location.state as { from?: string } | null)?.from;
       const redirectTo =
-        (location.state as { from?: string } | null)?.from ?? "/";
+        typeof rawFrom === "string" &&
+        rawFrom.startsWith("/") &&
+        !rawFrom.startsWith("//")
+          ? rawFrom
+          : "/";
       navigate(redirectTo, { replace: true });
     } catch (error) {
-      if (error instanceof ApiClientError) {
-        setErrorMessage(error.message);
-        return;
-      }
-
-      setErrorMessage("Unable to sign in. Please try again.");
+      setErrorMessage(
+        getApiErrorMessage(error, "Unable to sign in. Please try again."),
+      );
     }
   });
 

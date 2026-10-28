@@ -17,7 +17,7 @@ import { rolesService } from "@/features/roles/rolesService";
 import { UpdateUserStatusDialog } from "@/features/users/components/UpdateUserStatusDialog";
 import { selectIsUsersMutating } from "@/features/users/usersSelectors";
 import { updateUserStatus } from "@/features/users/usersSlice";
-import { ApiClientError } from "@/lib/api-client";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { PAGE_SIZE_OPTIONS, TABLE_SKELETON_ROW_COUNT } from "@/lib/pagination";
 
 import { AddTeamMemberDialog } from "../components/AddTeamMemberDialog";
@@ -38,15 +38,6 @@ import { clearSelectedTeam, fetchTeam } from "../teamsSlice";
 
 import type { TeamMember, TeamMemberRoleOption } from "../teamsTypes";
 
-type ApiRejection = {
-  message: string;
-};
-
-const isApiRejection = (value: unknown): value is ApiRejection =>
-  typeof value === "object" &&
-  value !== null &&
-  "message" in value &&
-  typeof value.message === "string";
 
 export const TeamDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -100,11 +91,7 @@ export const TeamDetailPage = () => {
         setRoles(result.roles.map((role) => ({ id: role.id, name: role.name })));
       } catch (error) {
         setRoles([]);
-        if (error instanceof ApiClientError) {
-          toast.error(error.message);
-        } else {
-          toast.error("Failed to load roles");
-        }
+        toast.error(getApiErrorMessage(error, "Failed to load roles"));
       }
     };
 
@@ -152,11 +139,7 @@ export const TeamDetailPage = () => {
       setSelectedMember(null);
       refetch();
     } catch (error) {
-      toast.error(
-        isApiRejection(error)
-          ? error.message
-          : "Failed to update user status",
-      );
+      toast.error(getApiErrorMessage(error, "Failed to update user status"));
     }
   };
 

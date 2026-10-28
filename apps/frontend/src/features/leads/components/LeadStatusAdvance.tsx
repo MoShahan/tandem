@@ -13,6 +13,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { cn } from "@/lib/utils";
 
 import { updateLead } from "../leadsSlice";
@@ -24,17 +25,6 @@ import {
 } from "../leadStatusPipeline";
 
 import type { Lead, LeadStatus } from "../leadsTypes";
-
-type ApiRejection = {
-  message: string;
-  details?: { field?: string; message: string }[];
-};
-
-const isApiRejection = (value: unknown): value is ApiRejection =>
-  typeof value === "object" &&
-  value !== null &&
-  "message" in value &&
-  typeof value.message === "string";
 
 type LeadStatusAdvanceProps = {
   lead: Lead;
@@ -92,11 +82,7 @@ export const LeadStatusAdvance = ({
       setPendingStatus(null);
       onAdvanced?.();
     } catch (error) {
-      if (isApiRejection(error)) {
-        toast.error(error.message);
-      } else {
-        toast.error("Failed to update lead status");
-      }
+      toast.error(getApiErrorMessage(error, "Failed to update lead status"));
     } finally {
       setIsSubmitting(false);
     }

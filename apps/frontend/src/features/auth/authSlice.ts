@@ -1,5 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+import { ApiClientError } from "@/lib/api-client";
+import { toApiRejection } from "@/lib/apiError";
+
 import { authService } from "./authService";
 
 import type { AuthState, LoginCredentials } from "./authTypes";
@@ -17,9 +20,17 @@ export const fetchMe = createAsyncThunk("auth/fetchMe", async () => {
 
 export const login = createAsyncThunk(
   "auth/login",
-  async (credentials: LoginCredentials, { dispatch }) => {
-    await authService.login(credentials);
-    await dispatch(fetchMe()).unwrap();
+  async (credentials: LoginCredentials, { dispatch, rejectWithValue }) => {
+    try {
+      await authService.login(credentials);
+      await dispatch(fetchMe()).unwrap();
+    } catch (error) {
+      if (error instanceof ApiClientError) {
+        return rejectWithValue(toApiRejection(error));
+      }
+
+      throw error;
+    }
   },
 );
 

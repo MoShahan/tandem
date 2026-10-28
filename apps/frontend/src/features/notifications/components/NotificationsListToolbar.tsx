@@ -3,6 +3,7 @@ import { toast } from "sonner";
 
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { Button } from "@/components/ui/button";
+import { getApiErrorMessage } from "@/lib/apiError";
 import { cn } from "@/lib/utils";
 
 import {
@@ -15,16 +16,6 @@ import type {
   NotificationListFilter,
   NotificationListQuery,
 } from "../notificationsTypes";
-
-type ApiRejection = {
-  message: string;
-};
-
-const isApiRejection = (value: unknown): value is ApiRejection =>
-  typeof value === "object" &&
-  value !== null &&
-  "message" in value &&
-  typeof value.message === "string";
 
 type NotificationsListToolbarProps = {
   query: NotificationListQuery;
@@ -134,11 +125,7 @@ export const NotificationsListToolbar = ({
       await dispatch(markAllNotificationsRead()).unwrap();
       onMarkAllReadComplete();
     } catch (error) {
-      toast.error(
-        isApiRejection(error)
-          ? error.message
-          : "Failed to mark all as read",
-      );
+      toast.error(getApiErrorMessage(error, "Failed to mark all as read"));
     }
   };
 

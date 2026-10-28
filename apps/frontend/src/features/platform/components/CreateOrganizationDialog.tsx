@@ -28,6 +28,7 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { getApiErrorDetails, getApiErrorMessage } from "@/lib/apiError";
 import {
   DEFAULT_NEW_USER_PASSWORD,
   PASSWORD_HELPER_TEXT,
@@ -37,20 +38,6 @@ import {
 import { createOrganization } from "../platformSlice";
 
 const codePattern = /^[a-z0-9-]+$/;
-
-type ApiRejection = {
-  message: string;
-  details?: { field?: string; message: string }[];
-};
-
-const isApiRejection = (value: unknown): value is ApiRejection => {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "message" in value &&
-    typeof value.message === "string"
-  );
-};
 
 const createOrganizationSchema = z.object({
   name: z.string().min(1, "Organization name is required"),
@@ -169,12 +156,8 @@ export const CreateOrganizationDialog = ({
       handleOpenChange(false);
       onCreated?.();
     } catch (error) {
-      if (isApiRejection(error)) {
-        applyApiFieldErrors(error.details);
-        toast.error(error.message);
-      } else {
-        toast.error("Failed to create organization");
-      }
+      applyApiFieldErrors(getApiErrorDetails(error));
+      toast.error(getApiErrorMessage(error, "Failed to create organization"));
     } finally {
       setIsSubmitting(false);
     }
