@@ -39,11 +39,11 @@ describe("organizationModuleService.getEnabledModuleKeys", () => {
   it("maps enabled repository keys", async () => {
     vi.mocked(
       organizationModuleRepository.findEnabledByOrganizationId,
-    ).mockResolvedValue(["SALES_ERP"] as never);
+    ).mockResolvedValue(["SALES"] as never);
 
     await expect(
       organizationModuleService.getEnabledModuleKeys(orgId),
-    ).resolves.toEqual([ORG_MODULE_KEYS.SALES_ERP]);
+    ).resolves.toEqual([ORG_MODULE_KEYS.SALES]);
   });
 });
 

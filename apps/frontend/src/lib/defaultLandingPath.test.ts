@@ -108,10 +108,10 @@ describe("selectDefaultLandingPath", () => {
     expect(selectDefaultLandingPath(state)).toBe("/teams");
   });
 
-  it("returns leads when sales ERP module and lead read permission are available", () => {
+  it("returns leads when sales module and lead read permission are available", () => {
     const state = asRootState(
       authenticatedState({
-        modules: ["sales_erp"],
+        modules: ["sales"],
         user: mockUser({ permissions: ["leads:read"] }),
       }),
     );
@@ -119,7 +119,7 @@ describe("selectDefaultLandingPath", () => {
     expect(selectDefaultLandingPath(state)).toBe("/leads");
   });
 
-  it("does not return leads without sales ERP module", () => {
+  it("does not return leads without sales module", () => {
     const state = asRootState(
       authenticatedState({
         modules: [],

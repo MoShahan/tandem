@@ -54,7 +54,7 @@ info:
 
     | Module key | Routes |
     |------------|--------|
-    | `sales_erp` | `/api/v1/leads/*` |
+    | `sales` | `/api/v1/leads/*` |
     | `dashboards` | `/api/v1/dashboard/*` |
     | `notifications` | `/api/v1/notifications/*` |
 
@@ -81,7 +81,7 @@ tags:
   - name: Roles
     description: Role and permission grant management
   - name: Leads
-    description: CRM pipeline (requires `sales_erp` module)
+    description: CRM pipeline (requires `sales` module)
   - name: Dashboard
     description: Analytics and customizable layout (requires `dashboards` module)
   - name: Notifications
@@ -862,7 +862,7 @@ paths:
       summary: List leads
       description: |
         Returns a paginated list of leads scoped by the caller's permissions.
-        Requires `sales_erp` module and one of `leads:read`, `leads:read:team`, or `leads:read:org`.
+        Requires `sales` module and one of `leads:read`, `leads:read:team`, or `leads:read:org`.
       operationId: listLeads
       security:
         - accessTokenCookie: []
@@ -910,7 +910,7 @@ paths:
     post:
       tags: [Leads]
       summary: Create lead
-      description: Creates a new lead. Requires `sales_erp` module and `leads:write`.
+      description: Creates a new lead. Requires `sales` module and `leads:write`.
       operationId: createLead
       security:
         - accessTokenCookie: []
@@ -947,7 +947,7 @@ paths:
     get:
       tags: [Leads]
       summary: Get lead
-      description: Returns lead details. Requires `sales_erp` module and lead read permission.
+      description: Returns lead details. Requires `sales` module and lead read permission.
       operationId: getLead
       security:
         - accessTokenCookie: []
@@ -979,7 +979,7 @@ paths:
       tags: [Leads]
       summary: Update lead
       description: |
-        Updates lead fields and/or status. Requires `sales_erp` module and one of
+        Updates lead fields and/or status. Requires `sales` module and one of
         `leads:write`, `leads:status:write`, or `leads:status:write:team`.
       operationId: updateLead
       security:
@@ -1023,7 +1023,7 @@ paths:
       summary: Assign or unassign lead
       description: |
         Assigns the lead to a user or unassigns it (`assignedToId: null`).
-        Requires `sales_erp` module and `leads:write` or `leads:read:team`.
+        Requires `sales` module and `leads:write` or `leads:read:team`.
       operationId: assignLead
       security:
         - accessTokenCookie: []
@@ -1064,7 +1064,7 @@ paths:
     get:
       tags: [Leads]
       summary: List lead activities
-      description: Returns a paginated activity log for a lead. Requires `sales_erp` module and lead read permission.
+      description: Returns a paginated activity log for a lead. Requires `sales` module and lead read permission.
       operationId: listLeadActivities
       security:
         - accessTokenCookie: []
@@ -1093,7 +1093,7 @@ paths:
     post:
       tags: [Leads]
       summary: Log activity
-      description: Creates an activity entry on a lead. Requires `sales_erp` module and `activities:write`.
+      description: Creates an activity entry on a lead. Requires `sales` module and `activities:write`.
       operationId: createLeadActivity
       security:
         - accessTokenCookie: []
@@ -1134,7 +1134,7 @@ paths:
     get:
       tags: [Leads]
       summary: Get lead status history
-      description: Returns the chronological status change history for a lead. Requires `sales_erp` module and lead read permission.
+      description: Returns the chronological status change history for a lead. Requires `sales` module and lead read permission.
       operationId: getLeadStatusHistory
       security:
         - accessTokenCookie: []
@@ -2179,7 +2179,7 @@ components:
 
     OrgModuleKey:
       type: string
-      enum: [sales_erp, dashboards, notifications]
+      enum: [sales, dashboards, notifications]
 
     DashboardView:
       type: string
@@ -3419,7 +3419,7 @@ components:
           additionalProperties:
             type: boolean
           example:
-            sales_erp: true
+            sales: true
             dashboards: true
             notifications: true
         catalog:
@@ -3436,7 +3436,7 @@ components:
           additionalProperties:
             type: boolean
           example:
-            sales_erp: true
+            sales: true
             dashboards: false
 
     PlatformUserResponse:

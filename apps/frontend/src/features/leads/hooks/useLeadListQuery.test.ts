@@ -18,7 +18,7 @@ describe("useLeadListQuery", () => {
   it("parses query from URL search params", () => {
     const { result } = renderHookWithProviders(() => useLeadListQuery(), {
       route: "/?search=acme&page=2",
-      preloadedState: authenticatedState({ modules: ["sales_erp"] }),
+      preloadedState: authenticatedState({ modules: ["sales"] }),
     });
 
     expect(result.current.query.search).toBe("acme");
@@ -28,7 +28,7 @@ describe("useLeadListQuery", () => {
   it("resets page when filters change via patchQuery", () => {
     const { result } = renderHookWithProviders(() => useLeadListQuery(), {
       route: "/?page=3",
-      preloadedState: authenticatedState({ modules: ["sales_erp"] }),
+      preloadedState: authenticatedState({ modules: ["sales"] }),
     });
 
     act(() => {
@@ -42,7 +42,7 @@ describe("useLeadListQuery", () => {
   it("does not reset page when only page changes", () => {
     const { result } = renderHookWithProviders(() => useLeadListQuery(), {
       route: "/?page=2",
-      preloadedState: authenticatedState({ modules: ["sales_erp"] }),
+      preloadedState: authenticatedState({ modules: ["sales"] }),
     });
 
     act(() => {
@@ -55,7 +55,7 @@ describe("useLeadListQuery", () => {
   it("clears filters while preserving sort defaults", () => {
     const { result } = renderHookWithProviders(() => useLeadListQuery(), {
       route: "/?search=acme&status=NEW",
-      preloadedState: authenticatedState({ modules: ["sales_erp"] }),
+      preloadedState: authenticatedState({ modules: ["sales"] }),
     });
 
     act(() => {
@@ -66,7 +66,7 @@ describe("useLeadListQuery", () => {
     expect(result.current.query.status).toBe("ALL");
   });
 
-  it("skips fetch when sales ERP module is disabled", () => {
+  it("skips fetch when sales module is disabled", () => {
     const { store } = renderHookWithProviders(() => useLeadListQuery(), {
       preloadedState: authenticatedState({ modules: [] }),
     });
@@ -74,9 +74,9 @@ describe("useLeadListQuery", () => {
     expect(store.getState().leads.listStatus).toBe("idle");
   });
 
-  it("dispatches fetch when sales ERP module is enabled", async () => {
+  it("dispatches fetch when sales module is enabled", async () => {
     const { store } = renderHookWithProviders(() => useLeadListQuery(), {
-      preloadedState: authenticatedState({ modules: ["sales_erp"] }),
+      preloadedState: authenticatedState({ modules: ["sales"] }),
     });
 
     await vi.waitFor(() => {

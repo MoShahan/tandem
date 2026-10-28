@@ -34,8 +34,8 @@ import {
 import type { AssigneeOption, TeamFilterOption } from "../leadsTypes";
 
 export const LeadsPage = () => {
-  const hasSalesErpModule = useAppSelector(
-    selectHasModule(ORG_MODULE_KEYS.SALES_ERP),
+  const hasSalesModule = useAppSelector(
+    selectHasModule(ORG_MODULE_KEYS.SALES),
   );
   const canCreateLead = useAppSelector(
     selectHasPermission(PERMISSIONS.LEADS_WRITE),
@@ -120,7 +120,7 @@ export const LeadsPage = () => {
   const showGlobalEmpty =
     !isLoading && listStatus === "success" && total === 0 && !hasFilters;
 
-  if (!hasSalesErpModule) {
+  if (!hasSalesModule) {
     return <Navigate to="/" replace />;
   }
 

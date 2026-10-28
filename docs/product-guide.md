@@ -219,7 +219,7 @@ Platform admins with `platform:orgs:write` create tenants from **Platform → Or
 
 - Organization row created (status `ACTIVE`)
 - Default org roles seeded (`org_admin`, `executive`, `team_lead`, `sales_manager`, `director`)
-- All three feature modules enabled (`sales_erp`, `dashboards`, `notifications`)
+- All three feature modules enabled (`sales`, `dashboards`, `notifications`)
 - Org admin user created with an `organization_members` row and `org_admin` role
 - Org admin receives welcome notification and `must_change_password = true`
 - Audit event `ORG_CREATED` logged
@@ -234,7 +234,7 @@ Platform admins can enable or disable modules **per organization** on the organi
 
 | Module key      | UI label      | What it unlocks when enabled                                         |
 | --------------- | ------------- | -------------------------------------------------------------------- |
-| `sales_erp`     | Sales ERP     | Leads list/detail, lead CRUD, activities, lead-related notifications |
+| `sales`         | Sales         | Leads list/detail, lead CRUD, activities, lead-related notifications |
 | `dashboards`    | Dashboards    | Analytics dashboard and widget customization                         |
 | `notifications` | Notifications | Notification bell, notification center, lead-event alerts            |
 
@@ -255,7 +255,7 @@ After login, `/` redirects to the **first accessible route** in this priority or
 1. `/dashboard` - if `dashboards` module + any dashboard permission
 2. `/platform/audit` - if `platform:audit:read`
 3. `/platform/organizations` - if platform admin
-4. `/leads` - if `sales_erp` module + any lead read permission
+4. `/leads` - if `sales` module + any lead read permission
 5. `/my-team` - if `users:read:team` and not `teams:read`
 6. `/users` - if `users:read`
 7. `/teams` - if `teams:read`
@@ -268,7 +268,7 @@ After login, `/` redirects to the **first accessible route** in this priority or
 | Section          | Visible when                                                        |
 | ---------------- | ------------------------------------------------------------------- |
 | **Platform**     | Dashboard, platform audit, platform orgs, or platform admins access |
-| **Sales**        | `sales_erp` module + lead read permission → Leads                   |
+| **Sales**        | `sales` module + lead read permission → Leads                   |
 | **Organization** | Users, Teams, My team, Roles, Audit (each permission-gated)         |
 
 The app supports **light**, **dark**, and **system** themes via the header toggle.
@@ -458,8 +458,8 @@ Full list of permissions available when creating custom roles or understanding b
 | Login               | `/login`                      | Guests                                               | —               |
 | Account             | `/account`                    | Authenticated                                        | —               |
 | Dashboard           | `/dashboard`                  | Dashboard permission                                 | `dashboards`    |
-| Leads list          | `/leads`                      | Any lead read permission                             | `sales_erp`     |
-| Lead detail         | `/leads/:id`                  | Lead read scope for that record                      | `sales_erp`     |
+| Leads list          | `/leads`                      | Any lead read permission                             | `sales`     |
+| Lead detail         | `/leads/:id`                  | Lead read scope for that record                      | `sales`     |
 | Users               | `/users`                      | `users:read`                                         | —               |
 | Teams               | `/teams`, `/teams/:id`        | `teams:read`                                         | —               |
 | My team             | `/my-team`                    | `users:read:team` (without `teams:read`)             | —               |
@@ -601,7 +601,7 @@ lead.service / activity.service  →  eventBus.emit(domain event)  →  notifica
 | **Fire-and-forget** | Handler errors are caught and logged; they do not fail the originating lead/activity operation |
 | **Welcome notifications** | Account welcome alerts (`WELCOME_CHANGE_PASSWORD`) are created by `welcomeNotification.service` during user provisioning — the only path that writes notifications outside the event handler |
 
-This keeps the Sales ERP module independent of notification delivery. Disabling the `notifications` module stops the handler from persisting lead-event alerts without changing lead or activity code.
+This keeps the Sales module independent of notification delivery. Disabling the `notifications` module stops the handler from persisting lead-event alerts without changing lead or activity code.
 
 See [Architecture — Notification Design](architecture.md#notification-design) for the full pipeline diagram.
 
@@ -878,7 +878,7 @@ Same columns and list UX as team detail members table.
 
 ### Leads (`/leads`)
 
-**Access:** `sales_erp` module + any lead read permission
+**Access:** `sales` module + any lead read permission
 
 | Column        | Sortable               |
 | ------------- | ---------------------- |
@@ -1065,7 +1065,7 @@ Includes cross-tenant events such as `PLATFORM_USER_CREATED`.
 | -------------------- | ------------------------------------------------- |
 | Organization profile | Edit name, code, description, logo URL            |
 | Status               | Suspend / activate organization                   |
-| Feature modules      | Toggle `sales_erp`, `dashboards`, `notifications` |
+| Feature modules      | Toggle `sales`, `dashboards`, `notifications` |
 | Metadata             | Created timestamp, user count                     |
 
 ---
@@ -1176,7 +1176,7 @@ Items below are **not implemented** in the MVP but are documented as evolution p
 | **Organization**        | A tenant; isolated slice of users, teams, and leads                    |
 | **Organization member** | A user's membership in an org, including their role in that org        |
 | **Platform admin**      | Cross-tenant administrator with no org membership                      |
-| **Module**              | Per-org feature toggle (`sales_erp`, `dashboards`, `notifications`)    |
+| **Module**              | Per-org feature toggle (`sales`, `dashboards`, `notifications`)    |
 | **Role**                | Named permission bundle; one per org membership (or one platform role) |
 | **Permission**          | Atomic capability key (e.g. `leads:read:team`)                         |
 | **Team**                | Group of org users; leads belong to a team                             |

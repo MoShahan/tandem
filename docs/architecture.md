@@ -124,7 +124,7 @@ The system is organized into three overlapping boundary types: **API route modul
 | `/api/v1/users`         | Org      | `users:*`                                          | User management                          |
 | `/api/v1/teams`         | Org      | `teams:*`                                          | Team management                          |
 | `/api/v1/roles`         | Org      | `roles:*`                                          | Role and permission grants               |
-| `/api/v1/leads`         | Org      | `leads:*`, `activities:write` + `sales_erp` module | CRM pipeline                             |
+| `/api/v1/leads`         | Org      | `leads:*`, `activities:write` + `sales` module | CRM pipeline                             |
 | `/api/v1/dashboard`     | Org      | Dashboard permissions + `dashboards` module        | Analytics                                |
 | `/api/v1/notifications` | Both     | Org: `notifications` module; platform users: always | In-app alerts                            |
 | `/api/v1/audit`         | Org      | `audit:read`                                       | Org audit trail                          |
@@ -144,7 +144,7 @@ Each feature lives under `apps/frontend/src/features/`. Shared global state uses
 | **audit**         | `audit`            | `/audit`                                                                                            | `audit:read` permission                          |
 | **users**         | `users`            | `/users`                                                                                            | `users:read`                                     |
 | **teams**         | `teams`            | `/teams`, `/teams/:id`, `/my-team`                                                                  | `teams:read` (admin Teams); `users:read:team` + not `teams:read` (My team nav); `users:write:team` (add member) |
-| **leads**         | `leads`            | `/leads`, `/leads/:id`                                                                              | `sales_erp` module + any lead read permission    |
+| **leads**         | `leads`            | `/leads`, `/leads/:id`                                                                              | `sales` module + any lead read permission    |
 | **notifications** | `notifications`    | `/notifications`                                                                                    | Notification bell (module-gated for org users; always for platform users) |
 | **dashboard**     | None (local state) | `/dashboard`                                                                                        | `dashboards` module + dashboard permission       |
 | **roles**         | None (hooks)       | `/roles`                                                                                            | `roles:write`                                    |
@@ -158,7 +158,7 @@ Defined in [`orgModules.ts`](../apps/backend/src/constants/orgModules.ts):
 
 | Key             | Gated routes              | Effect when disabled                          |
 | --------------- | ------------------------- | --------------------------------------------- |
-| `sales_erp`     | `/api/v1/leads/*`         | Leads nav hidden; lead operations unavailable |
+| `sales`         | `/api/v1/leads/*`         | Leads nav hidden; lead operations unavailable |
 | `dashboards`    | `/api/v1/dashboard`       | Dashboard nav hidden                          |
 | `notifications` | `/api/v1/notifications/*` | Bell hidden; no new notifications created     |
 

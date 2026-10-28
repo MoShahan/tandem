@@ -97,7 +97,7 @@ Persisted on `audit_logs.action`. Full list is defined in [`schema.prisma`](../a
 
 | Value           | Description          |
 | --------------- | -------------------- |
-| `SALES_ERP`     | Sales / leads module |
+| `SALES`         | Sales / leads module |
 | `DASHBOARDS`    | Dashboard module     |
 | `NOTIFICATIONS` | Notifications module |
 

@@ -40,8 +40,8 @@ export const DashboardPage = () => {
   const hasDashboardsModule = useAppSelector(
     selectHasModule(ORG_MODULE_KEYS.DASHBOARDS),
   );
-  const hasSalesErpModule = useAppSelector(
-    selectHasModule(ORG_MODULE_KEYS.SALES_ERP),
+  const hasSalesModule = useAppSelector(
+    selectHasModule(ORG_MODULE_KEYS.SALES),
   );
   const hasDashboard = useAppSelector(
     selectHasAnyPermission([...DASHBOARD_PERMISSIONS]),
@@ -92,7 +92,7 @@ export const DashboardPage = () => {
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {layout ? <CustomizeDashboardSheet layout={layout} /> : null}
-          {hasSalesErpModule && canViewLeads ? (
+          {hasSalesModule && canViewLeads ? (
             <Button variant="outline" asChild>
               <Link to="/leads">View leads</Link>
             </Button>

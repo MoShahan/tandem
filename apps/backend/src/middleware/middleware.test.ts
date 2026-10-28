@@ -97,7 +97,7 @@ describe("requireAnyPermission", () => {
 describe("requireOrgModule", () => {
   it("requires organization context", () => {
     const next = mockNext();
-    requireOrgModule(ORG_MODULE_KEYS.SALES_ERP)(
+    requireOrgModule(ORG_MODULE_KEYS.SALES)(
       mockReq({
         authUser: baseAuthContext({ organization: null }),
       }),
@@ -110,7 +110,7 @@ describe("requireOrgModule", () => {
 
   it("forbids disabled modules", () => {
     const next = mockNext();
-    requireOrgModule(ORG_MODULE_KEYS.SALES_ERP)(
+    requireOrgModule(ORG_MODULE_KEYS.SALES)(
       mockReq({ authUser: baseAuthContext({ modules: [] }) }),
       mockRes().res,
       next,
@@ -121,9 +121,9 @@ describe("requireOrgModule", () => {
 
   it("allows enabled modules", () => {
     const next = mockNext();
-    requireOrgModule(ORG_MODULE_KEYS.SALES_ERP)(
+    requireOrgModule(ORG_MODULE_KEYS.SALES)(
       mockReq({
-        authUser: baseAuthContext({ modules: [ORG_MODULE_KEYS.SALES_ERP] }),
+        authUser: baseAuthContext({ modules: [ORG_MODULE_KEYS.SALES] }),
       }),
       mockRes().res,
       next,

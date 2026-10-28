@@ -15,8 +15,8 @@ export const ORG_MODULE_CATALOG: {
   disableHint: string;
 }[] = [
   {
-    key: ORG_MODULE_KEYS.SALES_ERP,
-    label: "Sales ERP",
+    key: ORG_MODULE_KEYS.SALES,
+    label: "Sales",
     description: "Leads pipeline and activity logging for your sales team.",
     disableHint:
       "Users will not be able to manage leads or log activities. Dashboards and notifications are not affected.",
@@ -38,13 +38,13 @@ export const ORG_MODULE_CATALOG: {
 ];
 
 const MODULE_KEY_TO_DB: Record<OrgModuleKey, ModuleKey> = {
-  [ORG_MODULE_KEYS.SALES_ERP]: ModuleKey.SALES_ERP,
+  [ORG_MODULE_KEYS.SALES]: ModuleKey.SALES,
   [ORG_MODULE_KEYS.DASHBOARDS]: ModuleKey.DASHBOARDS,
   [ORG_MODULE_KEYS.NOTIFICATIONS]: ModuleKey.NOTIFICATIONS,
 };
 
 const DB_TO_MODULE_KEY: Record<ModuleKey, OrgModuleKey> = {
-  [ModuleKey.SALES_ERP]: ORG_MODULE_KEYS.SALES_ERP,
+  [ModuleKey.SALES]: ORG_MODULE_KEYS.SALES,
   [ModuleKey.DASHBOARDS]: ORG_MODULE_KEYS.DASHBOARDS,
   [ModuleKey.NOTIFICATIONS]: ORG_MODULE_KEYS.NOTIFICATIONS,
 };
@@ -56,7 +56,7 @@ export const fromDbModuleKey = (key: ModuleKey): OrgModuleKey =>
   DB_TO_MODULE_KEY[key];
 
 export const MODULE_DISABLED_MESSAGES: Record<OrgModuleKey, string> = {
-  [ORG_MODULE_KEYS.SALES_ERP]: "Sales operations are not available",
+  [ORG_MODULE_KEYS.SALES]: "Sales operations are not available",
   [ORG_MODULE_KEYS.DASHBOARDS]: "Dashboard is not available",
   [ORG_MODULE_KEYS.NOTIFICATIONS]: "Notifications are not available",
 };

@@ -19,8 +19,8 @@ import {
 
 export const DashboardNoAccess = () => {
   const canViewUsers = useAppSelector(selectHasPermission(PERMISSIONS.USERS_READ));
-  const hasSalesErpModule = useAppSelector(
-    selectHasModule(ORG_MODULE_KEYS.SALES_ERP),
+  const hasSalesModule = useAppSelector(
+    selectHasModule(ORG_MODULE_KEYS.SALES),
   );
   const canViewLeads = useAppSelector(
     selectHasAnyPermission([
@@ -45,7 +45,7 @@ export const DashboardNoAccess = () => {
           to manage the organization.
         </p>
         <div className="flex flex-wrap gap-2">
-          {hasSalesErpModule && canViewLeads ? (
+          {hasSalesModule && canViewLeads ? (
             <Button variant="outline" asChild>
               <Link to="/leads">View leads</Link>
             </Button>

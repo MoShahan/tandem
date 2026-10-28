@@ -3,7 +3,7 @@ import { ModuleKey, type Prisma } from "../generated/prisma/client";
 type TransactionClient = Prisma.TransactionClient;
 
 const DEFAULT_MODULE_KEYS = [
-  ModuleKey.SALES_ERP,
+  ModuleKey.SALES,
   ModuleKey.DASHBOARDS,
   ModuleKey.NOTIFICATIONS,
 ] as const;

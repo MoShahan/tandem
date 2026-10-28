@@ -24,7 +24,7 @@ describe("DefaultLandingRedirect", () => {
     expect(screen.getByText("Dashboard page")).toBeInTheDocument();
   });
 
-  it("redirects to leads when sales ERP module and lead read permission are available", () => {
+  it("redirects to leads when sales module and lead read permission are available", () => {
     renderWithProviders(
       <Routes>
         <Route path="/" element={<DefaultLandingRedirect />} />
@@ -32,7 +32,7 @@ describe("DefaultLandingRedirect", () => {
       </Routes>,
       {
         preloadedState: authenticatedState({
-          modules: ["sales_erp"],
+          modules: ["sales"],
           user: mockUser({ permissions: ["leads:read"] }),
         }),
       },
@@ -66,7 +66,7 @@ describe("DefaultLandingRedirect", () => {
       </Routes>,
       {
         preloadedState: authenticatedState({
-          modules: ["dashboards", "sales_erp"],
+          modules: ["dashboards", "sales"],
           user: mockUser({ permissions: ["leads:read"] }),
         }),
       },

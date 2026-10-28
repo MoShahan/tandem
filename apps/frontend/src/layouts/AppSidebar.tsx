@@ -64,8 +64,8 @@ export const AppSidebar = () => {
     selectHasAnyPermission([...LEADS_READ_PERMISSIONS]),
   );
   const canViewDashboard = useAppSelector(selectCanViewDashboard);
-  const hasSalesErpModule = useAppSelector(
-    selectHasModule(ORG_MODULE_KEYS.SALES_ERP),
+  const hasSalesModule = useAppSelector(
+    selectHasModule(ORG_MODULE_KEYS.SALES),
   );
   const user = useAppSelector(selectAuthUser);
   const location = useLocation();
@@ -153,7 +153,7 @@ export const AppSidebar = () => {
         canViewTeams ||
         canViewMyTeam ||
         canViewAudit ||
-        (hasSalesErpModule && canViewLeads) ? (
+        (hasSalesModule && canViewLeads) ? (
           <SidebarGroup>
             <SidebarGroupLabel className="text-[11px] font-semibold tracking-wider uppercase text-sidebar-foreground/50">
               Organization
@@ -220,7 +220,7 @@ export const AppSidebar = () => {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ) : null}
-                {hasSalesErpModule && canViewLeads ? (
+                {hasSalesModule && canViewLeads ? (
                   <SidebarMenuItem>
                     <SidebarMenuButton
                       asChild

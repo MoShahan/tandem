@@ -35,7 +35,7 @@ export const authenticatedState = (
       code: "TEST",
       status: "ACTIVE",
     },
-    modules: ["sales_erp", "dashboards"],
+    modules: ["sales", "dashboards"],
     status: "authenticated",
     ...overrides,
   }),

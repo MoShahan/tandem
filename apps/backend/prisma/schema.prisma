@@ -59,7 +59,7 @@ enum NotificationType {
 }
 
 enum ModuleKey {
-  SALES_ERP
+  SALES
   DASHBOARDS
   NOTIFICATIONS
 }

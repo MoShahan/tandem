@@ -16,8 +16,8 @@ import type { LeadListQuery } from "../leadsTypes";
 
 export const useLeadListQuery = () => {
   const dispatch = useAppDispatch();
-  const hasSalesErpModule = useAppSelector(
-    selectHasModule(ORG_MODULE_KEYS.SALES_ERP),
+  const hasSalesModule = useAppSelector(
+    selectHasModule(ORG_MODULE_KEYS.SALES),
   );
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -64,12 +64,12 @@ export const useLeadListQuery = () => {
   }, [dispatch, query]);
 
   useEffect(() => {
-    if (!hasSalesErpModule) {
+    if (!hasSalesModule) {
       return;
     }
 
     void dispatch(fetchLeads(query));
-  }, [dispatch, hasSalesErpModule, query]);
+  }, [dispatch, hasSalesModule, query]);
 
   return {
     query,

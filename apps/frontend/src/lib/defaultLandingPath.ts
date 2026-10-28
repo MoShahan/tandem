@@ -46,11 +46,11 @@ export const selectDefaultLandingPath = (state: RootState): string => {
     return "/my-team";
   }
 
-  const hasSalesErpModule = selectHasModule(ORG_MODULE_KEYS.SALES_ERP)(state);
+  const hasSalesModule = selectHasModule(ORG_MODULE_KEYS.SALES)(state);
   const canViewLeads = selectHasAnyPermission([...LEADS_READ_PERMISSIONS])(
     state,
   );
-  if (hasSalesErpModule && canViewLeads) {
+  if (hasSalesModule && canViewLeads) {
     return "/leads";
   }
 

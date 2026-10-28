@@ -1,5 +1,5 @@
 export const ORG_MODULE_KEYS = {
-  SALES_ERP: "sales_erp",
+  SALES: "sales",
   DASHBOARDS: "dashboards",
   NOTIFICATIONS: "notifications",
 } as const;

@@ -41,7 +41,7 @@ describe("authSelectors", () => {
 
   it("checks enabled modules", () => {
     const state = asRootState(authenticatedState());
-    expect(selectHasModule("sales_erp")(state)).toBe(true);
+    expect(selectHasModule("sales")(state)).toBe(true);
     expect(selectHasModule("notifications")(state)).toBe(false);
   });
 
@@ -62,7 +62,7 @@ describe("authSelectors", () => {
       authenticatedState({ modules: ["notifications"] }),
     );
     const withoutModule = asRootState(
-      authenticatedState({ modules: ["sales_erp"] }),
+      authenticatedState({ modules: ["sales"] }),
     );
 
     expect(selectCanAccessNotifications(withModule)).toBe(true);

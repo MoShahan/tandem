@@ -29,7 +29,7 @@ const mockMeResponse: AuthMeResponse = {
     code: "TEST",
     status: "ACTIVE",
   },
-  modules: ["sales_erp"],
+  modules: ["sales"],
 };
 
 describe("authSlice", () => {
@@ -56,7 +56,7 @@ describe("authSlice", () => {
     expect(state.status).toBe("authenticated");
     expect(state.user).toEqual(mockMeResponse.user);
     expect(state.organization).toEqual(mockMeResponse.organization);
-    expect(state.modules).toEqual(["sales_erp"]);
+    expect(state.modules).toEqual(["sales"]);
   });
 
   it("clears auth state on fetchMe.rejected", () => {
@@ -64,7 +64,7 @@ describe("authSlice", () => {
       {
         user: mockMeResponse.user,
         organization: mockMeResponse.organization,
-        modules: ["sales_erp"],
+        modules: ["sales"],
         status: "loading",
       },
       fetchMe.rejected(new Error("Unauthorized"), "", undefined),
@@ -107,7 +107,7 @@ describe("authSlice", () => {
       {
         user: mockMeResponse.user,
         organization: mockMeResponse.organization,
-        modules: ["sales_erp"],
+        modules: ["sales"],
         status: "authenticated",
       },
       logout.fulfilled(undefined, "", undefined),

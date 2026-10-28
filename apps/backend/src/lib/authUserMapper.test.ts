@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { OrganizationStatus, UserStatus } from "../generated/prisma/client";
+import { ORG_MODULE_KEYS } from "../constants/orgModules";
 import { PERMISSIONS } from "../constants/permissions";
 import { toAuthContext, toAuthMeResponse } from "./authUserMapper";
 import type { UserWithAuthRelations } from "./authUserMapper";
@@ -50,7 +51,7 @@ describe("toAuthContext", () => {
   beforeEach(() => {
     vi.mocked(organizationModuleService.getEnabledModuleKeys).mockReset();
     vi.mocked(organizationModuleService.getEnabledModuleKeys).mockResolvedValue([
-      "sales_erp",
+      ORG_MODULE_KEYS.SALES,
     ]);
   });
 
@@ -60,7 +61,7 @@ describe("toAuthContext", () => {
     expect(context.organization?.id).toBe("org-1");
     expect(context.membership?.permissions).toEqual([PERMISSIONS.LEADS_READ]);
     expect(context.membership?.team).toEqual({ id: "team-a", name: "Team A" });
-    expect(context.modules).toEqual(["sales_erp"]);
+    expect(context.modules).toEqual([ORG_MODULE_KEYS.SALES]);
   });
 
   it("rejects inactive memberships", async () => {
@@ -121,6 +122,6 @@ describe("toAuthMeResponse", () => {
     expect(response.user.id).toBe("user-1");
     expect(response.user.permissions).toEqual([PERMISSIONS.LEADS_READ]);
     expect(response.organization?.code).toBe("TEST");
-    expect(response.modules).toEqual(["sales_erp"]);
+    expect(response.modules).toEqual([ORG_MODULE_KEYS.SALES]);
   });
 });

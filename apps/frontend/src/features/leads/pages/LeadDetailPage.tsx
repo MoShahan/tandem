@@ -46,8 +46,8 @@ export const LeadDetailPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const hasSalesErpModule = useAppSelector(
-    selectHasModule(ORG_MODULE_KEYS.SALES_ERP),
+  const hasSalesModule = useAppSelector(
+    selectHasModule(ORG_MODULE_KEYS.SALES),
   );
   const authUser = useAppSelector(selectAuthUser);
   const lead = useAppSelector(selectSelectedLead);
@@ -88,7 +88,7 @@ export const LeadDetailPage = () => {
       : "";
 
   useEffect(() => {
-    if (!id || !hasSalesErpModule) return;
+    if (!id || !hasSalesModule) return;
 
     void dispatch(fetchLead(id));
     void dispatch(fetchActivities(id));
@@ -97,7 +97,7 @@ export const LeadDetailPage = () => {
     return () => {
       dispatch(clearSelectedLead());
     };
-  }, [dispatch, hasSalesErpModule, id]);
+  }, [dispatch, hasSalesModule, id]);
 
   const isLoading = detailStatus === "loading" || detailStatus === "idle";
   const isCurrentAssignee =
@@ -108,7 +108,7 @@ export const LeadDetailPage = () => {
     return null;
   }
 
-  if (!hasSalesErpModule) {
+  if (!hasSalesModule) {
     return <Navigate to="/" replace />;
   }
 

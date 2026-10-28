@@ -26,9 +26,9 @@ import { validateBody } from "../middleware/validateBody";
 
 const router = Router();
 
-const salesErpModule = [
+const salesModule = [
   authenticate,
-  requireOrgModule(ORG_MODULE_KEYS.SALES_ERP),
+  requireOrgModule(ORG_MODULE_KEYS.SALES),
 ];
 
 const leadsRead = [
@@ -55,18 +55,18 @@ const leadsReassign = [
 
 const activitiesWrite = [requirePermission(PERMISSIONS.ACTIVITIES_WRITE)];
 
-router.get("/", ...salesErpModule, ...leadsRead, listLeads);
-router.post("/", ...salesErpModule, ...leadsWrite, validateBody(createLeadSchema), createLead);
-router.get("/:id", ...salesErpModule, ...leadsRead, getLead);
-router.patch("/:id", ...salesErpModule, ...leadsUpdate, validateBody(updateLeadSchema), updateLead);
-router.patch("/:id/assign", ...salesErpModule, ...leadsReassign, validateBody(assignLeadSchema), assignLead);
-router.get("/:id/activities", ...salesErpModule, ...leadsRead, listActivities);
+router.get("/", ...salesModule, ...leadsRead, listLeads);
+router.post("/", ...salesModule, ...leadsWrite, validateBody(createLeadSchema), createLead);
+router.get("/:id", ...salesModule, ...leadsRead, getLead);
+router.patch("/:id", ...salesModule, ...leadsUpdate, validateBody(updateLeadSchema), updateLead);
+router.patch("/:id/assign", ...salesModule, ...leadsReassign, validateBody(assignLeadSchema), assignLead);
+router.get("/:id/activities", ...salesModule, ...leadsRead, listActivities);
 router.get(
   "/:id/status-history",
-  ...salesErpModule,
+  ...salesModule,
   ...leadsRead,
   listStatusHistory,
 );
-router.post("/:id/activities", ...salesErpModule, ...activitiesWrite, validateBody(createActivitySchema), createActivity);
+router.post("/:id/activities", ...salesModule, ...activitiesWrite, validateBody(createActivitySchema), createActivity);
 
 export default router;
