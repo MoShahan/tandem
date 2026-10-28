@@ -40,7 +40,7 @@ export const AccountProfileSection = () => {
           <div className="space-y-1">
             <p className="text-sm font-medium">Phone</p>
             <p className="text-sm text-muted-foreground">
-              {user.phoneNumber ?? "—"}
+              {user.phoneNumber ?? "-"}
             </p>
           </div>
 

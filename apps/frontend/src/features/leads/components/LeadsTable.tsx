@@ -149,10 +149,10 @@ export const LeadsTable = ({
             >
               <TableCell className="py-3 font-medium">{lead.name}</TableCell>
               <TableCell className="py-3 text-muted-foreground">
-                {lead.mobileNumber ?? "—"}
+                {lead.mobileNumber ?? "-"}
               </TableCell>
               <TableCell className="py-3 text-muted-foreground">
-                {lead.email ?? "—"}
+                {lead.email ?? "-"}
               </TableCell>
               <TableCell className="py-3">{lead.team.name}</TableCell>
               <TableCell className="py-3">
@@ -162,10 +162,10 @@ export const LeadsTable = ({
                 <LeadStatusBadge status={lead.status} />
               </TableCell>
               <TableCell className="py-3 text-muted-foreground">
-                {lead.source ?? "—"}
+                {lead.source ?? "-"}
               </TableCell>
               <TableCell className="py-3 text-muted-foreground">
-                {lead.project ?? "—"}
+                {lead.project ?? "-"}
               </TableCell>
               <TableCell className="py-3 text-muted-foreground">
                 {formatDate(lead.createdAt)}

@@ -35,7 +35,7 @@ describe("AuditDetailRow", () => {
       />,
     );
 
-    expect(screen.getByText("—")).toBeInTheDocument();
+    expect(screen.getByText("-")).toBeInTheDocument();
   });
 
   it("renders JSON for object diff values", () => {

@@ -3,6 +3,8 @@ import tseslint from "typescript-eslint";
 import importPlugin from "eslint-plugin-import";
 import prettier from "eslint-config-prettier";
 
+import { tandemEslintPlugin } from "../../eslint/no-em-dash.mjs";
+
 export default tseslint.config(
   {
     ignores: [
@@ -17,13 +19,14 @@ export default tseslint.config(
   prettier,
   {
     files: ["src/**/*.ts"],
-    plugins: { import: importPlugin },
+    plugins: { import: importPlugin, tandem: tandemEslintPlugin },
     settings: {
       "import/resolver": {
         typescript: { project: "./tsconfig.json" },
       },
     },
     rules: {
+      "tandem/no-em-dash": "error",
       "@typescript-eslint/no-unused-vars": [
         "error",
         { argsIgnorePattern: "^_" },

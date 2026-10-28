@@ -51,7 +51,7 @@ export const formatDate = (iso: string) =>
   );
 
 export const formatWinRate = (winRate: number | null) =>
-  winRate === null ? "—" : `${winRate}%`;
+  winRate === null ? "-" : `${winRate}%`;
 
 export const formatWinRateDetail = (
   winRate: number | null,
@@ -59,7 +59,7 @@ export const formatWinRateDetail = (
   lost: number,
 ) => {
   if (winRate === null) {
-    return { value: "—", description: "No closed leads yet" };
+    return { value: "-", description: "No closed leads yet" };
   }
 
   return {

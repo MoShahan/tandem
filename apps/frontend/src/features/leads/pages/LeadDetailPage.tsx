@@ -295,6 +295,6 @@ const DetailField = ({
     <p className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
       {label}
     </p>
-    <p className="mt-1 text-sm">{value?.trim() ? value : "—"}</p>
+    <p className="mt-1 text-sm">{value?.trim() ? value : "-"}</p>
   </div>
 );

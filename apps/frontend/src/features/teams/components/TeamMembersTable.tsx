@@ -156,7 +156,7 @@ export const TeamMembersTable = ({
                 </TableCell>
                 <TableCell className="py-3">
                   {member.role?.name ?? (
-                    <span className="text-muted-foreground">—</span>
+                    <span className="text-muted-foreground">-</span>
                   )}
                 </TableCell>
                 <TableCell className="py-3">

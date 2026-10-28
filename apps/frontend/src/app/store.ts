@@ -12,9 +12,9 @@ import { usersReducer } from "@/features/users/usersSlice";
 /**
  * Feature slice pattern (add per module under src/features/<feature>/):
  *
- * 1. <feature>Service.ts  — HTTP calls via apiClient (no Redux)
- * 2. <feature>Slice.ts    — createSlice + createAsyncThunk wrapping the service
- * 3. <feature>Selectors.ts — memoized selectors for derived state
+ * 1. <feature>Service.ts  - HTTP calls via apiClient (no Redux)
+ * 2. <feature>Slice.ts    - createSlice + createAsyncThunk wrapping the service
+ * 3. <feature>Selectors.ts - memoized selectors for derived state
  * 4. Register the reducer below: `<feature>: featureReducer`
  *
  * Components use useAppDispatch / useAppSelector from @/app/hooks.

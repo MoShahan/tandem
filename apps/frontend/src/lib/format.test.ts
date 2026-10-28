@@ -70,7 +70,7 @@ describe("formatDate", () => {
 
 describe("formatWinRate", () => {
   it("returns em dash for null win rate", () => {
-    expect(formatWinRate(null)).toBe("—");
+    expect(formatWinRate(null)).toBe("-");
   });
 
   it("returns percentage for numeric win rate", () => {
@@ -81,7 +81,7 @@ describe("formatWinRate", () => {
 describe("formatWinRateDetail", () => {
   it("returns placeholder when win rate is null", () => {
     expect(formatWinRateDetail(null, 0, 0)).toEqual({
-      value: "—",
+      value: "-",
       description: "No closed leads yet",
     });
   });

@@ -171,14 +171,14 @@ export const UsersTable = ({
                   {user.role ? (
                     <span className="text-sm">{user.role.name}</span>
                   ) : (
-                    <span className="text-sm text-muted-foreground">—</span>
+                    <span className="text-sm text-muted-foreground">-</span>
                   )}
                 </TableCell>
                 <TableCell className="py-3">
                   {user.team ? (
                     <span className="text-sm">{user.team.name}</span>
                   ) : (
-                    <span className="text-sm text-muted-foreground">—</span>
+                    <span className="text-sm text-muted-foreground">-</span>
                   )}
                 </TableCell>
                 <TableCell className="py-3">

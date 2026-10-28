@@ -23,7 +23,7 @@ export const PlaceholderPage = ({
       </CardHeader>
       <CardContent>
         <p className="text-sm text-muted-foreground">
-          Placeholder content — full implementation coming in later tasks.
+          Placeholder content - full implementation coming in later tasks.
         </p>
       </CardContent>
     </Card>
