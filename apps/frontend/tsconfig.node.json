@@ -16,7 +16,6 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "types": ["node"],
-    "baseUrl": ".",
     "paths": {
       "@vitejs/plugin-react": ["../../node_modules/@vitejs/plugin-react"],
       "@tailwindcss/vite": ["../../node_modules/@tailwindcss/vite"]
