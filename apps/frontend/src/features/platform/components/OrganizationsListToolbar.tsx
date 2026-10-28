@@ -2,6 +2,7 @@ import { Search, X } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { Input } from "@/components/ui/input";
+import { useDebouncedSearch } from "@/hooks/useDebouncedSearch";
 import { cn } from "@/lib/utils";
 
 import type {
@@ -117,15 +118,9 @@ export const OrganizationsListToolbar = ({
     setSearchInput(query.search);
   }, [query.search]);
 
-  useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      if (searchInput.trim() !== query.search.trim()) {
-        onQueryChange({ search: searchInput.trim(), page: 1 });
-      }
-    }, 300);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [searchInput, query.search, onQueryChange]);
+  useDebouncedSearch(searchInput, query.search, (search) =>
+    onQueryChange({ search, page: 1 }),
+  );
 
   const handleClearSearch = () => {
     setSearchInput("");

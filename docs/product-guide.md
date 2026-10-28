@@ -1083,7 +1083,7 @@ List pages persist **search**, **filters**, **sort**, and **pagination** in the 
 | Setting            | Value                                                                                     |
 | ------------------ | ----------------------------------------------------------------------------------------- |
 | **Delay**          | **300 milliseconds**                                                                      |
-| **Implementation** | `setTimeout` in toolbar `useEffect` (no shared debounce hook)                             |
+| **Implementation** | Shared `useDebouncedSearch` hook in list toolbars (`SEARCH_DEBOUNCE_MS` = 300)            |
 | **Trigger**        | Typing in search input updates local state immediately; API fetch fires after 300 ms idle |
 
 Pages **without** debounced search: Notifications (filter toggles immediately), Roles (no search), Dashboard widgets.

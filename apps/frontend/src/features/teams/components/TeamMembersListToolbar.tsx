@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useDebouncedSearch } from "@/hooks/useDebouncedSearch";
 import {
   Select,
   SelectContent,
@@ -42,14 +43,9 @@ export const TeamMembersListToolbar = ({
     setSearchInput(query.search);
   }, [query.search]);
 
-  useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      if (searchInput.trim() !== query.search.trim()) {
-        onQueryChange({ search: searchInput.trim(), page: 1 });
-      }
-    }, 300);
-    return () => window.clearTimeout(timeoutId);
-  }, [searchInput, query.search, onQueryChange]);
+  useDebouncedSearch(searchInput, query.search, (search) =>
+    onQueryChange({ search, page: 1 }),
+  );
 
   const rangeStart =
     total === 0 ? 0 : (query.page - 1) * query.pageSize + 1;
