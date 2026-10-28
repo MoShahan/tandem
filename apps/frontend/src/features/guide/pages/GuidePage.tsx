@@ -1,14 +1,5 @@
 import { Link } from "react-router-dom";
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-
 import { GuideActivityStrip } from "../components/GuideActivityStrip";
 import { GuideAssignmentFlow } from "../components/GuideAssignmentFlow";
 import { GuideHero } from "../components/GuideHero";
@@ -17,6 +8,7 @@ import { GuideOrgDiagram } from "../components/GuideOrgDiagram";
 import { GuideOutcomeCharts } from "../components/GuideOutcomeCharts";
 import { GuidePageLayout } from "../components/GuidePageLayout";
 import { GuidePipeline } from "../components/GuidePipeline";
+import { GuideRolesTable } from "../components/GuideRolesTable";
 import { GuideTeamTree } from "../components/GuideTeamTree";
 import {
   GuideDashboardScopes,
@@ -25,7 +17,7 @@ import {
   GuideNotifyVsAudit,
   GuideRoleLadder,
 } from "../components/GuideVisualPanels";
-import { GUIDE_SECTIONS, ROLE_ROWS } from "../content/guideContent";
+import { GUIDE_SECTIONS } from "../content/guideContent";
 
 import type { ReactNode } from "react";
 
@@ -233,38 +225,7 @@ export const GuidePage = () => {
             </p>
           </Prose>
           <GuideRoleLadder />
-          <div className="overflow-hidden rounded-xl border bg-card">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="whitespace-normal">
-                    Role in Tandem
-                  </TableHead>
-                  <TableHead className="whitespace-normal">
-                    Who they are
-                  </TableHead>
-                  <TableHead className="whitespace-normal">
-                    What they do here
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {ROLE_ROWS.map((row) => (
-                  <TableRow key={row.role}>
-                    <TableCell className="whitespace-normal font-medium">
-                      {row.role}
-                    </TableCell>
-                    <TableCell className="whitespace-normal text-muted-foreground">
-                      {row.realLife}
-                    </TableCell>
-                    <TableCell className="whitespace-normal text-muted-foreground">
-                      {row.does}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+          <GuideRolesTable />
           <Prose>
             <p>
               Organization admins can invent <strong>custom roles</strong> by

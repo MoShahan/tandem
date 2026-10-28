@@ -55,31 +55,37 @@ export const PIPELINE_STEPS: {
 export const ROLE_ROWS = [
   {
     role: "Platform admin",
+    scope: "platform",
     realLife: "Operator of Tandem itself",
     does: "Creates and suspends companies, turns modules on or off. Does not sell inside a company.",
   },
   {
     role: "Org admin",
+    scope: "company",
     realLife: "Office, HR, or operations admin",
     does: "Manages users, teams, roles, and the audit log. Not a salesperson by default.",
   },
   {
     role: "Director",
+    scope: "company",
     realLife: "Head of sales",
     does: "Sees every lead in the company and the organization dashboard.",
   },
   {
     role: "Sales manager",
+    scope: "company",
     realLife: "Sales manager",
     does: "Creates and edits leads across the company. No dashboard by default.",
   },
   {
     role: "Team leader",
+    scope: "company",
     realLife: "Team lead or supervisor",
     does: "Creates leads for the team, assigns them, sees the team dashboard, and can add team members.",
   },
   {
     role: "Executive",
+    scope: "company",
     realLife: "Sales executive, agent, or closer - not a CEO",
     does: "Works assigned leads, logs activities, and uses a personal dashboard. Cannot create leads by default.",
   },
