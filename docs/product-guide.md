@@ -1211,17 +1211,22 @@ The seed creates those five organizations with default roles and all modules ena
 
 ## 20. UI screenshots
 
-Screenshots live under `docs/assets/screenshots/`, grouped by public pages, shared account screens, platform admin, org admin, and role-specific dashboards.
+Screenshots live under `docs/assets/screenshots/`, grouped by public pages, shared account screens, platform admin, org admin, and role-specific dashboards. Recaptured October 2026 under **Tandem** branding (light theme). Sample Wayne Enterprises leads in the org/executive shots are local fixture data, not the production seed.
 
 ### Public
 
 | Screen             | Route      |
 | ------------------ | ---------- |
 | Login              | `/login`   |
+| How Tandem works   | `/guide`   |
 | Privacy policy     | `/privacy` |
 | Terms & conditions | `/terms`   |
 
 ![Login page](assets/screenshots/public/login-page.png)
+
+![How Tandem works](assets/screenshots/public/guide-page.png)
+
+![A day in the life](assets/screenshots/public/guide-day-in-the-life.png)
 
 ![Privacy policy](assets/screenshots/public/privacy-policy.png)
 
