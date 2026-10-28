@@ -12,55 +12,125 @@ import { disconnectPrisma, prisma } from "../src/lib/prisma";
 
 const SALT_ROUNDS = 10;
 
+const PLATFORM_ADMINS = [
+  {
+    email: "tandem.admin@yopmail.com",
+    name: "Platform Admin",
+    password: "Admin@123",
+  },
+  {
+    email: "tandem.admin2@yopmail.com",
+    name: "Platform Admin 2",
+    password: "Tandem@123",
+  },
+] as const;
+
+const ORGANIZATIONS = [
+  {
+    name: "Wayne Enterprises",
+    code: "wayne-enterprises",
+    description: "Gotham conglomerate spanning tech, real estate, and applied sciences",
+    admin: {
+      email: "wayne@yopmail.com",
+      name: "Wayne Enterprises Admin",
+      password: "Wayne@123",
+    },
+  },
+  {
+    name: "Daggett Industries",
+    code: "daggett-industries",
+    description: "Gotham construction and energy firm, rival to Wayne Enterprises",
+    admin: {
+      email: "daggett@yopmail.com",
+      name: "Daggett Industries Admin",
+      password: "Daggett@123",
+    },
+  },
+  {
+    name: "Ace Chemicals",
+    code: "ace-chemicals",
+    description: "Gotham industrial chemical manufacturer",
+    admin: {
+      email: "ace@yopmail.com",
+      name: "Ace Chemicals Admin",
+      password: "Ace@123",
+    },
+  },
+  {
+    name: "Janus Cosmetics",
+    code: "janus-cosmetics",
+    description: "Gotham cosmetics house from the Sionis family",
+    admin: {
+      email: "janus@yopmail.com",
+      name: "Janus Cosmetics Admin",
+      password: "Janus@123",
+    },
+  },
+  {
+    name: "LexCorp",
+    code: "lexcorp",
+    description: "Metropolis conglomerate spanning energy, tech, and defense",
+    admin: {
+      email: "lexcorp@yopmail.com",
+      name: "LexCorp Admin",
+      password: "Lex@123",
+    },
+  },
+] as const;
+
 const main = async () => {
   await prisma.$transaction(async (tx) => {
     await seedPermissions(tx);
     await seedPlatformRole(tx);
 
-    const organization = await tx.organization.upsert({
-      where: { code: "hilite-builders" },
-      update: {},
-      create: {
-        name: "HiLite Builders",
-        code: "hilite-builders",
-        description: "Sample organization for development",
-        status: OrganizationStatus.ACTIVE,
-      },
-    });
+    for (const admin of PLATFORM_ADMINS) {
+      const user = await tx.user.upsert({
+        where: { email: admin.email },
+        update: {},
+        create: {
+          email: admin.email,
+          name: admin.name,
+          passwordHash: await bcrypt.hash(admin.password, SALT_ROUNDS),
+          status: UserStatus.ACTIVE,
+        },
+      });
 
-    await seedDefaultRolesForOrg(tx, organization.id);
-    await seedDefaultModulesForOrg(tx, organization.id);
+      await assignPlatformRoleBySlug(tx, user.id, "platform_admin");
+    }
 
-    const platformAdmin = await tx.user.upsert({
-      where: { email: "admin@hilite.com" },
-      update: {},
-      create: {
-        email: "admin@hilite.com",
-        name: "Platform Admin",
-        passwordHash: await bcrypt.hash("Admin@123", SALT_ROUNDS),
-        status: UserStatus.ACTIVE,
-      },
-    });
+    for (const org of ORGANIZATIONS) {
+      const organization = await tx.organization.upsert({
+        where: { code: org.code },
+        update: {},
+        create: {
+          name: org.name,
+          code: org.code,
+          description: org.description,
+          status: OrganizationStatus.ACTIVE,
+        },
+      });
 
-    await assignPlatformRoleBySlug(tx, platformAdmin.id, "platform_admin");
+      await seedDefaultRolesForOrg(tx, organization.id);
+      await seedDefaultModulesForOrg(tx, organization.id);
 
-    const orgAdmin = await tx.user.upsert({
-      where: { email: "admin@hilitebuilders.com" },
-      update: {},
-      create: {
-        email: "admin@hilitebuilders.com",
-        name: "Organization Admin",
-        passwordHash: await bcrypt.hash("HBuilders@123", SALT_ROUNDS),
-        status: UserStatus.ACTIVE,
-      },
-    });
+      const orgAdmin = await tx.user.upsert({
+        where: { email: org.admin.email },
+        update: {},
+        create: {
+          email: org.admin.email,
+          name: org.admin.name,
+          passwordHash: await bcrypt.hash(org.admin.password, SALT_ROUNDS),
+          status: UserStatus.ACTIVE,
+        },
+      });
 
-    await assignOrgMembershipBySlug(
-      tx,
-      orgAdmin.id,
-      organization.id,
-      "org_admin",
-    );
+      await assignOrgMembershipBySlug(
+        tx,
+        orgAdmin.id,
+        organization.id,
+        "org_admin",
+      );
+    }
   });
 
   console.log("Seed completed successfully");
