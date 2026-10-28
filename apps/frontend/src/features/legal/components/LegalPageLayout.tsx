@@ -68,12 +68,20 @@ export const LegalPageLayout = ({
 
       <footer className="border-t bg-background">
         <div className="mx-auto flex max-w-3xl flex-col items-center gap-2 px-6 py-6 text-center text-sm text-muted-foreground sm:flex-row sm:justify-between">
-          <Link
-            to={otherLegalPage.href}
-            className="underline underline-offset-4 transition-colors hover:text-foreground"
-          >
-            {otherLegalPage.label}
-          </Link>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+            <Link
+              to={otherLegalPage.href}
+              className="underline underline-offset-4 transition-colors hover:text-foreground"
+            >
+              {otherLegalPage.label}
+            </Link>
+            <Link
+              to="/guide"
+              className="underline underline-offset-4 transition-colors hover:text-foreground"
+            >
+              How Tandem works
+            </Link>
+          </div>
           <Link
             to="/login"
             className="underline underline-offset-4 transition-colors hover:text-foreground"

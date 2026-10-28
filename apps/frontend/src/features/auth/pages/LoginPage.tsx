@@ -123,7 +123,13 @@ export const LoginPage = () => {
         </div>
 
         <p className="relative text-sm text-white/50">
-          Trusted by sales teams who need one place to work.
+          Trusted by sales teams who need one place to work.{" "}
+          <Link
+            to="/guide"
+            className="text-white/80 underline underline-offset-4 transition-colors hover:text-white"
+          >
+            How Tandem works
+          </Link>
         </p>
       </div>
 
@@ -204,6 +210,15 @@ export const LoginPage = () => {
                   >
                     {form.formState.isSubmitting ? "Signing in..." : "Log in"}
                   </Button>
+                  <p className="text-center text-sm text-muted-foreground">
+                    New here?{" "}
+                    <Link
+                      to="/guide"
+                      className="font-medium text-foreground underline underline-offset-4 hover:text-foreground/80"
+                    >
+                      How Tandem works
+                    </Link>
+                  </p>
                 </form>
               </Form>
             </CardContent>
@@ -224,6 +239,13 @@ export const LoginPage = () => {
             className="underline underline-offset-4 transition-colors hover:text-foreground"
           >
             Terms &amp; Conditions
+          </Link>
+          . Read{" "}
+          <Link
+            to="/guide"
+            className="underline underline-offset-4 transition-colors hover:text-foreground"
+          >
+            How Tandem works
           </Link>
           .
         </p>

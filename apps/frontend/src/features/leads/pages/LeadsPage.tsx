@@ -1,6 +1,6 @@
 import { Kanban, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import { useAppSelector } from "@/app/hooks";
@@ -179,10 +179,18 @@ export const LeadsPage = () => {
             <div className="flex size-12 items-center justify-center rounded-full bg-muted">
               <Kanban className="size-5 text-muted-foreground" />
             </div>
-            <div>
+            <div className="max-w-md space-y-1">
               <p className="font-medium">No leads yet</p>
               <p className="text-sm text-muted-foreground">
-                Create your first lead to start tracking opportunities.
+                A lead is a potential customer your team is trying to convert.
+                Create one to start tracking the pipeline, or{" "}
+                <Link
+                  to="/guide#what-a-lead-is"
+                  className="font-medium text-foreground underline underline-offset-4"
+                >
+                  read how leads work
+                </Link>
+                .
               </p>
             </div>
             {canCreateLead ? (

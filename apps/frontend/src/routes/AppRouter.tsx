@@ -113,6 +113,12 @@ const TermsPage = lazy(() =>
   })),
 );
 
+const GuidePage = lazy(() =>
+  import("@/features/guide/pages/GuidePage").then((module) => ({
+    default: module.GuidePage,
+  })),
+);
+
 const HomePage = lazy(() =>
   import("@/pages/HomePage").then((module) => ({
     default: module.HomePage,
@@ -155,6 +161,7 @@ export const AppRouter = () => {
           </Route>
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
+          <Route path="/guide" element={<GuidePage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<DefaultLandingRedirect />} />
             <Route
