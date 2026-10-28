@@ -26,4 +26,12 @@ export class AppError extends Error {
   static notFound = (message = "Resource not found") => {
     return new AppError(404, "NOT_FOUND", message);
   };
+
+  static tooManyRequests = (message = "Too many requests") => {
+    return new AppError(429, "TOO_MANY_REQUESTS", message);
+  };
+
+  static serviceUnavailable = (message = "Service unavailable") => {
+    return new AppError(503, "SERVICE_UNAVAILABLE", message);
+  };
 }

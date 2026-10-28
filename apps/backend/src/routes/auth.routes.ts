@@ -14,12 +14,13 @@ import {
   updateMe,
 } from "../controllers/auth.controller";
 import { authenticate } from "../middleware/authenticate";
+import { authRateLimiter } from "../middleware/authRateLimit";
 import { validateBody } from "../middleware/validateBody";
 
 const router = Router();
 
-router.post("/login", validateBody(loginSchema), login);
-router.post("/refresh", refresh);
+router.post("/login", authRateLimiter, validateBody(loginSchema), login);
+router.post("/refresh", authRateLimiter, refresh);
 router.get("/me", authenticate, getMe);
 router.patch("/me", authenticate, validateBody(updateProfileSchema), updateMe);
 router.post(

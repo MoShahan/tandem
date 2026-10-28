@@ -628,4 +628,4 @@ The codebase is optimized for MVP delivery and single-instance local development
 | Observability                  | Console logs         | Structured logging and metrics                                                                                                                           |
 | Audit / notification retention | Unbounded            | Time-based archival or partitioning for compliance tables                                                                                                |
 
-Graceful shutdown is implemented (`SIGINT`/`SIGTERM` → close server, disconnect Prisma, end connection pool), which is a foundation for container orchestration but not sufficient on its own for production readiness.
+Graceful shutdown waits for `server.close` (in-flight requests) with a 10s timeout, then disconnects Prisma and ends the pool. Render sends `SIGTERM` on deploy; a second signal is ignored while shutdown is already running.

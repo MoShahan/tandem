@@ -32,6 +32,10 @@ if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }
 
+export const pingDatabase = async (): Promise<void> => {
+  await pool.query("SELECT 1");
+};
+
 export const connectPrisma = async () => {
   await prisma.$connect();
   logger.info("Prisma connected to database");
