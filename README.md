@@ -70,7 +70,7 @@ npm run setup
 | `DATABASE_URL`             | PostgreSQL connection string. Local Docker, or Neon **pooled** (`-pooler`) on Render | `postgresql://tandem:tandem@localhost:5432/tandem`     |
 | `DIRECT_URL`               | Neon **non-pooled** URL for `migrate deploy` and seed. Omit locally. | *(unset locally)*                                      |
 | `JWT_SECRET`               | Secret used to sign access tokens            | `change-me` locally. Production refuses to start if this is still `change-me`. |
-| `JWT_EXPIRES_IN`           | Access token lifetime                        | `1d`                                                   |
+| `JWT_EXPIRES_IN`           | Access token lifetime                        | From env. Local example `1d`. Set `15m` on Render. Refresh stays `7d`. |
 | `REFRESH_TOKEN_EXPIRES_IN` | Refresh token lifetime                       | `7d`                                                   |
 | `FRONTEND_URL`             | Allowed frontend origin for CORS and cookies | `http://localhost:5173`                                |
 | `COOKIE_SECURE`            | Set `Secure` flag on auth cookies            | `true`                                                 |
@@ -167,7 +167,8 @@ Full UI screenshots by role and feature area are in the [Product guide - UI scre
 
 ## Documentation
 
-- [Product guide](docs/product-guide.md) - features, roles, permissions, notifications, audit, dashboards, UI reference, and [screenshots](docs/product-guide.md#20-ui-screenshots)
+- [How Tandem works](https://tandemcrm.vercel.app/guide) — public, no-login product story (`/guide`)
+- [Product guide](docs/product-guide.md) — stakeholder/QA reference (roles, permissions, lists, seed accounts, [screenshots](docs/product-guide.md#20-ui-screenshots))
 - [API specification (OpenAPI)](docs/openapi.yaml) - import into [Swagger Editor](https://editor.swagger.io) to browse and try endpoints
 - [Architecture](docs/architecture.md) - system design, auth, tenancy, multi-org readiness, notifications, scaling
 - [Database schema](docs/database-schema.md) - table-level reference, columns, enums, and relationships
