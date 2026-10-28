@@ -34,13 +34,9 @@ import { ApiClientError, resetSessionExpiredState } from "@/lib/api-client";
 type LoginFormValues = LoginInput;
 
 const LoginHeroGraphic = () => (
-  <div className="relative mx-auto size-56">
-    <div className="absolute inset-0 rounded-full bg-primary/20 blur-3xl" />
-    <div className="relative flex size-full items-center justify-center">
-      <div className="absolute inset-4 rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-sm" />
-      <div className="absolute inset-8 rounded-[1.5rem] border border-white/15 bg-gradient-to-br from-white/15 to-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]" />
-      <TandemLogo className="relative size-24 rounded-2xl border border-primary/30 shadow-[0_0_60px_rgba(0,0,0,0.35)]" />
-    </div>
+  <div className="relative mx-auto">
+    <div className="pointer-events-none absolute inset-0 scale-150 rounded-full bg-primary/20 blur-3xl" />
+    <TandemLogo withWordmark onDark className="relative text-white" />
   </div>
 );
 
@@ -103,7 +99,7 @@ export const LoginPage = () => {
         <div className="pointer-events-none absolute -right-16 bottom-1/4 size-64 rounded-full bg-primary/15 blur-3xl" />
 
         <div className="relative flex items-center gap-3">
-          <TandemLogo className="bg-white text-[oklch(0.18_0.02_260)]" />
+          <TandemLogo className="size-9" onDark />
           <span className="text-sm font-medium text-white/90">
             Tandem
           </span>
@@ -123,13 +119,7 @@ export const LoginPage = () => {
         </div>
 
         <p className="relative text-sm text-white/50">
-          Trusted by sales teams who need one place to work.{" "}
-          <Link
-            to="/guide"
-            className="text-white/80 underline underline-offset-4 transition-colors hover:text-white"
-          >
-            How Tandem works
-          </Link>
+          Trusted by sales teams who need one place to work.
         </p>
       </div>
 
@@ -148,7 +138,7 @@ export const LoginPage = () => {
 
           <Card className="w-full max-w-[420px] border-border/60 shadow-lg">
             <CardHeader className="items-center space-y-4 text-center">
-              <TandemLogo />
+              <TandemLogo className="size-12" />
               <div className="space-y-1.5">
                 <CardTitle className="text-2xl font-semibold tracking-tight">
                   Welcome back!
@@ -239,13 +229,6 @@ export const LoginPage = () => {
             className="underline underline-offset-4 transition-colors hover:text-foreground"
           >
             Terms &amp; Conditions
-          </Link>
-          . Read{" "}
-          <Link
-            to="/guide"
-            className="underline underline-offset-4 transition-colors hover:text-foreground"
-          >
-            How Tandem works
           </Link>
           .
         </p>

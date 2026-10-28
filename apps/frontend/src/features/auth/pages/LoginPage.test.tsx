@@ -32,8 +32,7 @@ describe("LoginPage", () => {
       wrapper: ({ children }) => <ThemeProvider>{children}</ThemeProvider>,
     });
 
-    const guideLinks = screen.getAllByRole("link", { name: "How Tandem works" });
-    expect(guideLinks.length).toBeGreaterThan(0);
-    expect(guideLinks[0]).toHaveAttribute("href", "/guide");
+    const guideLink = screen.getByRole("link", { name: "How Tandem works" });
+    expect(guideLink).toHaveAttribute("href", "/guide");
   });
 });
