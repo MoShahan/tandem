@@ -2,7 +2,7 @@ import { Building2, Mail, MapPin, Phone, UserRound } from "lucide-react";
 
 import { LeadStatusBadge } from "@/features/leads/components/LeadStatusBadge";
 
-import { GuideFigure } from "./GuideFigure";
+import { GUIDE_WELL, GuideFigure } from "./GuideFigure";
 
 const FIELDS = [
   { icon: Phone, label: "Mobile", value: "98765 43210" },
@@ -16,7 +16,7 @@ export const GuideLeadCard = () => (
     label="A lead is a person"
     caption="Priya is a potential customer, not an employee. The team and owner are your salespeople. Priya never logs in."
   >
-    <div className="mx-auto max-w-md rounded-xl border bg-muted/20 p-4 shadow-sm">
+    <div className={`mx-auto max-w-md rounded-xl border p-4 shadow-sm ${GUIDE_WELL}`}>
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="flex size-11 items-center justify-center rounded-full bg-primary/15 text-sm font-semibold text-primary">

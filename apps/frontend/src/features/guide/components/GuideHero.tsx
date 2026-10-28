@@ -1,5 +1,5 @@
 export const GuideHero = () => (
-  <div className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-primary/15 via-background to-background">
+  <div className="relative overflow-hidden rounded-2xl border bg-card bg-gradient-to-br from-primary/20 via-card to-card">
     <div
       className="pointer-events-none absolute inset-0 opacity-40"
       style={{
@@ -25,24 +25,21 @@ export const GuideHero = () => (
         </linearGradient>
       </defs>
 
-      <g className="text-foreground" fill="currentColor">
+      <g className="text-foreground">
         <rect
           x="36"
           y="42"
           width="150"
           height="118"
           rx="16"
-          className="fill-background stroke-border"
-          stroke="currentColor"
-          strokeOpacity="0.18"
-          fill="currentColor"
-          fillOpacity="0.04"
+          className="fill-[color-mix(in_oklch,var(--muted),var(--foreground)_10%)] stroke-border"
+          strokeWidth="1.5"
         />
-        <rect x="56" y="62" width="28" height="22" rx="6" fill="currentColor" fillOpacity="0.7" />
-        <rect x="92" y="64" width="70" height="6" rx="3" fill="currentColor" fillOpacity="0.35" />
-        <rect x="92" y="76" width="46" height="5" rx="2.5" fill="currentColor" fillOpacity="0.2" />
-        <rect x="56" y="98" width="110" height="22" rx="7" fill="currentColor" fillOpacity="0.1" />
-        <rect x="56" y="126" width="110" height="22" rx="7" fill="currentColor" fillOpacity="0.1" />
+        <rect x="56" y="62" width="28" height="22" rx="6" fill="currentColor" fillOpacity="0.55" />
+        <rect x="92" y="64" width="70" height="6" rx="3" fill="currentColor" fillOpacity="0.28" />
+        <rect x="92" y="76" width="46" height="5" rx="2.5" fill="currentColor" fillOpacity="0.16" />
+        <rect x="56" y="98" width="110" height="22" rx="7" fill="currentColor" fillOpacity="0.08" />
+        <rect x="56" y="126" width="110" height="22" rx="7" fill="currentColor" fillOpacity="0.08" />
         <text x="111" y="184" textAnchor="middle" fontSize="12" fill="currentColor" fillOpacity="0.7">
           Company A
         </text>
@@ -55,19 +52,17 @@ export const GuideHero = () => (
         <path d="M261 100h28" strokeDasharray="4 4" />
       </g>
 
-      <g className="text-foreground" fill="currentColor">
+      <g className="text-foreground">
         <rect
           x="312"
           y="42"
           width="150"
           height="118"
           rx="16"
-          stroke="currentColor"
-          strokeOpacity="0.18"
-          fill="currentColor"
-          fillOpacity="0.04"
+          className="fill-[color-mix(in_oklch,var(--muted),var(--foreground)_10%)] stroke-border"
+          strokeWidth="1.5"
         />
-        <rect x="332" y="62" width="28" height="22" rx="6" fill="currentColor" fillOpacity="0.45" />
+        <rect x="332" y="62" width="28" height="22" rx="6" fill="currentColor" fillOpacity="0.55" />
         <rect x="368" y="64" width="70" height="6" rx="3" fill="currentColor" fillOpacity="0.28" />
         <rect x="368" y="76" width="46" height="5" rx="2.5" fill="currentColor" fillOpacity="0.16" />
         <rect x="332" y="98" width="110" height="22" rx="7" fill="currentColor" fillOpacity="0.08" />

@@ -7,7 +7,7 @@ import {
   Video,
 } from "lucide-react";
 
-import { GuideFigure } from "./GuideFigure";
+import { GUIDE_WELL, GuideFigure } from "./GuideFigure";
 
 const ACTIVITIES = [
   { icon: Phone, label: "Call" },
@@ -28,7 +28,7 @@ export const GuideActivityStrip = () => (
         {ACTIVITIES.map((activity) => (
           <div
             key={activity.label}
-            className="flex w-20 flex-col items-center gap-2 rounded-xl border bg-muted/20 py-3"
+            className={`flex w-20 flex-col items-center gap-2 rounded-xl border py-3 ${GUIDE_WELL}`}
           >
             <div className="flex size-9 items-center justify-center rounded-full bg-primary/10 text-primary">
               <activity.icon className="size-4" />

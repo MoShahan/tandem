@@ -1,4 +1,4 @@
-import { GuideFigure } from "./GuideFigure";
+import { GUIDE_WELL, GuideFigure } from "./GuideFigure";
 
 const DONUT = {
   won: 8,
@@ -95,7 +95,7 @@ export const GuideOutcomeCharts = () => (
               <span>{row.label}</span>
               <span>{row.count}</span>
             </div>
-            <div className="h-2.5 overflow-hidden rounded-full bg-muted">
+            <div className={`h-2.5 overflow-hidden rounded-full ${GUIDE_WELL}`}>
               <div
                 className={`h-full rounded-full ${
                   row.label === "Won" ? "bg-emerald-500" : "bg-primary/70"

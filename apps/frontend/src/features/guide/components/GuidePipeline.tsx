@@ -36,7 +36,7 @@ export const GuidePipeline = () => {
         {PIPELINE_STEPS.map((step, index) => (
           <li
             key={step.status}
-            className="flex gap-3 rounded-lg border bg-background px-3 py-2"
+            className="flex gap-3 rounded-lg border bg-card px-3 py-2"
           >
             <span className="mt-0.5 font-mono text-xs text-muted-foreground">
               {step.closed ? "C" : String(index + 1)}
@@ -49,7 +49,7 @@ export const GuidePipeline = () => {
             </div>
           </li>
         ))}
-        <li className="flex items-center gap-2 rounded-lg border border-dashed bg-muted/20 px-3 py-2 text-xs text-muted-foreground sm:col-span-2">
+        <li className="flex items-center gap-2 rounded-lg border border-dashed bg-muted px-3 py-2 text-xs text-muted-foreground sm:col-span-2">
           Closed ({closedSteps.map((step) => step.status === "WON" ? "Won" : "Lost").join(" / ")})
           cannot be edited, reassigned, or moved.
         </li>

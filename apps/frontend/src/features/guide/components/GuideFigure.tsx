@@ -2,6 +2,10 @@ import { cn } from "@/lib/utils";
 
 import type { ReactNode } from "react";
 
+/** Nested well on a card: full muted is too close to white/card in both themes. */
+export const GUIDE_WELL =
+  "bg-[color-mix(in_oklch,var(--muted),var(--foreground)_10%)]";
+
 type GuideFigureProps = {
   label: string;
   caption: string;
@@ -18,7 +22,7 @@ export const GuideFigure = ({
   <figure className="space-y-2">
     <div
       className={cn(
-        "overflow-hidden rounded-xl border bg-background p-4 sm:p-5",
+        "overflow-hidden rounded-xl border bg-card p-4 sm:p-5",
         className,
       )}
     >

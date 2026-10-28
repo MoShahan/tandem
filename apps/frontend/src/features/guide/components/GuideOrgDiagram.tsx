@@ -1,6 +1,6 @@
 import { Building2, Kanban, Users, UsersRound } from "lucide-react";
 
-import { GuideArrow, GuideFigure } from "./GuideFigure";
+import { GUIDE_WELL, GuideArrow, GuideFigure } from "./GuideFigure";
 
 const NODES = [
   {
@@ -37,7 +37,7 @@ export const GuideOrgDiagram = () => {
             {index > 0 ? (
               <GuideArrow className="hidden sm:flex" />
             ) : null}
-            <div className="flex flex-1 gap-3 rounded-xl border bg-muted/30 p-3">
+            <div className={`flex flex-1 gap-3 rounded-xl border p-3 ${GUIDE_WELL}`}>
               <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                 <node.icon className="size-4" />
               </div>

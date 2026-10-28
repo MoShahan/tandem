@@ -1,6 +1,6 @@
 import { UserRound } from "lucide-react";
 
-import { GuideDownArrow, GuideFigure } from "./GuideFigure";
+import { GUIDE_WELL, GuideDownArrow, GuideFigure } from "./GuideFigure";
 
 export const GuideTeamTree = () => (
   <GuideFigure
@@ -14,23 +14,23 @@ export const GuideTeamTree = () => (
       </div>
       <GuideDownArrow />
       <div className="grid w-full gap-3 sm:grid-cols-2">
-        <div className="rounded-xl border bg-background p-3">
+        <div className={`rounded-xl border p-3 ${GUIDE_WELL}`}>
           <p className="mb-2 flex items-center gap-1.5 text-sm font-medium">
             <UserRound className="size-4 text-primary" />
             Asha - executive
           </p>
           <div className="space-y-1.5 text-xs text-muted-foreground">
-            <p className="rounded-md bg-muted/50 px-2 py-1">Priya Shah</p>
-            <p className="rounded-md bg-muted/50 px-2 py-1">Dev Patel</p>
+            <p className="rounded-md bg-background px-2 py-1">Priya Shah</p>
+            <p className="rounded-md bg-background px-2 py-1">Dev Patel</p>
           </div>
         </div>
-        <div className="rounded-xl border bg-background p-3">
+        <div className={`rounded-xl border p-3 ${GUIDE_WELL}`}>
           <p className="mb-2 flex items-center gap-1.5 text-sm font-medium">
             <UserRound className="size-4 text-primary" />
             Rohan - executive
           </p>
           <div className="space-y-1.5 text-xs text-muted-foreground">
-            <p className="rounded-md bg-muted/50 px-2 py-1">Arun Mehta</p>
+            <p className="rounded-md bg-background px-2 py-1">Arun Mehta</p>
             <p className="rounded-md border border-dashed px-2 py-1">
               No more assigned leads
             </p>

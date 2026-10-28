@@ -70,7 +70,7 @@ export const GuidePage = () => {
 
       <nav
         aria-label="On this page"
-        className="mb-10 rounded-xl border bg-background p-4"
+        className="mb-10 rounded-xl border bg-card p-4"
       >
         <p className="mb-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">
           On this page
@@ -233,7 +233,7 @@ export const GuidePage = () => {
             </p>
           </Prose>
           <GuideRoleLadder />
-          <div className="overflow-hidden rounded-xl border bg-background">
+          <div className="overflow-hidden rounded-xl border bg-card">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -338,7 +338,7 @@ export const GuidePage = () => {
         </section>
       </div>
 
-      <div className="mt-12 rounded-xl border bg-background px-5 py-6 text-center">
+      <div className="mt-12 rounded-xl border bg-card px-5 py-6 text-center">
         <p className="text-sm font-medium">Ready to open the workspace?</p>
         <p className="mt-1 text-sm text-muted-foreground">
           Log in with the account your organization gave you.

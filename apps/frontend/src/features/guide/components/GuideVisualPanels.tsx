@@ -10,7 +10,7 @@ import {
   X,
 } from "lucide-react";
 
-import { GuideFigure } from "./GuideFigure";
+import { GUIDE_WELL, GuideFigure } from "./GuideFigure";
 
 export const GuideRoleLadder = () => (
   <GuideFigure
@@ -67,13 +67,13 @@ export const GuideModulesPanel = () => (
       ].map((module) => (
         <div
           key={module.title}
-          className="flex flex-col items-start gap-3 rounded-xl border p-3"
+          className={`flex flex-col items-start gap-3 rounded-xl border p-3 ${GUIDE_WELL}`}
         >
           <div className="flex w-full items-center justify-between">
             <module.icon className="size-4 text-primary" />
             <span
               className={`relative h-5 w-9 rounded-full ${
-                module.on ? "bg-primary" : "bg-muted"
+                module.on ? "bg-primary" : "bg-foreground/20"
               }`}
               aria-hidden
             >
@@ -109,8 +109,8 @@ export const GuideNotifyVsAudit = () => (
           "Priya Shah was assigned to you." Click it and go do the work.
         </p>
       </div>
-      <div className="rounded-xl bg-muted/40 p-4">
-        <div className="mb-3 flex size-10 items-center justify-center rounded-full bg-muted text-muted-foreground">
+      <div className={`rounded-xl p-4 ${GUIDE_WELL}`}>
+        <div className="mb-3 flex size-10 items-center justify-center rounded-full bg-background text-muted-foreground">
           <Shield className="size-5" />
         </div>
         <p className="text-sm font-medium">Audit row</p>
@@ -127,11 +127,11 @@ export const GuideDashboardScopes = () => (
     label="Dashboards nest like zoom levels"
     caption="An executive sees personal numbers. A team leader zooms out to the team. A director zooms out to the company."
   >
-    <div className="space-y-2 rounded-xl border bg-muted/20 p-3">
+    <div className={`space-y-2 rounded-xl border p-3 ${GUIDE_WELL}`}>
       <p className="text-center text-[11px] uppercase tracking-wide text-muted-foreground">
         Organization
       </p>
-      <div className="rounded-lg border bg-background/70 p-3">
+      <div className="rounded-lg border bg-card p-3">
         <p className="text-center text-[11px] uppercase tracking-wide text-muted-foreground">
           Team
         </p>
@@ -160,7 +160,7 @@ export const GuideNotErp = () => (
         <div
           key={item.label}
           className={`flex flex-col items-center gap-2 rounded-xl border p-3 text-center ${
-            item.included ? "bg-primary/10" : "bg-muted/20"
+            item.included ? "bg-primary/10" : GUIDE_WELL
           }`}
         >
           <item.icon
