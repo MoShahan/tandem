@@ -15,7 +15,7 @@ import { GUIDE_WELL, GuideFigure } from "./GuideFigure";
 export const GuideRoleLadder = () => (
   <GuideFigure
     label="Who sits where"
-    caption="Platform staff are outside the company. Inside the company, directors see the most, executives work the leads."
+    caption="Tandem does not store a boss field. What you can see is the reporting line: director over managers, team leader over executives. Org admin sits beside sales, not above it. Platform admin is outside the company."
   >
     <div className="space-y-2">
       <div className="rounded-lg border border-dashed px-3 py-2 text-center text-sm">
@@ -28,26 +28,32 @@ export const GuideRoleLadder = () => (
         <div className="rounded-lg bg-primary/10 px-3 py-2 text-center text-sm">
           Org admin
           <span className="mt-0.5 block text-xs text-muted-foreground">
-            Users, teams, roles
+            Users, teams, roles — office side
           </span>
         </div>
         <div className="rounded-lg bg-primary/20 px-3 py-2 text-center text-sm">
-          Director / sales manager
+          Director
           <span className="mt-0.5 block text-xs text-muted-foreground">
-            Whole-company pipeline
+            Head of sales, whole-company view
           </span>
         </div>
+      </div>
+      <div className="rounded-lg bg-primary/25 px-3 py-2 text-center text-sm">
+        Sales manager
+        <span className="mt-0.5 block text-xs text-muted-foreground">
+          Several teams; company-wide leads
+        </span>
       </div>
       <div className="rounded-lg bg-primary/30 px-3 py-2 text-center text-sm">
         Team leader
         <span className="mt-0.5 block text-xs text-muted-foreground">
-          Creates and assigns leads for one team
+          Boss of one team; creates and assigns leads
         </span>
       </div>
       <div className="rounded-lg bg-primary/45 px-3 py-2 text-center text-sm">
         Executive
         <span className="mt-0.5 block text-xs text-muted-foreground">
-          Salesperson who works assigned leads - not a CEO
+          Salesperson on that team — the “team member,” not a CEO
         </span>
       </div>
     </div>

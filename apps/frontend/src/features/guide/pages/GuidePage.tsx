@@ -8,6 +8,10 @@ import { GuideOrgDiagram } from "../components/GuideOrgDiagram";
 import { GuideOutcomeCharts } from "../components/GuideOutcomeCharts";
 import { GuidePageLayout } from "../components/GuidePageLayout";
 import { GuidePipeline } from "../components/GuidePipeline";
+import {
+  GuideCustomRoleExamples,
+  GuideRoleProfiles,
+} from "../components/GuideRoleProfiles";
 import { GuideRolesTable } from "../components/GuideRolesTable";
 import { GuideTeamTree } from "../components/GuideTeamTree";
 import {
@@ -218,20 +222,45 @@ export const GuidePage = () => {
           <SectionHeading id="roles">Roles</SectionHeading>
           <Prose>
             <p>
-              A role is a job title bundled with permissions - what that person
+              A role is a job title bundled with permissions — what that person
               is allowed to see and do. The most important translation:{" "}
               <strong>executive does not mean CEO</strong>. In Tandem it means
-              salesperson.
+              salesperson. Those people are the <strong>team members</strong>.
+            </p>
+            <p>
+              A <strong>lead</strong> is not a job. It is a potential customer.
+              There is no “Lead” role and no built-in “Team member” or “Project
+              manager” role. Org admins can add extra roles by ticking
+              permissions. Built-in roles cannot be deleted.
+            </p>
+            <p>
+              Tandem does not store “this person is the boss of that person.”
+              The ladder below is how a real sales floor usually works, and how
+              far each default role can see: own leads, one team, or the whole
+              company.
             </p>
           </Prose>
           <GuideRoleLadder />
           <GuideRolesTable />
           <Prose>
             <p>
-              Organization admins can invent <strong>custom roles</strong> by
-              ticking permissions. Built-in roles cannot be deleted.
+              Each default role, in a company and in this app:
             </p>
           </Prose>
+          <GuideRoleProfiles />
+          <h3 className="text-base font-semibold tracking-tight text-foreground">
+            Roles you can add
+          </h3>
+          <Prose>
+            <p>
+              If your office has jobs that are not on the list — a coordinator
+              who only captures walk-ins, a founder who only wants numbers, a
+              project desk that watches one building — create a custom role and
+              tick the permissions that match. These three are examples, not
+              extra built-in roles.
+            </p>
+          </Prose>
+          <GuideCustomRoleExamples />
         </section>
 
         <section className="space-y-4" aria-labelledby="modules">
