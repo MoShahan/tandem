@@ -15,7 +15,14 @@ const mockAuditLog = {
   entityType: "user" as const,
   entityId: "user-1",
   actorId: "actor-1",
+  actor: {
+    id: "actor-1",
+    name: "Actor",
+    email: "actor@example.com",
+    roleSlug: "org_admin",
+  },
   organizationId: "org-1",
+  organization: { id: "org-1", name: "Wayne Enterprises", code: "WAYNE" },
   metadata: { summary: "User created" },
   createdAt: "2026-06-01T00:00:00.000Z",
 };

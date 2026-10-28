@@ -5,7 +5,10 @@ import { SessionExpiredHandler } from "./SessionExpiredHandler";
 import { renderWithProviders } from "@/test/render";
 import { authenticatedState } from "@/test/fixtures/auth";
 
-const mockNavigate = vi.fn();
+const { mockNavigate, onSessionExpired } = vi.hoisted(() => ({
+  mockNavigate: vi.fn(),
+  onSessionExpired: vi.fn<(handler: () => void | Promise<void>) => void>(),
+}));
 
 vi.mock("react-router-dom", async () => {
   const actual = await vi.importActual<typeof import("react-router-dom")>(
@@ -18,8 +21,6 @@ vi.mock("react-router-dom", async () => {
   };
 });
 
-let capturedHandler: (() => void | Promise<void>) | null = null;
-
 vi.mock("@/lib/api-client", async () => {
   const actual = await vi.importActual<typeof import("@/lib/api-client")>(
     "@/lib/api-client",
@@ -28,8 +29,8 @@ vi.mock("@/lib/api-client", async () => {
   return {
     ...actual,
     registerSessionExpiredHandler: (handler: () => void | Promise<void>) => {
-      capturedHandler = handler;
-      return actual.registerSessionExpiredHandler(handler);
+      onSessionExpired(handler);
+      actual.registerSessionExpiredHandler(handler);
     },
   };
 });
@@ -37,7 +38,7 @@ vi.mock("@/lib/api-client", async () => {
 describe("SessionExpiredHandler", () => {
   it("logs out and navigates to login when session expires", async () => {
     mockNavigate.mockReset();
-    capturedHandler = null;
+    onSessionExpired.mockClear();
 
     const { store } = renderWithProviders(
       <Routes>
@@ -49,9 +50,9 @@ describe("SessionExpiredHandler", () => {
       },
     );
 
-    expect(capturedHandler).not.toBeNull();
-
-    await capturedHandler?.();
+    const handler = onSessionExpired.mock.calls[0]?.[0];
+    expect(handler).toEqual(expect.any(Function));
+    await handler?.();
 
     expect(store.getState().auth.status).toBe("unauthenticated");
     expect(mockNavigate).toHaveBeenCalledWith("/login", {

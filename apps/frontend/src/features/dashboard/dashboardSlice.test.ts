@@ -18,15 +18,28 @@ vi.mock("./dashboardService", () => ({
 }));
 
 const mockSummary = {
-  totalLeads: 10,
-  openLeads: 5,
-  wonLeads: 3,
-  lostLeads: 2,
-  winRate: 60,
+  view: "me" as const,
+  conversion: {
+    totalLeads: 10,
+    openLeads: 5,
+    wonCount: 3,
+    lostCount: 2,
+    closedCount: 5,
+    winRate: 60,
+    unassignedCount: 0,
+  },
+  statusBreakdown: [],
+  totalActivities: 0,
+  recentActivities: [],
+  needsAttentionCount: 0,
 };
 
 const mockLayout = {
-  widgets: [{ key: "lead_summary", width: "full" as const }],
+  view: "me" as const,
+  widgets: [
+    { key: "conversion_overview" as const, order: 0, visible: true },
+  ],
+  catalog: [],
 };
 
 describe("dashboardSlice", () => {
