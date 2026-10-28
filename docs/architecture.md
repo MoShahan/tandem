@@ -624,7 +624,7 @@ The codebase is optimized for MVP delivery and single-instance local development
 | Notifications                  | In-process + polling | Message queue (Bull, SQS) + WebSocket/SSE push; separate email worker                                                                                    |
 | DB load                        | Single Postgres      | Connection pool tuning, read replicas for list endpoints; indexes exist on `notifications.[userId, readAt]` and `audit_logs.[organizationId, createdAt]` |
 | Caching                        | None                 | Redis for unread counts and permission catalog                                                                                                           |
-| Deployment                     | Local dev only       | Containerize backend, static frontend on CDN, managed Postgres; secrets for `JWT_SECRET`, `DATABASE_URL`, `COOKIE_SECURE`, `FRONTEND_URL`                |
+| Deployment                     | Local dev only       | Containerize backend, static frontend on CDN, managed Postgres; secrets for `JWT_SECRET`, `DATABASE_URL`, `DIRECT_URL`, `COOKIE_SECURE`, `FRONTEND_URL`  |
 | Observability                  | Console logs         | Structured logging and metrics                                                                                                                           |
 | Audit / notification retention | Unbounded            | Time-based archival or partitioning for compliance tables                                                                                                |
 

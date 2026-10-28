@@ -63,7 +63,8 @@ npm run setup
 | Variable                   | Description                                  | Default                                                |
 | -------------------------- | -------------------------------------------- | ------------------------------------------------------ |
 | `PORT`                     | API server port                              | `3000`                                                 |
-| `DATABASE_URL`             | PostgreSQL connection string                 | `postgresql://tandem:tandem@localhost:5432/tandem`     |
+| `DATABASE_URL`             | PostgreSQL connection string. Local Docker, or Neon **pooled** (`-pooler`) on Render | `postgresql://tandem:tandem@localhost:5432/tandem`     |
+| `DIRECT_URL`               | Neon **non-pooled** URL for `migrate deploy` and seed. Omit locally. | *(unset locally)*                                      |
 | `JWT_SECRET`               | Secret used to sign access tokens            | `change-me` locally. Production refuses to start if this is still `change-me`. |
 | `JWT_EXPIRES_IN`           | Access token lifetime                        | `1d`                                                   |
 | `REFRESH_TOKEN_EXPIRES_IN` | Refresh token lifetime                       | `7d`                                                   |

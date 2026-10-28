@@ -4,6 +4,7 @@ import { Pool } from "pg";
 import { env } from "../config/env";
 import { PrismaClient } from "../generated/prisma/client";
 
+import { createPgPoolConfig } from "./pgPoolConfig";
 import { logger } from "./logger";
 
 const globalForPrisma = globalThis as unknown as {
@@ -12,7 +13,13 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 const pool =
-  globalForPrisma.pool ?? new Pool({ connectionString: env.databaseUrl });
+  globalForPrisma.pool ??
+  new Pool(
+    createPgPoolConfig({
+      connectionString: env.databaseUrl,
+      nodeEnv: process.env.NODE_ENV,
+    }),
+  );
 
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.pool = pool;
