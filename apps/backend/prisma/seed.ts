@@ -8,7 +8,7 @@ import {
 import { assignOrgMembershipBySlug } from "../src/lib/orgMembership";
 import { seedDefaultModulesForOrg } from "../src/lib/seedOrganizationModules";
 import { seedPermissions } from "../src/lib/seedPermissions";
-import { disconnectPrisma, prisma } from "../src/lib/prisma";
+import { disconnectPrisma, pingDatabase, prisma } from "../src/lib/prisma";
 
 const SALT_ROUNDS = 10;
 
@@ -79,59 +79,83 @@ const ORGANIZATIONS = [
 ] as const;
 
 const main = async () => {
-  await prisma.$transaction(async (tx) => {
-    await seedPermissions(tx);
-    await seedPlatformRole(tx);
+  await pingDatabase();
 
-    for (const admin of PLATFORM_ADMINS) {
-      const user = await tx.user.upsert({
-        where: { email: admin.email },
-        update: {},
-        create: {
-          email: admin.email,
-          name: admin.name,
-          passwordHash: await bcrypt.hash(admin.password, SALT_ROUNDS),
-          status: UserStatus.ACTIVE,
-        },
-      });
+  const platformAdminHashes = await Promise.all(
+    PLATFORM_ADMINS.map(async (admin) => ({
+      ...admin,
+      passwordHash: await bcrypt.hash(admin.password, SALT_ROUNDS),
+    })),
+  );
+  const organizationHashes = await Promise.all(
+    ORGANIZATIONS.map(async (org) => ({
+      ...org,
+      admin: {
+        ...org.admin,
+        passwordHash: await bcrypt.hash(org.admin.password, SALT_ROUNDS),
+      },
+    })),
+  );
 
-      await assignPlatformRoleBySlug(tx, user.id, "platform_admin");
-    }
+  await prisma.$transaction(
+    async (tx) => {
+      await seedPermissions(tx);
+      await seedPlatformRole(tx);
 
-    for (const org of ORGANIZATIONS) {
-      const organization = await tx.organization.upsert({
-        where: { code: org.code },
-        update: {},
-        create: {
-          name: org.name,
-          code: org.code,
-          description: org.description,
-          status: OrganizationStatus.ACTIVE,
-        },
-      });
+      for (const admin of platformAdminHashes) {
+        const user = await tx.user.upsert({
+          where: { email: admin.email },
+          update: {},
+          create: {
+            email: admin.email,
+            name: admin.name,
+            passwordHash: admin.passwordHash,
+            status: UserStatus.ACTIVE,
+          },
+        });
 
-      await seedDefaultRolesForOrg(tx, organization.id);
-      await seedDefaultModulesForOrg(tx, organization.id);
+        await assignPlatformRoleBySlug(tx, user.id, "platform_admin");
+      }
 
-      const orgAdmin = await tx.user.upsert({
-        where: { email: org.admin.email },
-        update: {},
-        create: {
-          email: org.admin.email,
-          name: org.admin.name,
-          passwordHash: await bcrypt.hash(org.admin.password, SALT_ROUNDS),
-          status: UserStatus.ACTIVE,
-        },
-      });
+      for (const org of organizationHashes) {
+        const organization = await tx.organization.upsert({
+          where: { code: org.code },
+          update: {},
+          create: {
+            name: org.name,
+            code: org.code,
+            description: org.description,
+            status: OrganizationStatus.ACTIVE,
+          },
+        });
 
-      await assignOrgMembershipBySlug(
-        tx,
-        orgAdmin.id,
-        organization.id,
-        "org_admin",
-      );
-    }
-  });
+        await seedDefaultRolesForOrg(tx, organization.id);
+        await seedDefaultModulesForOrg(tx, organization.id);
+
+        const orgAdmin = await tx.user.upsert({
+          where: { email: org.admin.email },
+          update: {},
+          create: {
+            email: org.admin.email,
+            name: org.admin.name,
+            passwordHash: org.admin.passwordHash,
+            status: UserStatus.ACTIVE,
+          },
+        });
+
+        await assignOrgMembershipBySlug(
+          tx,
+          orgAdmin.id,
+          organization.id,
+          "org_admin",
+        );
+      }
+    },
+    {
+      maxWait: 30_000,
+      timeout: 120_000,
+    },
+  );
 
   console.log("Seed completed successfully");
 };

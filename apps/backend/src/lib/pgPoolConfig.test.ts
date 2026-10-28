@@ -53,6 +53,17 @@ describe("createPgPoolConfig", () => {
       connectionString: NEON_POOLED_URL,
       max: PG_POOL_MAX,
       ssl: { rejectUnauthorized: false },
+      connectionTimeoutMillis: 30_000,
     });
+  });
+
+  it("strips channel_binding which node-pg does not honor", () => {
+    const withBinding = `${NEON_POOLED_URL}&channel_binding=require`;
+    expect(
+      createPgPoolConfig({
+        connectionString: withBinding,
+        nodeEnv: "development",
+      }).connectionString,
+    ).toBe(NEON_POOLED_URL);
   });
 });

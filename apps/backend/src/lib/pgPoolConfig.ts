@@ -26,17 +26,29 @@ export const shouldUsePgSsl = (
   }
 };
 
+const connectionStringForPg = (connectionString: string): string => {
+  try {
+    const url = new URL(connectionString);
+    url.searchParams.delete("channel_binding");
+    return url.toString();
+  } catch {
+    return connectionString;
+  }
+};
+
 export const createPgPoolConfig = (options: {
   connectionString: string;
   nodeEnv?: string;
 }): PoolConfig => {
+  const useSsl = shouldUsePgSsl(options.connectionString, options.nodeEnv);
   const config: PoolConfig = {
-    connectionString: options.connectionString,
+    connectionString: connectionStringForPg(options.connectionString),
     max: PG_POOL_MAX,
   };
 
-  if (shouldUsePgSsl(options.connectionString, options.nodeEnv)) {
+  if (useSsl) {
     config.ssl = { rejectUnauthorized: false };
+    config.connectionTimeoutMillis = 30_000;
   }
 
   return config;
