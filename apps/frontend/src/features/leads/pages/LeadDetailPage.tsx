@@ -132,8 +132,14 @@ export const LeadDetailPage = () => {
             <Skeleton className="h-32 w-full" />
           </div>
         ) : detailError ? (
-          <div className="rounded-xl border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm text-destructive">
-            {detailError}
+          <div className="rounded-xl border bg-card px-6 py-10 text-center shadow-sm">
+            <p className="text-lg font-semibold tracking-tight">Lead not found</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {detailError}
+            </p>
+            <Button className="mt-4" variant="outline" asChild>
+              <Link to={`/leads${listSearch}`}>Back to leads</Link>
+            </Button>
           </div>
         ) : lead ? (
           <>

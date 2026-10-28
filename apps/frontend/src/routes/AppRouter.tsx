@@ -1,5 +1,5 @@
 import { lazy, Suspense, type ReactNode } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import { PageSkeleton } from "@/components/PageSkeleton";
 import { DASHBOARD_PERMISSIONS } from "@/constants/permissions";
@@ -122,6 +122,12 @@ const GuidePage = lazy(() =>
 const HomePage = lazy(() =>
   import("@/pages/HomePage").then((module) => ({
     default: module.HomePage,
+  })),
+);
+
+const NotFoundPage = lazy(() =>
+  import("@/pages/NotFoundPage").then((module) => ({
+    default: module.NotFoundPage,
   })),
 );
 
@@ -328,7 +334,7 @@ export const AppRouter = () => {
               }
             />
           </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
     </>

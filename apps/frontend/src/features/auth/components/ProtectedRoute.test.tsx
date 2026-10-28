@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { screen } from "@testing-library/react";
 
 import { ProtectedRoute } from "./ProtectedRoute";
@@ -42,6 +42,32 @@ describe("ProtectedRoute", () => {
 
     expect(screen.getByText("Login page")).toBeInTheDocument();
     expect(screen.queryByText("Private page")).not.toBeInTheDocument();
+  });
+
+  it("passes the original path and query to login", () => {
+    const LoginFrom = () => {
+      const location = useLocation();
+      const from = (location.state as { from?: string } | null)?.from;
+
+      return <div>from:{from ?? "none"}</div>;
+    };
+
+    renderWithProviders(
+      <Routes>
+        <Route path="/leads/:id" element={<ProtectedRoute />}>
+          <Route index element={<div>Lead page</div>} />
+        </Route>
+        <Route path="/login" element={<LoginFrom />} />
+      </Routes>,
+      {
+        preloadedState: {
+          auth: mockAuthState({ status: "unauthenticated" }),
+        },
+        route: "/leads/abc-123?fromList=1",
+      },
+    );
+
+    expect(screen.getByText("from:/leads/abc-123?fromList=1")).toBeInTheDocument();
   });
 
   it("renders child routes for authenticated users", () => {
