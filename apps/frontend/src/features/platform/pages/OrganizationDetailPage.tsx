@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Pencil } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
@@ -28,7 +28,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
-import { ApiClientError } from "@/lib/api-client";
+import { getApiErrorDetails, getApiErrorMessage } from "@/lib/apiError";
 import { formatDateTime } from "@/lib/format";
 
 import { OrganizationModulesPanel } from "../components/OrganizationModulesPanel";
@@ -68,20 +68,6 @@ const updateOrganizationSchema = z.object({
 
 type UpdateOrganizationFormValues = z.infer<typeof updateOrganizationSchema>;
 
-type ApiRejection = {
-  message: string;
-  details?: { field?: string; message: string }[];
-};
-
-const isApiRejection = (value: unknown): value is ApiRejection => {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "message" in value &&
-    typeof value.message === "string"
-  );
-};
-
 export const OrganizationDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
@@ -96,6 +82,7 @@ export const OrganizationDetailPage = () => {
   const isMutating = useAppSelector(selectIsPlatformMutating);
 
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const form = useForm<UpdateOrganizationFormValues>({
     resolver: zodResolver(updateOrganizationSchema),
@@ -125,13 +112,17 @@ export const OrganizationDetailPage = () => {
       return;
     }
 
+    if (isEditing) {
+      return;
+    }
+
     form.reset({
       name: organization.name,
       code: organization.code,
       description: organization.description ?? "",
       logoUrl: organization.logoUrl ?? "",
     });
-  }, [form, organization]);
+  }, [form, isEditing, organization]);
 
   const applyApiFieldErrors = (
     details?: { field?: string; message: string }[],
@@ -175,15 +166,39 @@ export const OrganizationDetailPage = () => {
       ).unwrap();
 
       toast.success("Organization updated");
+      setIsEditing(false);
     } catch (error) {
-      if (isApiRejection(error)) {
-        applyApiFieldErrors(error.details);
-        toast.error(error.message);
-        return;
-      }
-
-      toast.error("Failed to update organization");
+      applyApiFieldErrors(getApiErrorDetails(error));
+      toast.error(getApiErrorMessage(error, "Failed to update organization"));
     }
+  };
+
+  const startEditing = () => {
+    if (!organization) {
+      return;
+    }
+
+    form.reset({
+      name: organization.name,
+      code: organization.code,
+      description: organization.description ?? "",
+      logoUrl: organization.logoUrl ?? "",
+    });
+    setIsEditing(true);
+  };
+
+  const cancelEditing = () => {
+    if (!organization) {
+      return;
+    }
+
+    form.reset({
+      name: organization.name,
+      code: organization.code,
+      description: organization.description ?? "",
+      logoUrl: organization.logoUrl ?? "",
+    });
+    setIsEditing(false);
   };
 
   const handleConfirmStatusChange = async () => {
@@ -210,9 +225,7 @@ export const OrganizationDetailPage = () => {
       setStatusDialogOpen(false);
     } catch (error) {
       toast.error(
-        error instanceof ApiClientError
-          ? error.message
-          : "Failed to update organization status",
+        getApiErrorMessage(error, "Failed to update organization status"),
       );
     }
   };
@@ -307,12 +320,28 @@ export const OrganizationDetailPage = () => {
             >
               {organization.status === "ACTIVE" ? "Suspend" : "Activate"}
             </Button>
-            <Button
-              onClick={() => void form.handleSubmit(onSubmit)()}
-              disabled={isMutating || !form.formState.isDirty}
-            >
-              {isMutating ? "Saving..." : "Save changes"}
-            </Button>
+            {isEditing ? (
+              <>
+                <Button
+                  variant="outline"
+                  onClick={cancelEditing}
+                  disabled={isMutating}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={() => void form.handleSubmit(onSubmit)()}
+                  disabled={isMutating || !form.formState.isDirty}
+                >
+                  {isMutating ? "Saving..." : "Save"}
+                </Button>
+              </>
+            ) : (
+              <Button onClick={startEditing} disabled={isMutating}>
+                <Pencil className="size-4" />
+                Edit
+              </Button>
+            )}
           </div>
         </div>
       </div>
@@ -321,74 +350,115 @@ export const OrganizationDetailPage = () => {
         <CardHeader>
           <CardTitle>Organization details</CardTitle>
           <CardDescription>
-            Update organization information and view metadata.
+            {isEditing
+              ? "Update organization information, then save."
+              : "Name, code, and description for this organization."}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <Form {...form}>
-            <form
-              onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
-              className="grid gap-4 md:grid-cols-2"
-            >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="code"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Code</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        onChange={(event) =>
-                          field.onChange(event.target.value.toLowerCase())
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem className="md:col-span-2">
-                    <FormLabel>Description</FormLabel>
-                    <FormControl>
-                      <Textarea rows={3} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="logoUrl"
-                render={({ field }) => (
-                  <FormItem className="md:col-span-2">
-                    <FormLabel>Logo URL</FormLabel>
-                    <FormControl>
-                      <Input placeholder="https://example.com/logo.png" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </form>
-          </Form>
+          {isEditing ? (
+            <Form {...form}>
+              <form
+                onSubmit={(event) => void form.handleSubmit(onSubmit)(event)}
+                className="grid gap-4 md:grid-cols-2"
+              >
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Name</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="code"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Code</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          onChange={(event) =>
+                            field.onChange(event.target.value.toLowerCase())
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Textarea rows={3} {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="logoUrl"
+                  render={({ field }) => (
+                    <FormItem className="md:col-span-2">
+                      <FormLabel>Logo URL</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="https://example.com/logo.png"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </form>
+            </Form>
+          ) : (
+            <dl className="grid gap-4 md:grid-cols-2">
+              <div>
+                <dt className="text-sm text-muted-foreground">Name</dt>
+                <dd className="mt-1 text-sm font-medium">{organization.name}</dd>
+              </div>
+              <div>
+                <dt className="text-sm text-muted-foreground">Code</dt>
+                <dd className="mt-1 text-sm font-medium">{organization.code}</dd>
+              </div>
+              <div className="md:col-span-2">
+                <dt className="text-sm text-muted-foreground">Description</dt>
+                <dd className="mt-1 text-sm font-medium whitespace-pre-wrap">
+                  {organization.description?.trim() ? organization.description : "—"}
+                </dd>
+              </div>
+              <div className="md:col-span-2">
+                <dt className="text-sm text-muted-foreground">Logo URL</dt>
+                <dd className="mt-1 text-sm font-medium break-all">
+                  {organization.logoUrl ? (
+                    <a
+                      href={organization.logoUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="underline underline-offset-4"
+                    >
+                      {organization.logoUrl}
+                    </a>
+                  ) : (
+                    "—"
+                  )}
+                </dd>
+              </div>
+            </dl>
+          )}
 
           <div className="grid gap-4 rounded-lg border bg-muted/30 p-4 text-sm md:grid-cols-3">
             <div>
