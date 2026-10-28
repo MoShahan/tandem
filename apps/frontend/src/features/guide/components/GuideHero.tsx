@@ -32,7 +32,7 @@ export const GuideHero = () => (
           width="150"
           height="118"
           rx="16"
-          className="fill-[color-mix(in_oklch,var(--muted),var(--foreground)_10%)] stroke-border"
+          className="fill-muted dark:fill-[color-mix(in_oklch,var(--muted),var(--foreground)_10%)] stroke-border"
           strokeWidth="1.5"
         />
         <rect x="56" y="62" width="28" height="22" rx="6" fill="currentColor" fillOpacity="0.55" />
@@ -59,7 +59,7 @@ export const GuideHero = () => (
           width="150"
           height="118"
           rx="16"
-          className="fill-[color-mix(in_oklch,var(--muted),var(--foreground)_10%)] stroke-border"
+          className="fill-muted dark:fill-[color-mix(in_oklch,var(--muted),var(--foreground)_10%)] stroke-border"
           strokeWidth="1.5"
         />
         <rect x="332" y="62" width="28" height="22" rx="6" fill="currentColor" fillOpacity="0.55" />

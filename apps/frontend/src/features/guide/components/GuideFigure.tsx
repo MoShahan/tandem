@@ -2,9 +2,9 @@ import { cn } from "@/lib/utils";
 
 import type { ReactNode } from "react";
 
-/** Nested well on a card: full muted is too close to white/card in both themes. */
+/** Nested well on a card: light gray in light mode, lifted muted in dark. */
 export const GUIDE_WELL =
-  "bg-[color-mix(in_oklch,var(--muted),var(--foreground)_10%)]";
+  "bg-muted dark:bg-[color-mix(in_oklch,var(--muted),var(--foreground)_10%)]";
 
 type GuideFigureProps = {
   label: string;
