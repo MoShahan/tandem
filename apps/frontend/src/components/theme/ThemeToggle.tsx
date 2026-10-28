@@ -71,7 +71,7 @@ export const ThemeToggle = () => {
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
           isDark
             ? "bg-[#2a3042] shadow-[inset_3px_3px_8px_rgba(0,0,0,0.45),inset_-2px_-2px_6px_rgba(255,255,255,0.05)]"
-            : "bg-[#e8ecf0] shadow-[inset_3px_3px_8px_rgba(0,0,0,0.1),inset_-3px_-3px_8px_rgba(255,255,255,0.95)]",
+            : "border border-neutral-300 bg-[#d5dbe3] shadow-[inset_3px_3px_8px_rgba(0,0,0,0.12),inset_-3px_-3px_8px_rgba(255,255,255,0.85)]",
         )}
         style={{
           width: TRACK_WIDTH,
@@ -86,7 +86,7 @@ export const ThemeToggle = () => {
             "transition-[transform,background-color,box-shadow,color]",
             isDark
               ? "bg-[#4a5568] text-white/80 shadow-[3px_3px_10px_rgba(0,0,0,0.45),-2px_-2px_6px_rgba(255,255,255,0.08)]"
-              : "bg-white text-[#b0b8c4] shadow-[4px_4px_12px_rgba(0,0,0,0.14),-2px_-2px_8px_rgba(255,255,255,1)]",
+              : "border border-neutral-200 bg-white text-[#7a8494] shadow-[4px_4px_12px_rgba(0,0,0,0.16),-2px_-2px_8px_rgba(255,255,255,1)]",
           )}
           style={{
             width: KNOB_SIZE,

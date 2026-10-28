@@ -58,11 +58,11 @@ export const AuditActionBadge = ({
       className={cn(
         "font-normal",
         category === "auth" &&
-          "border-blue-500/40 text-blue-700 dark:text-blue-300",
+          "border-blue-500/30 bg-blue-500/10 text-blue-700 dark:border-blue-400/20 dark:bg-blue-400/10 dark:text-blue-300",
         category === "lead" &&
-          "border-emerald-500/40 text-emerald-700 dark:text-emerald-300",
+          "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-300",
         category === "admin" &&
-          "border-amber-500/40 text-amber-700 dark:text-amber-300",
+          "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-300",
       )}
     >
       {formatAuditActionLabel(action)}

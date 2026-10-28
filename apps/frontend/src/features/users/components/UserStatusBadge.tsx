@@ -20,8 +20,8 @@ export const UserStatusBadge = ({
       className={cn(
         "font-normal",
         isActive
-          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
-          : "border-muted-foreground/30 bg-muted/50 text-muted-foreground",
+          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-300"
+          : "border-muted-foreground/30 bg-muted/50 text-muted-foreground dark:border-muted-foreground/20 dark:bg-muted/40",
         className,
       )}
     >

@@ -20,8 +20,8 @@ export const OrganizationStatusBadge = ({
       className={cn(
         "gap-1.5 rounded-full px-2.5 py-0.5 font-medium",
         isActive
-          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
-          : "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:text-amber-400",
+          ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-300"
+          : "border-amber-500/30 bg-amber-500/10 text-amber-700 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-300",
         className,
       )}
     >
