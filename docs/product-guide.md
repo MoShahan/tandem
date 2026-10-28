@@ -1,8 +1,10 @@
 # Product Guide
 
-Complete product reference for **Tandem** - a multi-tenant sales CRM / Sales OS with organizations, teams, leads, role-based access control (RBAC), dashboards, in-app notifications, and audit trails.
+Stakeholder and QA reference for **Tandem** — a multi-tenant sales CRM / Sales OS. Use this file to check what shipped: roles, the permission catalog, pipeline rules, list/search/sort behavior, seed logins, and UI screenshots.
 
-**Audience:** Anyone who needs to understand _what_ the product does (not how it is built).
+**If you want the non-technical story**, open **[How Tandem works](https://tandemcrm.vercel.app/guide)** (no login). Locally that is [`/guide`](http://localhost:5173/guide). That page is the human tour. This markdown file is not.
+
+**Audience:** stakeholders, QA, and anyone reviewing acceptance details — not first-time readers of the product.
 
 **Related technical docs:**
 
