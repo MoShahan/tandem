@@ -2,9 +2,9 @@ import type { LegalPageContent } from "../types";
 
 export const privacyPolicyContent: LegalPageContent = {
   title: "Privacy Policy",
-  lastUpdated: "June 24, 2026",
+  lastUpdated: "October 28, 2026",
   disclaimer:
-    "This document is provided for demonstration purposes as part of the HILITE Sales OS MVP.",
+    "This document is sample legal copy for Tandem, a personal full-stack project.",
   otherLegalPage: {
     label: "Terms & Conditions",
     href: "/terms",
@@ -13,8 +13,8 @@ export const privacyPolicyContent: LegalPageContent = {
     {
       title: "Introduction",
       paragraphs: [
-        "HILITE Sales OS is a multi-tenant sales management platform operated for authorized business users. This Privacy Policy explains how we collect, use, and protect information when you access or use the service.",
-        "By using HILITE Sales OS, you acknowledge that you have read and understood this Privacy Policy.",
+        "Tandem is a multi-tenant sales management platform operated for authorized business users. This Privacy Policy explains how we collect, use, and protect information when you access or use the service.",
+        "By using Tandem, you acknowledge that you have read and understood this Privacy Policy.",
       ],
     },
     {
@@ -34,14 +34,14 @@ export const privacyPolicyContent: LegalPageContent = {
     {
       title: "Multi-Tenant Data Handling",
       paragraphs: [
-        "HILITE Sales OS is designed for multi-tenant use. Data entered by your organization is scoped to that organization and is accessible only to users with appropriate permissions within that organization.",
+        "Tandem is designed for multi-tenant use. Data entered by your organization is scoped to that organization and is accessible only to users with appropriate permissions within that organization.",
         "Platform administrators may access cross-organization data solely for platform administration, support, and security purposes.",
       ],
     },
     {
       title: "Data Sharing",
       paragraphs: [
-        "We do not sell personal data. We may share information with service providers who assist in operating the platform, when required by law, or to protect the rights, safety, and security of HILITE, our users, or others.",
+        "We do not sell personal data. We may share information with service providers who assist in operating the platform, when required by law, or to protect the rights, safety, and security of Tandem, our users, or others.",
         "Any sharing is limited to what is necessary for the stated purpose.",
       ],
     },

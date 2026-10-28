@@ -1,8 +1,8 @@
 # Product Guide
 
-Complete product reference for **HILITE Sales OS** - a multi-tenant sales ERP MVP with organizations, teams, leads, role-based access control (RBAC), dashboards, in-app notifications, and audit trails.
+Complete product reference for **Tandem** - a multi-tenant sales CRM / Sales OS with organizations, teams, leads, role-based access control (RBAC), dashboards, in-app notifications, and audit trails.
 
-**Audience:** Product owners, stakeholders, assessors, and developers who need to understand _what_ the product does (not how it is built).
+**Audience:** Anyone who needs to understand _what_ the product does (not how it is built).
 
 **Related technical docs:**
 
@@ -40,7 +40,7 @@ Complete product reference for **HILITE Sales OS** - a multi-tenant sales ERP MV
 
 ## 1. Product overview
 
-HILITE Sales OS is a **multi-tenant sales platform**. Each **organization** (tenant) has its own users, teams, roles, leads, and configuration. A separate **platform** layer sits above tenants for cross-organization administration.
+Tandem is a **multi-tenant sales platform**. Each **organization** (tenant) has its own users, teams, roles, leads, and configuration. A separate **platform** layer sits above tenants for cross-organization administration.
 
 ### What the product includes today
 
@@ -95,7 +95,7 @@ Platform admins suspend or reactivate organizations from the organization list o
 
 ### Multi-tenant strategy
 
-HILITE Sales OS uses **shared-database, row-level multi-tenancy** — a deliberate MVP choice that balances simplicity with strong isolation.
+Tandem uses **shared-database, row-level multi-tenancy** — a deliberate MVP choice that balances simplicity with strong isolation.
 
 | Approach | Used? | Notes |
 | -------- | ----- | ----- |

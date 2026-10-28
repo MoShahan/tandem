@@ -4,9 +4,9 @@ import {
   type DashboardWidgetDefinition,
   type DashboardWidgetKey,
   type DashboardWidgetWidth,
-} from "@hilite/shared";
+} from "@tandem/shared";
 
-import type { DashboardView } from "@hilite/shared";
+import type { DashboardView } from "@tandem/shared";
 
 export {
   DASHBOARD_WIDGET_KEYS,

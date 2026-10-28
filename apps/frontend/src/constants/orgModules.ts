@@ -2,7 +2,7 @@ export {
   ALL_ORG_MODULE_KEYS,
   ORG_MODULE_KEYS,
   type OrgModuleKey,
-} from "@hilite/shared";
+} from "@tandem/shared";
 
 export const NO_FEATURES_COPY = {
   title: "No features available",

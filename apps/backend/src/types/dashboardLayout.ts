@@ -6,7 +6,7 @@ import type {
   DashboardWidgetKey,
   DashboardWidgetWidth,
   UpdateDashboardLayoutInput,
-} from "@hilite/shared";
+} from "@tandem/shared";
 
 export type {
   DashboardLayoutItem,

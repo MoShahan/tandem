@@ -1,4 +1,4 @@
-import { getLeadStatusSortIndex } from "@hilite/shared";
+import { getLeadStatusSortIndex } from "@tandem/shared";
 
 import type { LeadStatus } from "../generated/prisma/client";
 

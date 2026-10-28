@@ -5,9 +5,9 @@ import {
   LEAD_STATUS_LABELS,
   LINEAR_LEAD_STAGES,
   TERMINAL_LEAD_STAGES,
-} from "@hilite/shared";
+} from "@tandem/shared";
 
-import type { LeadStatus } from "@hilite/shared";
+import type { LeadStatus } from "@tandem/shared";
 
 export {
   getAllowedNextStatuses,

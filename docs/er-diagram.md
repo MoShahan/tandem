@@ -1,6 +1,6 @@
 # ER Diagram
 
-Entity-relationship diagram for the Hilite ERP PostgreSQL database.
+Entity-relationship diagram for the Tandem PostgreSQL database.
 
 **Source of truth:** [`apps/backend/prisma/schema.prisma`](../apps/backend/prisma/schema.prisma)
 

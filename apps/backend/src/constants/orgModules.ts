@@ -2,7 +2,7 @@ import {
   ALL_ORG_MODULE_KEYS,
   ORG_MODULE_KEYS,
   type OrgModuleKey,
-} from "@hilite/shared";
+} from "@tandem/shared";
 
 import { ModuleKey } from "../generated/prisma/client";
 

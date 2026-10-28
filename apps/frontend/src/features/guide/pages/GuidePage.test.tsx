@@ -56,12 +56,12 @@ describe("GuidePage", () => {
   it("is reachable without logging in and links to login", () => {
     renderGuide();
 
+    const loginLinks = screen.getAllByRole("link", { name: "Log in" });
+    expect(loginLinks.length).toBe(2);
+    expect(loginLinks[0]).toHaveAttribute("href", "/login");
+    expect(loginLinks[1]).toHaveAttribute("href", "/login");
     expect(
-      screen.getAllByRole("link", { name: "Log in" }).length,
-    ).toBeGreaterThan(0);
-    expect(screen.getByRole("link", { name: "Back to login" })).toHaveAttribute(
-      "href",
-      "/login",
-    );
+      screen.queryByRole("link", { name: "Back to login" }),
+    ).not.toBeInTheDocument();
   });
 });

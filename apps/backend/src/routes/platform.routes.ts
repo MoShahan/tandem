@@ -1,7 +1,7 @@
 import {
   createPlatformUserSchema,
   updatePlatformUserStatusSchema,
-} from "@hilite/shared";
+} from "@tandem/shared";
 import { Router } from "express";
 
 import { PERMISSIONS } from "../constants/permissions";

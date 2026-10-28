@@ -1,5 +1,5 @@
-import { loginSchema, type LoginInput } from "@hilite/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, type LoginInput } from "@tandem/shared";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { toast } from "sonner";
 
 import { useAppDispatch } from "@/app/hooks";
 import { store } from "@/app/store";
-import { HiliteLogo } from "@/components/HiliteLogo";
+import { TandemLogo } from "@/components/TandemLogo";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,7 +39,7 @@ const LoginHeroGraphic = () => (
     <div className="relative flex size-full items-center justify-center">
       <div className="absolute inset-4 rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-sm" />
       <div className="absolute inset-8 rounded-[1.5rem] border border-white/15 bg-gradient-to-br from-white/15 to-white/5 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]" />
-      <HiliteLogo className="relative size-24 rounded-2xl border border-primary/30 shadow-[0_0_60px_rgba(0,0,0,0.35)]" />
+      <TandemLogo className="relative size-24 rounded-2xl border border-primary/30 shadow-[0_0_60px_rgba(0,0,0,0.35)]" />
     </div>
   </div>
 );
@@ -103,9 +103,9 @@ export const LoginPage = () => {
         <div className="pointer-events-none absolute -right-16 bottom-1/4 size-64 rounded-full bg-primary/15 blur-3xl" />
 
         <div className="relative flex items-center gap-3">
-          <HiliteLogo className="bg-white text-[oklch(0.18_0.02_260)]" />
+          <TandemLogo className="bg-white text-[oklch(0.18_0.02_260)]" />
           <span className="text-sm font-medium text-white/90">
-            HILITE Sales OS
+            Tandem
           </span>
         </div>
 
@@ -140,21 +140,21 @@ export const LoginPage = () => {
 
         <div className="flex flex-1 flex-col items-center justify-center px-6 py-12 sm:px-10">
           <div className="mb-8 flex items-center gap-3 lg:hidden">
-            <HiliteLogo />
+            <TandemLogo />
             <span className="text-sm font-medium text-muted-foreground">
-              HILITE Sales OS
+              Tandem
             </span>
           </div>
 
           <Card className="w-full max-w-[420px] border-border/60 shadow-lg">
             <CardHeader className="items-center space-y-4 text-center">
-              <HiliteLogo />
+              <TandemLogo />
               <div className="space-y-1.5">
                 <CardTitle className="text-2xl font-semibold tracking-tight">
                   Welcome back!
                 </CardTitle>
                 <CardDescription>
-                  Log in to your HILITE Sales OS account
+                  Log in to your Tandem account
                 </CardDescription>
               </div>
             </CardHeader>

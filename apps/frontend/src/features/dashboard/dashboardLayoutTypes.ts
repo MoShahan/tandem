@@ -6,4 +6,4 @@ export {
   type DashboardWidgetDefinition,
   type DashboardWidgetKey,
   type DashboardWidgetWidth,
-} from "@hilite/shared";
+} from "@tandem/shared";

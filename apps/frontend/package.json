@@ -18,7 +18,7 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@fontsource-variable/inter": "^5.2.8",
-    "@hilite/shared": "file:../../packages/shared",
+    "@tandem/shared": "file:../../packages/shared",
     "@hookform/resolvers": "^5.4.0",
     "@reduxjs/toolkit": "^2.12.0",
     "@tailwindcss/vite": "^4.3.1",

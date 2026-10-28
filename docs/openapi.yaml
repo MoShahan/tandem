@@ -1,11 +1,11 @@
 openapi: 3.0.3
 info:
-  title: HiLite ERP API
+  title: Tandem API
   version: 1.0.0
   license:
     name: ISC
   description: |
-    REST API for **HiLite Sales OS** — a multi-tenant Sales ERP platform with organization isolation,
+    REST API for **Tandem** - a multi-tenant sales CRM / Sales OS with organization isolation,
     role-based access control (RBAC), module toggles, platform admin management, and event-driven notifications.
 
     ## Base URL

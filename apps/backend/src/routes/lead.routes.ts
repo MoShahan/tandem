@@ -3,7 +3,7 @@ import {
   createActivitySchema,
   createLeadSchema,
   updateLeadSchema,
-} from "@hilite/shared";
+} from "@tandem/shared";
 import { Router } from "express";
 
 import { ORG_MODULE_KEYS } from "../constants/orgModules";

@@ -1,6 +1,6 @@
 # Database Schema
 
-PostgreSQL schema for Hilite ERP, managed with Prisma.
+PostgreSQL schema for Tandem, managed with Prisma.
 
 **Source of truth:** [`apps/backend/prisma/schema.prisma`](../apps/backend/prisma/schema.prisma)
 

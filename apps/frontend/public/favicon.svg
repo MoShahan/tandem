@@ -1,5 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" rx="8" fill="#1496a8"/>
-  <rect x="8" y="7" width="16" height="3" rx="1.5" fill="#fff" fill-opacity="0.9"/>
-  <path d="M10 13v12h3v-5h6v5h3V13h-3v4h-6v-4h-3z" fill="#fff"/>
+  <defs>
+    <linearGradient id="tandem-bg" x1="8" y1="2" x2="26" y2="30" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2bb3c4"/>
+      <stop offset="1" stop-color="#0e6f7c"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="8" fill="url(#tandem-bg)"/>
+  <rect x="1.1" y="1.1" width="29.8" height="29.8" rx="6.9" stroke="#fff" stroke-opacity="0.22"/>
+  <g transform="translate(4 4)" stroke="#fff" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <path d="M4.2 5.2 11.4 12 4.2 18.8"/>
+    <path d="M12.6 5.2 19.8 12 12.6 18.8"/>
+  </g>
 </svg>

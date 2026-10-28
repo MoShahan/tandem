@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { HiliteLogo } from "@/components/HiliteLogo";
+import { TandemLogo } from "@/components/TandemLogo";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
 import type { LegalSection } from "../types";
@@ -31,8 +31,8 @@ export const LegalPageLayout = ({
             to="/login"
             className="flex items-center gap-3 transition-opacity hover:opacity-80"
           >
-            <HiliteLogo />
-            <span className="text-sm font-medium">HILITE Sales OS</span>
+            <TandemLogo />
+            <span className="text-sm font-medium">Tandem</span>
           </Link>
           <ThemeToggle />
         </div>

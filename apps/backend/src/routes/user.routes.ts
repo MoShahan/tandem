@@ -1,4 +1,4 @@
-import { createUserSchema } from "@hilite/shared";
+import { createUserSchema } from "@tandem/shared";
 import { Router } from "express";
 
 import { PERMISSIONS } from "../constants/permissions";

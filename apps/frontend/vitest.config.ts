@@ -9,7 +9,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "@hilite/shared": path.resolve(__dirname, "../../packages/shared/src"),
+      "@tandem/shared": path.resolve(__dirname, "../../packages/shared/src"),
     },
   },
   test: {

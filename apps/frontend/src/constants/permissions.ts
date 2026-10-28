@@ -4,4 +4,4 @@ export {
   LEADS_READ_PERMISSIONS,
   PERMISSIONS,
   type Permission,
-} from "@hilite/shared";
+} from "@tandem/shared";

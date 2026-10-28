@@ -1,10 +1,10 @@
-# HILITE Sales OS
+# Tandem
 
-A multi-tenant Sales ERP MVP built for the HILITE technical assessment.
+A multi-tenant sales CRM / Sales OS I built as a personal full-stack learning project.
 
 ## Project Overview
 
-HILITE Sales OS is a **multi-tenant sales platform** where each organization (tenant) gets isolated users, teams, roles, leads, and dashboards. A **platform** layer above tenants handles cross-organization administration. User identity is global (one email per person); org access is modeled via `organization_members` so the same user can belong to multiple organizations in the future. See [Multi-Org Readiness](docs/architecture.md#multi-org-readiness).
+Tandem is a **multi-tenant sales platform** where each organization (tenant) gets isolated users, teams, roles, leads, and dashboards. A **platform** layer above tenants handles cross-organization administration. User identity is global (one email per person); org access is modeled via `organization_members` so the same user can belong to multiple organizations in the future. See [Multi-Org Readiness](docs/architecture.md#multi-org-readiness).
 
 ### Capabilities
 
@@ -27,7 +27,7 @@ HILITE Sales OS is a **multi-tenant sales platform** where each organization (te
 | Frontend | React 19, Vite, Redux Toolkit, React Router, Axios, shadcn/ui                          |
 | Backend  | Express 5, TypeScript, Prisma 7                                                        |
 | Database | PostgreSQL 16 (Docker Compose for local dev)                                           |
-| Monorepo | npm workspaces — `apps/frontend`, `apps/backend`, `packages/shared` (`@hilite/shared`) |
+| Monorepo | npm workspaces - `apps/frontend`, `apps/backend`, `packages/shared` (`@tandem/shared`) |
 
 ### Repository layout
 
@@ -63,7 +63,7 @@ npm run setup
 | Variable                   | Description                                  | Default                                                |
 | -------------------------- | -------------------------------------------- | ------------------------------------------------------ |
 | `PORT`                     | API server port                              | `3000`                                                 |
-| `DATABASE_URL`             | PostgreSQL connection string                 | `postgresql://hilite:hilite@localhost:5432/hilite_erp` |
+| `DATABASE_URL`             | PostgreSQL connection string                 | `postgresql://tandem:tandem@localhost:5432/tandem`     |
 | `JWT_SECRET`               | Secret used to sign access tokens            | `change-me`                                            |
 | `JWT_EXPIRES_IN`           | Access token lifetime                        | `1d`                                                   |
 | `REFRESH_TOKEN_EXPIRES_IN` | Refresh token lifetime                       | `7d`                                                   |

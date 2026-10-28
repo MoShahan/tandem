@@ -50,7 +50,7 @@ describe("organizationListParams", () => {
   it("round-trips non-default query values", () => {
     const query = {
       ...DEFAULT_LIST_QUERY,
-      search: "hilite",
+      search: "builders",
       status: "SUSPENDED" as const,
       sortBy: "name" as const,
       page: 2,
@@ -74,7 +74,7 @@ describe("organizationListParams", () => {
     expect(
       toOrganizationListApiParams({
         ...DEFAULT_LIST_QUERY,
-        search: "hilite",
+        search: "builders",
         status: "ACTIVE",
       }),
     ).toEqual({
@@ -83,7 +83,7 @@ describe("organizationListParams", () => {
       sortBy: "createdAt",
       sortOrder: "desc",
       status: "ACTIVE",
-      search: "hilite",
+      search: "builders",
     });
   });
 });

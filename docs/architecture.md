@@ -1,6 +1,6 @@
 # Architecture
 
-System architecture for HILITE Sales OS — a multi-tenant Sales ERP MVP.
+System architecture for Tandem - a multi-tenant sales CRM / Sales OS.
 
 **Related documentation:**
 
@@ -11,7 +11,7 @@ System architecture for HILITE Sales OS — a multi-tenant Sales ERP MVP.
 
 ## Introduction
 
-HILITE Sales OS is a multi-tenant sales platform that supports multiple organizations with isolated users, teams, leads, and dashboards. User identity is global (one email per person); org access is modeled via `organization_members` so the same user can belong to multiple organizations in the future. Platform administrators manage organizations cross-tenant; org administrators configure users, roles, and teams within their tenant.
+Tandem is a multi-tenant sales platform that supports multiple organizations with isolated users, teams, leads, and dashboards. User identity is global (one email per person); org access is modeled via `organization_members` so the same user can belong to multiple organizations in the future. Platform administrators manage organizations cross-tenant; org administrators configure users, roles, and teams within their tenant.
 
 | Layer    | Technology                                                                         |
 | -------- | ---------------------------------------------------------------------------------- |
@@ -368,7 +368,7 @@ Built-in role slugs are protected from deletion. Custom roles can be created by 
 
 ## Multi-Tenant Design
 
-HILITE Sales OS uses **shared-database, row-level multi-tenancy**. Each tenant is an `Organization` row; domain data is isolated via `organizationId` foreign keys.
+Tandem uses **shared-database, row-level multi-tenancy**. Each tenant is an `Organization` row; domain data is isolated via `organizationId` foreign keys.
 
 ### What we do not use
 

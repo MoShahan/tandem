@@ -1,4 +1,4 @@
-import { dashboardLayoutUpdateSchema } from "@hilite/shared";
+import { dashboardLayoutUpdateSchema } from "@tandem/shared";
 import { Router } from "express";
 
 import { ORG_MODULE_KEYS } from "../constants/orgModules";

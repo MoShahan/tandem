@@ -4,11 +4,11 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: hilite
-      POSTGRES_PASSWORD: hilite
-      POSTGRES_DB: hilite_erp
+      POSTGRES_USER: tandem
+      POSTGRES_PASSWORD: tandem
+      POSTGRES_DB: tandem
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - tandem_pgdata:/var/lib/postgresql/data
 
 volumes:
-  postgres_data:
+  tandem_pgdata:

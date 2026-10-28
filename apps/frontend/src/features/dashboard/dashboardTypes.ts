@@ -9,6 +9,6 @@ export type {
   StatusBreakdownItem,
   TeamDashboardSummary,
   TeamLeadStats,
-} from "@hilite/shared";
+} from "@tandem/shared";
 
-export { ACTIVITY_TYPE_LABELS, LEAD_STATUS_LABELS } from "@hilite/shared";
+export { ACTIVITY_TYPE_LABELS, LEAD_STATUS_LABELS } from "@tandem/shared";

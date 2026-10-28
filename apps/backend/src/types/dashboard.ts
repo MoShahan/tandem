@@ -9,4 +9,4 @@ export type {
   StatusBreakdownItem,
   TeamDashboardSummary,
   TeamLeadStats,
-} from "@hilite/shared";
+} from "@tandem/shared";

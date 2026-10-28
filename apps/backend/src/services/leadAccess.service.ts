@@ -1,4 +1,4 @@
-import { TERMINAL_LEAD_STAGES } from "@hilite/shared";
+import { TERMINAL_LEAD_STAGES } from "@tandem/shared";
 
 import { PERMISSIONS } from "../constants/permissions";
 import { LeadStatus, UserStatus } from "../generated/prisma/client";

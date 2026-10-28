@@ -2,7 +2,7 @@ import {
   ACTIVITY_TYPE_LABELS,
   type ActivityType,
   type LeadStatus,
-} from "@hilite/shared";
+} from "@tandem/shared";
 
 export type { ActivityType, LeadStatus };
 

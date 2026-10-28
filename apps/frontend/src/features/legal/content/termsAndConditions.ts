@@ -2,9 +2,9 @@ import type { LegalPageContent } from "../types";
 
 export const termsAndConditionsContent: LegalPageContent = {
   title: "Terms & Conditions",
-  lastUpdated: "June 24, 2026",
+  lastUpdated: "October 28, 2026",
   disclaimer:
-    "This document is provided for demonstration purposes as part of the HILITE Sales OS MVP.",
+    "This document is sample legal copy for Tandem, a personal full-stack project.",
   otherLegalPage: {
     label: "Privacy Policy",
     href: "/privacy",
@@ -13,13 +13,13 @@ export const termsAndConditionsContent: LegalPageContent = {
     {
       title: "Acceptance",
       paragraphs: [
-        "These Terms & Conditions govern your access to and use of HILITE Sales OS. By accessing or using the service, you agree to be bound by these terms. If you do not agree, do not use the service.",
+        "These Terms & Conditions govern your access to and use of Tandem. By accessing or using the service, you agree to be bound by these terms. If you do not agree, do not use the service.",
       ],
     },
     {
       title: "Service Description",
       paragraphs: [
-        "HILITE Sales OS is a multi-tenant sales management platform that provides organizations with tools for managing users, teams, roles, leads, activities, dashboards, and in-app notifications. Features and availability may change as the platform evolves.",
+        "Tandem is a multi-tenant sales management platform that provides organizations with tools for managing users, teams, roles, leads, activities, dashboards, and in-app notifications. Features and availability may change as the platform evolves.",
       ],
     },
     {
@@ -44,7 +44,7 @@ export const termsAndConditionsContent: LegalPageContent = {
     {
       title: "Intellectual Property",
       paragraphs: [
-        "HILITE retains all rights, title, and interest in the platform, including its software, design, and branding. Your organization retains ownership of the business data you enter into the service, subject to the license granted to HILITE to host and process that data as needed to provide the service.",
+        "Tandem retains all rights, title, and interest in the platform, including its software, design, and branding. Your organization retains ownership of the business data you enter into the service, subject to the license granted to Tandem to host and process that data as needed to provide the service.",
       ],
     },
     {
@@ -56,13 +56,13 @@ export const termsAndConditionsContent: LegalPageContent = {
     {
       title: "Disclaimers",
       paragraphs: [
-        "HILITE Sales OS is provided on an \"as is\" and \"as available\" basis without warranties of any kind, whether express or implied, including implied warranties of merchantability, fitness for a particular purpose, or non-infringement. As an MVP demonstration platform, the service may contain errors or interruptions.",
+        "Tandem is provided on an \"as is\" and \"as available\" basis without warranties of any kind, whether express or implied, including implied warranties of merchantability, fitness for a particular purpose, or non-infringement. The service may contain errors or interruptions.",
       ],
     },
     {
       title: "Limitation of Liability",
       paragraphs: [
-        "To the fullest extent permitted by applicable law, HILITE and its affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or for any loss of profits, data, or goodwill arising from your use of the service. Our total liability for any claim relating to the service shall not exceed the amount paid by your organization for the service in the twelve months preceding the claim, or one hundred dollars if no fees were paid.",
+        "To the fullest extent permitted by applicable law, Tandem and its affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or for any loss of profits, data, or goodwill arising from your use of the service. Our total liability for any claim relating to the service shall not exceed the amount paid by your organization for the service in the twelve months preceding the claim, or one hundred dollars if no fees were paid.",
       ],
     },
     {
@@ -80,7 +80,7 @@ export const termsAndConditionsContent: LegalPageContent = {
     {
       title: "Governing Law",
       paragraphs: [
-        "These terms are governed by the laws of the jurisdiction in which HILITE operates, without regard to conflict-of-law principles. Any disputes shall be resolved in the courts of that jurisdiction, unless otherwise required by applicable law.",
+        "These terms are governed by the laws of the jurisdiction in which Tandem operates, without regard to conflict-of-law principles. Any disputes shall be resolved in the courts of that jurisdiction, unless otherwise required by applicable law.",
       ],
     },
     {

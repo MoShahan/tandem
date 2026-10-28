@@ -4,7 +4,7 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   resolve: {
     alias: {
-      "@hilite/shared": path.resolve(__dirname, "../../packages/shared/src"),
+      "@tandem/shared": path.resolve(__dirname, "../../packages/shared/src"),
     },
   },
   test: {

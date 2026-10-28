@@ -21,7 +21,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@hilite/shared": "file:../../packages/shared",
+    "@tandem/shared": "file:../../packages/shared",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "bcrypt": "^6.0.0",
@@ -29,7 +29,7 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "hilite-erp": "file:../..",
+    "tandem": "file:../..",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.22.0",
     "zod": "^4.4.3"

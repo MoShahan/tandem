@@ -3,7 +3,7 @@ import {
   LEAD_STATUS_LABELS,
   LINEAR_LEAD_STAGES,
   TERMINAL_LEAD_STAGES,
-} from "@hilite/shared";
+} from "@tandem/shared";
 
 import { LeadStatus } from "../generated/prisma/client";
 import { AppError } from "../utils/AppError";

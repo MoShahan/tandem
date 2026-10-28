@@ -1,7 +1,7 @@
 import {
   ACTIVITY_TYPE_NOTIFY_LABELS,
   LEAD_STATUS_LABELS,
-} from "@hilite/shared";
+} from "@tandem/shared";
 
 import { ORG_MODULE_KEYS } from "../constants/orgModules";
 import { NotificationType } from "../generated/prisma/client";

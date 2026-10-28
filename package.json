@@ -1,5 +1,5 @@
 {
-  "name": "hilite-erp",
+  "name": "tandem",
   "private": true,
   "workspaces": [
     "apps/*",

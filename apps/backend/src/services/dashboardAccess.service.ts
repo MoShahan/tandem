@@ -3,7 +3,7 @@ import { LeadStatus, type Prisma } from "../generated/prisma/client";
 import { AppError } from "../utils/AppError";
 
 import type { AuthUser } from "../types/auth";
-import type { DashboardView as SharedDashboardView } from "@hilite/shared";
+import type { DashboardView as SharedDashboardView } from "@tandem/shared";
 
 export type DashboardView = SharedDashboardView;
 

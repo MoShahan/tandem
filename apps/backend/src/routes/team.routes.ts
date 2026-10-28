@@ -1,4 +1,4 @@
-import { createTeamSchema } from "@hilite/shared";
+import { createTeamSchema } from "@tandem/shared";
 import { Router } from "express";
 
 import { PERMISSIONS } from "../constants/permissions";
