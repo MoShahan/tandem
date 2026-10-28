@@ -31,7 +31,7 @@ export const LegalPageLayout = ({
             to="/login"
             className="flex items-center gap-3 transition-opacity hover:opacity-80"
           >
-            <TandemLogo />
+            <TandemLogo className="size-8" />
             <span className="text-sm font-medium">Tandem</span>
           </Link>
           <ThemeToggle />

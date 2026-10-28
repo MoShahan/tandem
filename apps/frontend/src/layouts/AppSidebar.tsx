@@ -76,7 +76,7 @@ export const AppSidebar = () => {
     <Sidebar collapsible="icon" variant="inset">
       <SidebarHeader className="px-3 py-4">
         <div className="flex items-center gap-3">
-          <TandemLogo className="size-9 rounded-xl" />
+          <TandemLogo className="size-8" />
           <div className="flex min-w-0 flex-col group-data-[collapsible=icon]:hidden">
             <span className="truncate text-sm font-semibold tracking-tight">
               Tandem

@@ -19,7 +19,7 @@ export const GuidePageLayout = ({ children }: GuidePageLayoutProps) => {
             to="/guide"
             className="flex min-w-0 items-center gap-3 transition-opacity hover:opacity-80"
           >
-            <TandemLogo />
+            <TandemLogo className="size-8" />
             <span className="truncate text-sm font-medium">Tandem</span>
           </Link>
           <div className="flex items-center gap-2">
