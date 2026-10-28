@@ -110,7 +110,7 @@ Browser → **Vercel** (SPA) → **Render** (Express API) → **Neon** (Postgres
 | Piece | Host | Project / service | Public URL |
 | ----- | ---- | ----------------- | ---------- |
 | Frontend | [Vercel](https://vercel.com) | `tandemcrm` | [https://tandemcrm.vercel.app](https://tandemcrm.vercel.app) |
-| Backend | [Render](https://render.com) | Project `tandem`, web service `tandem-api` | `https://tandem-api.onrender.com` *(placeholder until Plan 3 deploy)* |
+| Backend | [Render](https://render.com) | Project `tandem`, web service `tandemcrm-api` | [https://tandem-api-4eal.onrender.com](https://tandem-api-4eal.onrender.com) |
 | Database | [Neon](https://neon.tech) | Project `tandem`, Postgres 16 | No public URL. Only the API holds `DATABASE_URL` / `DIRECT_URL` (pooled + direct, `sslmode=require`) |
 
 How they connect:
@@ -119,7 +119,7 @@ How they connect:
 - Render `FRONTEND_URL` = `https://tandemcrm.vercel.app` (CORS + cookies)
 - Render `DATABASE_URL` = Neon pooled string; `DIRECT_URL` = Neon direct string for migrations
 
-Health (after the API is live): `GET https://tandem-api.onrender.com/health`
+Health: `GET https://tandem-api-4eal.onrender.com/health`
 
 Do not put Neon connection strings, `JWT_SECRET`, or Render/Vercel tokens in this file.
 

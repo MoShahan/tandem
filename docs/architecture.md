@@ -25,7 +25,7 @@ Tandem is a multi-tenant sales platform that supports multiple organizations wit
 - API: `http://localhost:3000`
 - Frontend: `http://localhost:5173`
 
-**Production frontend:** `https://tandemcrm.vercel.app`
+**Production:** SPA [https://tandemcrm.vercel.app](https://tandemcrm.vercel.app) (Vercel) → API [https://tandem-api-4eal.onrender.com](https://tandem-api-4eal.onrender.com) (Render service `tandemcrm-api`) → Neon Postgres (`us-east-2`, no public URL). Auth cookies are third-party until Plan 5 (custom domain).
 
 The backend follows a consistent layering pattern: **routes → controllers → services → repositories → Prisma**. Cross-cutting concerns (authentication, RBAC, org module gates, audit logging, domain events) sit alongside domain services rather than in separate deployable services.
 
