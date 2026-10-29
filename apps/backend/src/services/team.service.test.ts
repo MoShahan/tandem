@@ -7,7 +7,9 @@ vi.mock("../repositories/team.repository", () => ({
     findByIdForOrganization: vi.fn(),
     create: vi.fn(),
     findMembersPaginated: vi.fn(),
-    createMember: vi.fn(),
+    createMemberWithUser: vi.fn(),
+    findRoleForOrganization: vi.fn(),
+    findTeamMembershipByEmail: vi.fn(),
   },
 }));
 
@@ -31,6 +33,8 @@ vi.mock("./welcomeNotification.service", () => ({
 
 import { PERMISSIONS } from "../constants/permissions";
 import { teamRepository } from "../repositories/team.repository";
+import { authUserRepository } from "../repositories/user.repository";
+import { AppError } from "../utils/AppError";
 import { teamService } from "./team.service";
 import { baseAuthUser, expectAppErrorAsync } from "../test/helpers";
 
@@ -171,5 +175,54 @@ describe("teamService.listMembers", () => {
     );
 
     expect(result.members).toEqual([]);
+  });
+});
+
+describe("teamService.createMember", () => {
+  const input = {
+    name: "Asha",
+    email: "asha@wayne.com",
+    password: "Password@123",
+    roleId: "role-exec",
+  };
+
+  const auditContext = {
+    authUser: baseAuthUser({ permissions: [PERMISSIONS.USERS_WRITE] }),
+  };
+
+  beforeEach(() => {
+    vi.mocked(teamRepository.findByIdForOrganization).mockReset();
+    vi.mocked(teamRepository.findTeamMembershipByEmail).mockReset();
+    vi.mocked(authUserRepository.emailExists).mockReset();
+    vi.mocked(teamRepository.findByIdForOrganization).mockResolvedValue({
+      id: "team-a",
+      name: "North Sales",
+      createdAt: new Date(),
+      _count: { members: 1 },
+    } as never);
+  });
+
+  it("rejects an email that is already on a team", async () => {
+    vi.mocked(teamRepository.findTeamMembershipByEmail).mockResolvedValue({
+      team: { id: "team-north", name: "North Sales" },
+    });
+
+    try {
+      await teamService.createMember(orgId, "team-a", input, auditContext);
+      expect.fail("Expected AppError to be thrown");
+    } catch (error) {
+      expect(error).toBeInstanceOf(AppError);
+      expect((error as AppError).statusCode).toBe(400);
+      expect((error as AppError).message).toBe(
+        "This person is already on North Sales. A person can only be on one team.",
+      );
+      expect((error as AppError).details).toEqual([
+        {
+          field: "email",
+          message:
+            "This person is already on North Sales. A person can only be on one team.",
+        },
+      ]);
+    }
   });
 });

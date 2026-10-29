@@ -228,4 +228,18 @@ export const teamRepository = {
       where: { id: roleId, organizationId },
     });
   },
+
+  findTeamMembershipByEmail: (email: string, organizationId: string) => {
+    return prisma.teamMember.findFirst({
+      where: {
+        organizationId,
+        user: { email },
+      },
+      select: {
+        team: {
+          select: { id: true, name: true },
+        },
+      },
+    });
+  },
 };

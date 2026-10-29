@@ -173,7 +173,8 @@ export const AddTeamMemberDialog = ({
         <DialogHeader>
           <DialogTitle>Add team member</DialogTitle>
           <DialogDescription>
-            Create a new team-scoped user for this team.
+            Create a new person for this team. A person can only belong to one
+            team.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -208,6 +209,10 @@ export const AddTeamMemberDialog = ({
                       {...field}
                     />
                   </FormControl>
+                  <FormDescription>
+                    If this email is already on a team, they cannot be added
+                    here.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

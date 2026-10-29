@@ -198,6 +198,16 @@ const requireOrganizationId = (organizationId: string | null | undefined) => {
   return organizationId;
 };
 
+const alreadyOnATeamMessage = (teamName?: string) =>
+  teamName
+    ? `This person is already on ${teamName}. A person can only be on one team.`
+    : "This person is already on a team. A person can only be on one team.";
+
+const alreadyOnATeamError = (teamName?: string) =>
+  AppError.badRequest(alreadyOnATeamMessage(teamName), [
+    { field: "email", message: alreadyOnATeamMessage(teamName) },
+  ]);
+
 export const teamService = {
   listTeams: async (
     organizationId: string | null,
@@ -384,6 +394,12 @@ export const teamService = {
       ]);
     }
 
+    const existingTeamMembership =
+      await teamRepository.findTeamMembershipByEmail(email, orgId);
+    if (existingTeamMembership) {
+      throw alreadyOnATeamError(existingTeamMembership.team.name);
+    }
+
     const existingEmail = await authUserRepository.emailExists(email);
     if (existingEmail) {
       throw AppError.badRequest("Email is already in use", [
@@ -481,12 +497,7 @@ export const teamService = {
         "code" in error &&
         error.code === "P2002"
       ) {
-        throw AppError.badRequest("User is already assigned to a team", [
-          {
-            field: "email",
-            message: "This user is already on a team",
-          },
-        ]);
+        throw alreadyOnATeamError();
       }
 
       throw error;
