@@ -14,7 +14,7 @@ import {
   updateMe,
 } from "../controllers/auth.controller";
 import { authenticate } from "../middleware/authenticate";
-import { authRateLimiter } from "../middleware/authRateLimit";
+import { authRateLimiter } from "../middleware/rateLimit";
 import { validateBody } from "../middleware/validateBody";
 
 const router = Router();

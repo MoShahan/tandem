@@ -1,5 +1,7 @@
 import { Router } from "express";
 
+import { apiRateLimiter, writeRateLimiter } from "../middleware/rateLimit";
+
 import auditRoutes from "./audit.routes";
 import authRoutes from "./auth.routes";
 import dashboardRoutes from "./dashboard.routes";
@@ -15,6 +17,8 @@ import userRoutes from "./user.routes";
 const router = Router();
 
 router.use("/health", healthRoutes);
+router.use("/api/v1", apiRateLimiter);
+router.use("/api/v1", writeRateLimiter);
 router.use("/api/v1/auth", authRoutes);
 router.use("/api/v1/platform", platformRoutes);
 router.use("/api/v1/permissions", permissionRoutes);
