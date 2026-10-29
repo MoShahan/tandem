@@ -84,13 +84,11 @@ export const assertCanReadLead = (
   throw AppError.forbidden("You do not have permission to view this lead");
 };
 
-export const assertCanWriteLead = (
+const assertLeadWriteScope = (
   lead: LeadAccessRecord,
   user: AuthUser,
   organizationId: string,
 ) => {
-  assertLeadIsOpen(lead);
-
   if (!hasPermission(user, PERMISSIONS.LEADS_WRITE)) {
     throw AppError.forbidden("You do not have permission to manage leads");
   }
@@ -108,7 +106,23 @@ export const assertCanWriteLead = (
     }
   }
 
+  if (
+    hasPermission(user, PERMISSIONS.LEADS_READ) &&
+    lead.assignedToId === user.id
+  ) {
+    return;
+  }
+
   throw AppError.forbidden("You do not have permission to manage this lead");
+};
+
+export const assertCanWriteLead = (
+  lead: LeadAccessRecord,
+  user: AuthUser,
+  organizationId: string,
+) => {
+  assertLeadIsOpen(lead);
+  assertLeadWriteScope(lead, user, organizationId);
 };
 
 export const assertCanUpdateLeadStatus = (
@@ -121,7 +135,7 @@ export const assertCanUpdateLeadStatus = (
   }
 
   if (hasPermission(user, PERMISSIONS.LEADS_WRITE)) {
-    assertCanWriteLead(lead, user, organizationId);
+    assertLeadWriteScope(lead, user, organizationId);
     return;
   }
 
@@ -213,7 +227,53 @@ export const resolveCreateTeamId = (
     return requestedTeamId;
   }
 
+  if (hasPermission(user, PERMISSIONS.LEADS_READ)) {
+    const teamId = getCallerTeamId(user);
+    if (!teamId) {
+      throw AppError.badRequest("You must belong to a team to create leads");
+    }
+
+    if (requestedTeamId && requestedTeamId !== teamId) {
+      throw AppError.badRequest("You can only create leads for your team", [
+        { field: "teamId", message: "You can only create leads for your team" },
+      ]);
+    }
+
+    return teamId;
+  }
+
   throw AppError.forbidden("You do not have permission to create leads");
+};
+
+export const resolveCreateAssignedToId = (
+  user: AuthUser,
+  teamId: string,
+  requestedAssignedToId?: string | null,
+): string | null => {
+  const canSeeTeamPile =
+    hasPermission(user, PERMISSIONS.LEADS_READ_TEAM) ||
+    hasPermission(user, PERMISSIONS.LEADS_READ_ORG);
+
+  if (canSeeTeamPile) {
+    return requestedAssignedToId ?? null;
+  }
+
+  if (
+    hasPermission(user, PERMISSIONS.LEADS_ASSIGNABLE) &&
+    getCallerTeamId(user) === teamId
+  ) {
+    if (requestedAssignedToId && requestedAssignedToId !== user.id) {
+      throw AppError.forbidden("You can only assign new leads to yourself");
+    }
+
+    return user.id;
+  }
+
+  if (requestedAssignedToId) {
+    throw AppError.forbidden("You do not have permission to assign leads");
+  }
+
+  return null;
 };
 
 export const assertAssigneeEligible = async (

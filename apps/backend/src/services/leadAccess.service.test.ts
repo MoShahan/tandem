@@ -13,6 +13,7 @@ import {
   assertCanUpdateLeadStatus,
   assertCanWriteLead,
   getCallerTeamId,
+  resolveCreateAssignedToId,
   resolveCreateTeamId,
   resolveLeadListScope,
 } from "./leadAccess.service";
@@ -123,6 +124,66 @@ describe("resolveCreateTeamId", () => {
       "BAD_REQUEST",
     );
   });
+
+  it("returns caller team for own-scope writers", () => {
+    expect(
+      resolveCreateTeamId(
+        baseAuthUser({
+          permissions: [PERMISSIONS.LEADS_WRITE, PERMISSIONS.LEADS_READ],
+        }),
+        undefined,
+      ),
+    ).toBe(teamId);
+  });
+});
+
+describe("resolveCreateAssignedToId", () => {
+  it("leaves team-pile writers unassigned by default", () => {
+    expect(
+      resolveCreateAssignedToId(
+        baseAuthUser({
+          permissions: [PERMISSIONS.LEADS_WRITE, PERMISSIONS.LEADS_READ_TEAM],
+        }),
+        teamId,
+        undefined,
+      ),
+    ).toBeNull();
+  });
+
+  it("assigns own-scope writers to themselves", () => {
+    expect(
+      resolveCreateAssignedToId(
+        baseAuthUser({
+          permissions: [
+            PERMISSIONS.LEADS_WRITE,
+            PERMISSIONS.LEADS_READ,
+            PERMISSIONS.LEADS_ASSIGNABLE,
+          ],
+        }),
+        teamId,
+        undefined,
+      ),
+    ).toBe(userId);
+  });
+
+  it("forbids own-scope writers from assigning someone else", () => {
+    expectAppError(
+      () =>
+        resolveCreateAssignedToId(
+          baseAuthUser({
+            permissions: [
+              PERMISSIONS.LEADS_WRITE,
+              PERMISSIONS.LEADS_READ,
+              PERMISSIONS.LEADS_ASSIGNABLE,
+            ],
+          }),
+          teamId,
+          "other-user",
+        ),
+      403,
+      "FORBIDDEN",
+    );
+  });
 });
 
 describe("assertCanUpdateLeadStatus", () => {
@@ -141,6 +202,32 @@ describe("assertCanUpdateLeadStatus", () => {
       assertCanUpdateLeadStatus(
         baseLead(),
         baseAuthUser({ permissions: [PERMISSIONS.LEADS_STATUS_WRITE] }),
+        orgId,
+      ),
+    ).not.toThrow();
+  });
+
+  it("allows own-scope writers to update status on their lead", () => {
+    expect(() =>
+      assertCanUpdateLeadStatus(
+        baseLead(),
+        baseAuthUser({
+          permissions: [PERMISSIONS.LEADS_WRITE, PERMISSIONS.LEADS_READ],
+        }),
+        orgId,
+      ),
+    ).not.toThrow();
+  });
+});
+
+describe("assertCanWriteLead", () => {
+  it("allows own-scope writers on their assigned lead", () => {
+    expect(() =>
+      assertCanWriteLead(
+        baseLead(),
+        baseAuthUser({
+          permissions: [PERMISSIONS.LEADS_WRITE, PERMISSIONS.LEADS_READ],
+        }),
         orgId,
       ),
     ).not.toThrow();
@@ -171,6 +258,14 @@ describe("closed lead guards", () => {
     it("allows open leads with permission", () => {
       expect(() =>
         assertCanWriteLead(baseLead(LeadStatus.NEGOTIATION), writeUser, orgId),
+      ).not.toThrow();
+    });
+  });
+
+  describe("assertCanUpdateLeadStatus", () => {
+    it("allows reopening a closed lead", () => {
+      expect(() =>
+        assertCanUpdateLeadStatus(baseLead(LeadStatus.LOST), writeUser, orgId),
       ).not.toThrow();
     });
   });
