@@ -50,6 +50,12 @@ export const formatDate = (iso: string) =>
     new Date(iso),
   );
 
+export const formatDealValue = (value: number) =>
+  new Intl.NumberFormat(undefined, {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
+  }).format(value);
+
 export const formatWinRate = (winRate: number | null) =>
   winRate === null ? "-" : `${winRate}%`;
 

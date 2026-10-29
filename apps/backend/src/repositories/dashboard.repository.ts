@@ -40,6 +40,15 @@ export const dashboardRepository = {
       _count: { _all: true },
     }),
 
+  sumWonDealValue: async (where: Prisma.LeadWhereInput) => {
+    const result = await prisma.lead.aggregate({
+      where: { ...where, status: LeadStatus.WON },
+      _sum: { dealValue: true },
+    });
+
+    return Number(result._sum.dealValue ?? 0);
+  },
+
   groupLeadsByAssigneeAndStatus: (where: Prisma.LeadWhereInput) =>
     prisma.lead.groupBy({
       by: ["assignedToId", "status"],

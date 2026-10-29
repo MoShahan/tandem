@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -36,6 +36,9 @@ type UpdateLeadDialogProps = {
   onUpdated?: () => void;
 };
 
+const toDateInputValue = (value: string | null | undefined) =>
+  value ? value.slice(0, 10) : "";
+
 export const UpdateLeadDialog = ({
   lead,
   open,
@@ -43,6 +46,7 @@ export const UpdateLeadDialog = ({
   onUpdated,
 }: UpdateLeadDialogProps) => {
   const dispatch = useAppDispatch();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<UpdateLeadFormValues>({
     resolver: zodResolver(updateLeadSchema),
@@ -53,6 +57,7 @@ export const UpdateLeadDialog = ({
       email: "",
       source: "",
       project: "",
+      expectedCloseDate: "",
     },
   });
 
@@ -65,11 +70,14 @@ export const UpdateLeadDialog = ({
       email: lead.email ?? "",
       source: lead.source ?? "",
       project: lead.project ?? "",
+      expectedCloseDate: toDateInputValue(lead.expectedCloseDate),
     });
   }, [lead, open, form]);
 
   const onSubmit = async (values: UpdateLeadFormValues) => {
     if (!lead) return;
+
+    setIsSubmitting(true);
 
     try {
       await dispatch(
@@ -81,6 +89,7 @@ export const UpdateLeadDialog = ({
             email: values.email?.trim() || null,
             source: values.source?.trim() || null,
             project: values.project?.trim() || null,
+            expectedCloseDate: toDateInputValue(values.expectedCloseDate) || null,
           },
         }),
       ).unwrap();
@@ -97,6 +106,8 @@ export const UpdateLeadDialog = ({
         }
       });
       toast.error(getApiErrorMessage(error, "Failed to update lead"));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -183,15 +194,35 @@ export const UpdateLeadDialog = ({
                 )}
               />
             </div>
+            <FormField
+              control={form.control}
+              name="expectedCloseDate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Expected close date</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="date"
+                      {...field}
+                      value={toDateInputValue(field.value)}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <DialogFooter>
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
+                disabled={isSubmitting}
               >
                 Cancel
               </Button>
-              <Button type="submit">Save changes</Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Saving..." : "Save changes"}
+              </Button>
             </DialogFooter>
           </form>
         </Form>

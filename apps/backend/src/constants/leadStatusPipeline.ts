@@ -1,5 +1,7 @@
 import {
   getAllowedNextStatuses as getSharedAllowedNextStatuses,
+  getNextLinearStatus as getSharedNextLinearStatus,
+  getQuickAdvanceStatuses as getSharedQuickAdvanceStatuses,
   LEAD_STATUS_LABELS,
   LINEAR_LEAD_STAGES,
   TERMINAL_LEAD_STAGES,
@@ -16,6 +18,12 @@ export {
 
 export const getAllowedNextStatuses = (current: LeadStatus): LeadStatus[] =>
   getSharedAllowedNextStatuses(current) as LeadStatus[];
+
+export const getNextLinearStatus = (current: LeadStatus): LeadStatus | null =>
+  getSharedNextLinearStatus(current) as LeadStatus | null;
+
+export const getQuickAdvanceStatuses = (current: LeadStatus): LeadStatus[] =>
+  getSharedQuickAdvanceStatuses(current) as LeadStatus[];
 
 export const assertValidStatusTransition = (
   from: LeadStatus,

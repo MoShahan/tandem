@@ -13,7 +13,7 @@ import {
   selectHasModule,
   selectHasPermission,
 } from "@/features/auth/authSelectors";
-import { formatDateTime } from "@/lib/format";
+import { formatDate, formatDateTime, formatDealValue } from "@/lib/format";
 
 import { ActivityTimeline } from "../components/ActivityTimeline";
 import { AssignLeadDialog } from "../components/AssignLeadDialog";
@@ -186,7 +186,8 @@ export const LeadDetailPage = () => {
               <div>
                 <h2 className="text-sm font-semibold">Pipeline</h2>
                 <p className="text-sm text-muted-foreground">
-                  Leads move forward one stage at a time.
+                  Skip, go back, mark lost from any open stage, or reopen a
+                  closed lead. Site visit stays in this pipeline.
                 </p>
               </div>
               <LeadStatusStepper status={lead.status} />
@@ -206,6 +207,21 @@ export const LeadDetailPage = () => {
               <DetailField label="Email" value={lead.email} />
               <DetailField label="Source" value={lead.source} />
               <DetailField label="Project" value={lead.project} />
+              <DetailField
+                label="Expected close"
+                value={
+                  lead.expectedCloseDate
+                    ? formatDate(`${lead.expectedCloseDate}T00:00:00`)
+                    : null
+                }
+              />
+              <DetailField
+                label="Deal value"
+                value={
+                  lead.dealValue == null ? null : formatDealValue(lead.dealValue)
+                }
+              />
+              <DetailField label="Lost reason" value={lead.lostReason} />
               <DetailField label="Created by" value={lead.createdBy.name} />
               <DetailField
                 label="Created"

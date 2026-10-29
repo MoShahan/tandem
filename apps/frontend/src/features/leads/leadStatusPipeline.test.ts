@@ -8,18 +8,20 @@ import {
 } from "./leadStatusPipeline";
 
 describe("getAllowedNextStatuses", () => {
-  it("returns the next linear stage", () => {
-    expect(getAllowedNextStatuses("NEW")).toEqual(["CONTACTED"]);
-    expect(getAllowedNextStatuses("CONTACTED")).toEqual(["VISIT_SCHEDULED"]);
+  it("allows skip, back, won, and lost from an open stage", () => {
+    expect(getAllowedNextStatuses("CONTACTED")).toEqual([
+      "NEW",
+      "VISIT_SCHEDULED",
+      "SITE_VISIT_COMPLETED",
+      "NEGOTIATION",
+      "WON",
+      "LOST",
+    ]);
   });
 
-  it("returns WON and LOST from negotiation", () => {
-    expect(getAllowedNextStatuses("NEGOTIATION")).toEqual(["WON", "LOST"]);
-  });
-
-  it("returns no next statuses for terminal stages", () => {
-    expect(getAllowedNextStatuses("WON")).toEqual([]);
-    expect(getAllowedNextStatuses("LOST")).toEqual([]);
+  it("allows reopening a closed lead", () => {
+    expect(getAllowedNextStatuses("LOST")).toContain("NEW");
+    expect(getAllowedNextStatuses("WON")).toContain("NEGOTIATION");
   });
 });
 
@@ -29,7 +31,7 @@ describe("getAdvanceActionLabel", () => {
     expect(getAdvanceActionLabel("WON")).toBe("Mark as won");
   });
 
-  it("falls back to a generic label for unknown statuses", () => {
+  it("labels a move back to New", () => {
     expect(getAdvanceActionLabel("NEW")).toBe("Move to New");
   });
 });

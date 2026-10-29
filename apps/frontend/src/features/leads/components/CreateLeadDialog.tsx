@@ -34,6 +34,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { PERMISSIONS } from "@/constants/permissions";
 import {
   selectAuthUser,
+  selectHasAnyPermission,
   selectHasPermission,
 } from "@/features/auth/authSelectors";
 import { teamsService } from "@/features/teams/teamsService";
@@ -72,6 +73,12 @@ export const CreateLeadDialog = ({
   const authUser = useAppSelector(selectAuthUser);
   const canPickTeam = useAppSelector(
     selectHasPermission(PERMISSIONS.LEADS_READ_ORG),
+  );
+  const canAssignOnCreate = useAppSelector(
+    selectHasAnyPermission([
+      PERMISSIONS.LEADS_READ_TEAM,
+      PERMISSIONS.LEADS_READ_ORG,
+    ]),
   );
   const canReadTeams = useAppSelector(
     selectHasPermission(PERMISSIONS.TEAMS_READ),
@@ -128,7 +135,7 @@ export const CreateLeadDialog = ({
   }, [open, canReadTeams, authUser?.team?.id, form]);
 
   useEffect(() => {
-    if (!open || !selectedTeamId) {
+    if (!open || !canAssignOnCreate || !selectedTeamId) {
       setAssignees([]);
       return;
     }
@@ -156,7 +163,7 @@ export const CreateLeadDialog = ({
     return () => {
       cancelled = true;
     };
-  }, [open, selectedTeamId]);
+  }, [open, canAssignOnCreate, selectedTeamId]);
 
   const handleOpenChange = (nextOpen: boolean) => {
     if (!nextOpen) {
@@ -181,7 +188,9 @@ export const CreateLeadDialog = ({
               ? values.teamId
               : authUser?.team?.id
             : authUser?.team?.id,
-          assignedToId: values.assignedToId || null,
+          assignedToId: canAssignOnCreate
+            ? values.assignedToId || null
+            : undefined,
         }),
       ).unwrap();
 
@@ -331,7 +340,7 @@ export const CreateLeadDialog = ({
                 )}
               />
             ) : null}
-            {selectedTeamId ? (
+            {canAssignOnCreate && selectedTeamId ? (
               <FormField
                 control={form.control}
                 name="assignedToId"

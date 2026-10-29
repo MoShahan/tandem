@@ -286,6 +286,9 @@ model Lead {
   source         String?
   project        String?
   status         LeadStatus @default(NEW)
+  lostReason     String?    @map("lost_reason")
+  dealValue      Decimal?   @map("deal_value") @db.Decimal(12, 2)
+  expectedCloseDate DateTime? @map("expected_close_date") @db.Date
   createdById    String     @map("created_by_id")
   createdBy      User       @relation("LeadCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
   createdAt      DateTime   @default(now()) @map("created_at")

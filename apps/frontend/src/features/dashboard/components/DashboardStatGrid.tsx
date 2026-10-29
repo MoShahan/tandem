@@ -72,6 +72,7 @@ const labelConfig: Record<string, { icon: LucideIcon; tone: StatCardTone }> = {
   "organization activities": { icon: Activity, tone: "neutral" },
   "needs attention": { icon: AlertTriangle, tone: "warning" },
   won: { icon: Trophy, tone: "success" },
+  "won value": { icon: Trophy, tone: "success" },
   lost: { icon: TrendingDown, tone: "danger" },
   closed: { icon: CircleCheck, tone: "neutral" },
   unassigned: { icon: UserMinus, tone: "warning" },

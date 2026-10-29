@@ -16,6 +16,7 @@ import {
   assertCanReassignLead,
   assertCanUpdateLeadStatus,
   assertCanWriteLead,
+  resolveCreateAssignedToId,
   resolveCreateTeamId,
   resolveLeadListScope,
 } from "./leadAccess.service";
@@ -146,6 +147,11 @@ const toLeadResponse = (lead: LeadRecord): LeadResponse => ({
   source: lead.source,
   project: lead.project,
   status: lead.status,
+  lostReason: lead.lostReason,
+  dealValue: lead.dealValue === null ? null : Number(lead.dealValue),
+  expectedCloseDate: lead.expectedCloseDate
+    ? lead.expectedCloseDate.toISOString().slice(0, 10)
+    : null,
   team: lead.team,
   assignedTo: lead.assignedTo,
   createdBy: lead.createdBy,
@@ -166,6 +172,28 @@ const optionalString = (value: string | undefined) => {
   return trimmed ? trimmed : null;
 };
 
+const DATE_ONLY = /^\d{4}-\d{2}-\d{2}$/;
+
+const parseExpectedCloseDate = (value: string | null) => {
+  if (value === null || value === "") {
+    return null;
+  }
+
+  if (!DATE_ONLY.test(value)) {
+    throw AppError.badRequest("Expected close date must be YYYY-MM-DD", [
+      { field: "expectedCloseDate", message: "Expected close date must be YYYY-MM-DD" },
+    ]);
+  }
+
+  return new Date(`${value}T00:00:00.000Z`);
+};
+
+const STATUS_ADJACENT_KEYS = new Set<keyof UpdateLeadInput>([
+  "status",
+  "lostReason",
+  "dealValue",
+]);
+
 const leadSnapshot = (lead: LeadRecord) => ({
   name: lead.name,
   mobileNumber: lead.mobileNumber,
@@ -173,6 +201,11 @@ const leadSnapshot = (lead: LeadRecord) => ({
   source: lead.source,
   project: lead.project,
   status: lead.status,
+  lostReason: lead.lostReason,
+  dealValue: lead.dealValue === null ? null : Number(lead.dealValue),
+  expectedCloseDate: lead.expectedCloseDate
+    ? lead.expectedCloseDate.toISOString().slice(0, 10)
+    : null,
 });
 
 const toAssigneeRef = (user: LeadRecord["assignedTo"]) =>
@@ -247,14 +280,20 @@ export const leadService = {
       ]);
     }
 
-    if (input.assignedToId) {
-      await assertAssigneeEligible(input.assignedToId, teamId, orgId);
+    const assignedToId = resolveCreateAssignedToId(
+      authUser,
+      teamId,
+      input.assignedToId,
+    );
+
+    if (assignedToId) {
+      await assertAssigneeEligible(assignedToId, teamId, orgId);
     }
 
     const lead = await leadRepository.create({
       organizationId: orgId,
       teamId,
-      assignedToId: input.assignedToId ?? null,
+      assignedToId,
       name,
       mobileNumber: parseRequiredPhoneNumber(input.mobileNumber),
       email: parseOptionalEmail(input.email),
@@ -262,8 +301,6 @@ export const leadService = {
       project: optionalString(input.project),
       createdById: authUser.id,
     });
-
-    const assignedToId = input.assignedToId ?? null;
 
     if (!assignedToId) {
       eventBus.emit("LEAD_CREATED", {
@@ -351,11 +388,13 @@ export const leadService = {
     }
 
     const hasStatus = input.status !== undefined;
-    const hasNonStatusFields = definedKeys.some((key) => key !== "status");
+    const hasNonStatusFields = definedKeys.some(
+      (key) => !STATUS_ADJACENT_KEYS.has(key),
+    );
 
     if (hasNonStatusFields) {
       assertCanWriteLead(existing, authUser, orgId);
-    } else if (hasStatus) {
+    } else if (hasStatus || definedKeys.length > 0) {
       assertCanUpdateLeadStatus(existing, authUser, orgId);
     } else {
       throw AppError.badRequest("No fields to update");
@@ -380,6 +419,32 @@ export const leadService = {
       assertValidStatusTransition(existing.status, input.status);
     }
 
+    const nextStatus = input.status ?? existing.status;
+
+    if (nextStatus === LeadStatus.LOST) {
+      const reason =
+        input.lostReason !== undefined
+          ? optionalString(input.lostReason ?? undefined)
+          : existing.lostReason;
+
+      if (!reason) {
+        throw AppError.badRequest("Lost reason is required", [
+          { field: "lostReason", message: "Lost reason is required" },
+        ]);
+      }
+    }
+
+    const lostReason =
+      nextStatus === LeadStatus.LOST
+        ? input.lostReason !== undefined
+          ? optionalString(input.lostReason ?? undefined)
+          : undefined
+        : input.status !== undefined && existing.status === LeadStatus.LOST
+          ? null
+          : input.lostReason !== undefined
+            ? optionalString(input.lostReason ?? undefined)
+            : undefined;
+
     const lead = await leadRepository.update(leadId, {
       ...(name !== undefined ? { name } : {}),
       ...(input.mobileNumber !== undefined
@@ -395,6 +460,15 @@ export const leadService = {
         ? { project: optionalString(input.project ?? undefined) }
         : {}),
       ...(input.status !== undefined ? { status: input.status } : {}),
+      ...(lostReason !== undefined ? { lostReason } : {}),
+      ...(input.dealValue !== undefined ? { dealValue: input.dealValue } : {}),
+      ...(input.expectedCloseDate !== undefined
+        ? {
+            expectedCloseDate: parseExpectedCloseDate(
+              input.expectedCloseDate === "" ? null : input.expectedCloseDate,
+            ),
+          }
+        : {}),
     });
 
     if (
@@ -423,6 +497,9 @@ export const leadService = {
       "email",
       "source",
       "project",
+      "lostReason",
+      "dealValue",
+      "expectedCloseDate",
     ]);
 
     if (fieldChanges.changedFields.length > 0) {

@@ -14,6 +14,9 @@ const mockLead = (status: LeadStatus): Lead => ({
   source: null,
   project: null,
   status,
+  lostReason: null,
+  dealValue: null,
+  expectedCloseDate: null,
   team: { id: "team-1", name: "Sales" },
   assignedTo: null,
   createdBy: { id: "user-1", name: "Creator", email: "creator@example.com" },
@@ -22,15 +25,18 @@ const mockLead = (status: LeadStatus): Lead => ({
 });
 
 describe("LeadStatusAdvance", () => {
-  it("shows closed message for terminal statuses", () => {
+  it("lets a closed lead be reopened", () => {
     renderWithProviders(<LeadStatusAdvance lead={mockLead("WON")} />);
 
-    expect(screen.getByText("This lead is closed.")).toBeInTheDocument();
+    expect(
+      screen.getByRole("combobox", { name: "Reopen or move to" }),
+    ).toBeInTheDocument();
   });
 
   it("renders advance actions for non-terminal statuses", () => {
     renderWithProviders(<LeadStatusAdvance lead={mockLead("NEW")} />);
 
     expect(screen.getByRole("button", { name: "Mark as contacted" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Mark as lost" })).toBeInTheDocument();
   });
 });

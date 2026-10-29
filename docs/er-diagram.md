@@ -4,7 +4,7 @@ Entity-relationship diagram for the Tandem PostgreSQL database.
 
 **Source of truth:** [`apps/backend/prisma/schema.prisma`](../apps/backend/prisma/schema.prisma)
 
-For membership and auth context, see [Architecture — Multi-Org Readiness](architecture.md#multi-org-readiness).
+For membership and auth context, see [Architecture — Multi-Org Readiness](architecture.md#multi-org-readiness). Org switcher (one person, two companies) is **upcoming**, not in the product.
 
 ## Full diagram
 
@@ -241,7 +241,7 @@ erDiagram
 | From         | To                 | Cardinality | Junction / notes                                      |
 | ------------ | ------------------ | ----------- | ----------------------------------------------------- |
 | Organization | OrganizationMember | 1:N         | Per-org user access and role                          |
-| User         | OrganizationMember | 1:N         | One row per org (1 today; multi-org ready)            |
+| User         | OrganizationMember | 1:N         | One row per org today; extra rows for upcoming org switcher |
 | Organization | Role               | 1:N         | `roles.organization_id` (nullable for platform role)  |
 | Organization | Team               | 1:N         |                                                       |
 | Organization | Lead               | 1:N         |                                                       |

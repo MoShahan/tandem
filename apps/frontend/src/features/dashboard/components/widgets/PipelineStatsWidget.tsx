@@ -1,3 +1,5 @@
+import { formatDealValue } from "@/lib/format";
+
 import {
   DashboardStatCard,
   DashboardStatGrid,
@@ -19,6 +21,10 @@ export const PipelineStatsWidget = ({ summary }: PipelineStatsWidgetProps) => {
           description="New or contacted leads"
         />
         <DashboardStatCard label="Won" value={summary.conversion.wonCount} />
+        <DashboardStatCard
+          label="Won value"
+          value={formatDealValue(summary.conversion.wonValue)}
+        />
         <DashboardStatCard label="Lost" value={summary.conversion.lostCount} />
         <DashboardStatCard
           label="Closed"
@@ -36,6 +42,10 @@ export const PipelineStatsWidget = ({ summary }: PipelineStatsWidgetProps) => {
           value={summary.conversion.openLeads}
         />
         <DashboardStatCard label="Won" value={summary.conversion.wonCount} />
+        <DashboardStatCard
+          label="Won value"
+          value={formatDealValue(summary.conversion.wonValue)}
+        />
         <DashboardStatCard label="Lost" value={summary.conversion.lostCount} />
         <DashboardStatCard
           label="Closed"
@@ -52,6 +62,10 @@ export const PipelineStatsWidget = ({ summary }: PipelineStatsWidgetProps) => {
         value={summary.conversion.unassignedCount}
       />
       <DashboardStatCard label="Won" value={summary.conversion.wonCount} />
+      <DashboardStatCard
+        label="Won value"
+        value={formatDealValue(summary.conversion.wonValue)}
+      />
       <DashboardStatCard label="Lost" value={summary.conversion.lostCount} />
       <DashboardStatCard
         label="Closed"

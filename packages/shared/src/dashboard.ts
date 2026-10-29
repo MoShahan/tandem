@@ -5,6 +5,7 @@ export type ConversionMetrics = {
   totalLeads: number;
   openLeads: number;
   wonCount: number;
+  wonValue: number;
   lostCount: number;
   closedCount: number;
   winRate: number | null;

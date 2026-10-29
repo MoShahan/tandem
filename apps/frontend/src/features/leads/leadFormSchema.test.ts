@@ -8,6 +8,7 @@ const validLead = {
   email: "",
   source: "",
   project: "",
+  expectedCloseDate: "",
 };
 
 describe("createLeadSchema", () => {
@@ -50,5 +51,23 @@ describe("updateLeadSchema", () => {
     expect(updateLeadSchema.safeParse({ ...validLead, mobileNumber: "" }).success).toBe(
       false,
     );
+  });
+
+  it("accepts an empty or YYYY-MM-DD expected close date", () => {
+    expect(
+      updateLeadSchema.safeParse({ ...validLead, expectedCloseDate: "" }).success,
+    ).toBe(true);
+    expect(
+      updateLeadSchema.safeParse({
+        ...validLead,
+        expectedCloseDate: "2026-11-15",
+      }).success,
+    ).toBe(true);
+    expect(
+      updateLeadSchema.safeParse({
+        ...validLead,
+        expectedCloseDate: "15/11/2026",
+      }).success,
+    ).toBe(false);
   });
 });

@@ -4,7 +4,7 @@ PostgreSQL schema for Tandem, managed with Prisma.
 
 **Source of truth:** [`apps/backend/prisma/schema.prisma`](../apps/backend/prisma/schema.prisma)
 
-Org user access is modeled via **`organization_members`** (not a column on `users`). Platform admins use **`user_roles`** only. See [Architecture — Multi-Org Readiness](architecture.md#multi-org-readiness).
+Org user access is modeled via **`organization_members`** (not a column on `users`). Platform admins use **`user_roles`** only. The table can hold more than one membership per user; the product still uses **one org per login**. Org switcher is **upcoming**, not shipped. See [Architecture — Multi-Org Readiness](architecture.md#multi-org-readiness).
 
 ## Overview
 
@@ -155,7 +155,7 @@ Global user identity (email, password, profile). Org access is via `organization
 | `created_at`           | TIMESTAMPTZ  | NOT NULL                      |
 | `updated_at`           | TIMESTAMPTZ  | NOT NULL                      |
 
-**Notes:** New users provisioned with a default password are created with `must_change_password = true` and receive a `WELCOME_CHANGE_PASSWORD` notification. Platform admins have no `organization_members` rows.
+**Notes:** New users provisioned with a default password are created with `must_change_password = true` and receive a `WELCOME_CHANGE_PASSWORD` notification. The flag is **not** a login gate — the app does not force `/account`. Platform admins have no `organization_members` rows.
 
 ---
 
@@ -174,7 +174,7 @@ Junction table: users ↔ organizations. Stores per-org role assignment (source 
 **Primary key:** `(user_id, organization_id)`  
 **Indexes:** `organization_id`, `role_id`
 
-**Notes:** Today each org user has one membership row. The schema supports multiple memberships per user for future multi-org support.
+**Notes:** Today each org user has one membership row. The schema supports multiple memberships per user. Org switcher is an upcoming feature, not in the product.
 
 ---
 
@@ -436,11 +436,11 @@ Defined in application code, not as separate DB tables.
 | Slug             | Scope        | Key permissions                                                                 |
 | ---------------- | ------------ | ------------------------------------------------------------------------------- |
 | `platform_admin` | Platform     | `platform:orgs:*`, `platform:users:*`, `platform:audit:read`                    |
-| `org_admin`      | Organization | users, teams, roles, org-wide leads, `audit:read`                               |
-| `executive`      | Team         | own leads, activities, `dashboard:me`                                           |
-| `team_lead`      | Team         | team users/leads, team lead write, `dashboard:team`                             |
-| `sales_manager`  | Organization | all org leads (read/write)                                                      |
-| `director`       | Organization | all org leads, `dashboard:org`                                                  |
+| `org_admin`      | Organization | users, teams, roles, org-wide lead read, `dashboard:org`, `audit:read`           |
+| `executive`      | Team         | own leads, lead write, activities, `dashboard:me`                               |
+| `team_lead`      | Team         | team users/leads, lead write, assignable, activities, `dashboard:team`          |
+| `sales_manager`  | Organization | all org leads (read/write), `dashboard:org`                                     |
+| `director`       | Organization | all org leads, `dashboard:org`, `audit:read`                                    |
 
 ---
 

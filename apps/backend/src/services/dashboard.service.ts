@@ -55,6 +55,7 @@ const buildConversionMetrics = (
   statusGroups: { status: LeadStatus; _count: { _all: number } }[],
   totalLeads: number,
   unassignedCount: number,
+  wonValue: number,
 ): ConversionMetrics => {
   const countByStatus = new Map(
     statusGroups.map((group) => [group.status, group._count._all]),
@@ -69,6 +70,7 @@ const buildConversionMetrics = (
     totalLeads,
     openLeads,
     wonCount,
+    wonValue,
     lostCount,
     closedCount,
     winRate: computeWinRate(wonCount, lostCount),
@@ -240,12 +242,14 @@ export const dashboardService = {
       totalLeads,
       unassignedCount,
       statusGroups,
+      wonValue,
       totalActivities,
       recentActivities,
     ] = await Promise.all([
       dashboardRepository.countLeads(leadScope),
       dashboardRepository.countUnassignedLeads(leadScope),
       dashboardRepository.groupLeadsByStatus(leadScope),
+      dashboardRepository.sumWonDealValue(leadScope),
       dashboardRepository.countActivities(leadScope),
       dashboardRepository.findRecentActivities(leadScope),
     ]);
@@ -254,6 +258,7 @@ export const dashboardService = {
       statusGroups,
       totalLeads,
       unassignedCount,
+      wonValue,
     );
     const statusBreakdown = buildStatusBreakdown(statusGroups, totalLeads);
     const recentActivityItems = toRecentActivities(recentActivities);

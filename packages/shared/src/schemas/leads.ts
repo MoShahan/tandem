@@ -52,10 +52,30 @@ export const updateLeadSchema = z
     source: z.string().nullable().optional(),
     project: z.string().nullable().optional(),
     status: leadStatusSchema.optional(),
+    lostReason: z.string().trim().max(500).nullable().optional(),
+    dealValue: z.number().finite().nonnegative().nullable().optional(),
+    expectedCloseDate: z
+      .union([
+        z.literal(""),
+        z
+          .string()
+          .regex(/^\d{4}-\d{2}-\d{2}$/, "Enter a date as YYYY-MM-DD"),
+        z.null(),
+      ])
+      .optional(),
   })
   .refine((value) => Object.keys(value).length > 0, {
     message: "At least one field is required",
-  });
+  })
+  .refine(
+    (value) =>
+      value.status !== "LOST" ||
+      Boolean(value.lostReason && value.lostReason.trim()),
+    {
+      message: "Lost reason is required",
+      path: ["lostReason"],
+    },
+  );
 
 export const assignLeadSchema = z.object({
   assignedToId: z.string().nullable(),

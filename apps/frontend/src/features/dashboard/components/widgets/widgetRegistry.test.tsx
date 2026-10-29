@@ -15,6 +15,7 @@ const mockSummary: MeDashboardSummary = {
     totalLeads: 10,
     openLeads: 4,
     wonCount: 4,
+    wonValue: 0,
     lostCount: 2,
     closedCount: 6,
     winRate: 67,

@@ -38,22 +38,44 @@ export const LEAD_STATUS_LABELS: Record<LeadStatus, string> = {
 const isTerminalStatus = (status: LeadStatus) =>
   TERMINAL_LEAD_STAGES.includes(status);
 
-export const getAllowedNextStatuses = (current: LeadStatus): LeadStatus[] => {
+export const getNextLinearStatus = (current: LeadStatus): LeadStatus | null => {
   if (isTerminalStatus(current)) {
-    return [];
-  }
-
-  if (current === "NEGOTIATION") {
-    return ["WON", "LOST"];
+    return null;
   }
 
   const index = LINEAR_LEAD_STAGES.indexOf(current);
 
-  if (index === -1) {
+  if (index === -1 || index >= LINEAR_LEAD_STAGES.length - 1) {
+    return null;
+  }
+
+  return LINEAR_LEAD_STAGES[index + 1];
+};
+
+export const getAllowedNextStatuses = (current: LeadStatus): LeadStatus[] =>
+  LEAD_STATUS_SORT_ORDER.filter((status) => status !== current);
+
+export const getQuickAdvanceStatuses = (current: LeadStatus): LeadStatus[] => {
+  if (isTerminalStatus(current)) {
     return [];
   }
 
-  return [LINEAR_LEAD_STAGES[index + 1]];
+  const next = getNextLinearStatus(current);
+  const quick: LeadStatus[] = [];
+
+  if (next) {
+    quick.push(next);
+  }
+
+  if (current !== "WON") {
+    quick.push("WON");
+  }
+
+  if (current !== "LOST") {
+    quick.push("LOST");
+  }
+
+  return quick;
 };
 
 export const isTerminalLeadStatus = (status: LeadStatus) =>

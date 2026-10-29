@@ -193,6 +193,9 @@ export const leadRepository = {
       source?: string | null;
       project?: string | null;
       status?: LeadStatus;
+      lostReason?: string | null;
+      dealValue?: number | null;
+      expectedCloseDate?: Date | null;
     },
   ): Promise<LeadRecord> => {
     return prisma.lead.update({

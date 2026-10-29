@@ -34,6 +34,9 @@ const mockLead = (overrides?: Partial<Lead>): Lead => ({
   source: null,
   project: null,
   status: "NEW",
+  lostReason: null,
+  dealValue: null,
+  expectedCloseDate: null,
   team: { id: "team-1", name: "Sales" },
   assignedTo: null,
   createdBy: {

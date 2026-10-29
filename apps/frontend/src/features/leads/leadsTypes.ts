@@ -25,6 +25,9 @@ export type Lead = {
   source: string | null;
   project: string | null;
   status: LeadStatus;
+  lostReason: string | null;
+  dealValue: number | null;
+  expectedCloseDate: string | null;
   team: LeadTeamSummary;
   assignedTo: LeadUserSummary | null;
   createdBy: LeadUserSummary;
@@ -103,6 +106,9 @@ export type UpdateLeadInput = {
   source?: string | null;
   project?: string | null;
   status?: LeadStatus;
+  lostReason?: string | null;
+  dealValue?: number | null;
+  expectedCloseDate?: string | null;
 };
 
 export type AssignLeadInput = {

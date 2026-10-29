@@ -1,6 +1,8 @@
 import {
   getAllowedNextStatuses,
   getLinearStageIndex,
+  getNextLinearStatus,
+  getQuickAdvanceStatuses,
   isTerminalLeadStatus,
   LEAD_STATUS_LABELS,
   LINEAR_LEAD_STAGES,
@@ -12,6 +14,8 @@ import type { LeadStatus } from "@tandem/shared";
 export {
   getAllowedNextStatuses,
   getLinearStageIndex,
+  getNextLinearStatus,
+  getQuickAdvanceStatuses,
   isTerminalLeadStatus,
   LEAD_STATUS_LABELS,
   LINEAR_LEAD_STAGES,
@@ -31,6 +35,7 @@ export const LEAD_STATUS_FILTER_OPTIONS: { value: LeadStatus; label: string }[] 
   ];
 
 const ADVANCE_ACTION_LABELS: Partial<Record<LeadStatus, string>> = {
+  NEW: "Move to New",
   CONTACTED: "Mark as contacted",
   VISIT_SCHEDULED: "Schedule site visit",
   SITE_VISIT_COMPLETED: "Mark site visit completed",

@@ -23,6 +23,7 @@ const mockSummary = {
     totalLeads: 10,
     openLeads: 5,
     wonCount: 3,
+    wonValue: 0,
     lostCount: 2,
     closedCount: 5,
     winRate: 60,

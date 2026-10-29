@@ -24,6 +24,10 @@ export const updateLeadSchema = z.object({
   email: z.union([z.literal(""), z.email("Enter a valid email address")]),
   source: z.string().optional(),
   project: z.string().optional(),
+  expectedCloseDate: z.union([
+    z.literal(""),
+    z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Enter a date as YYYY-MM-DD"),
+  ]),
 });
 
 export type CreateLeadFormValues = z.infer<typeof createLeadSchema>;
