@@ -10,8 +10,8 @@
     "dev": "vite",
     "build": "tsc -b tsconfig.app.json tsconfig.node.json && vite build",
     "preview": "vite preview",
-    "lint": "eslint src --fix",
-    "lint:fix": "eslint src --fix",
+    "lint": "eslint src --fix && node ../../eslint/no-em-dash.mjs",
+    "lint:fix": "eslint src --fix && node ../../eslint/no-em-dash.mjs",
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage"

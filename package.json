@@ -28,9 +28,15 @@
     "test:frontend": "npm run test:run --prefix apps/frontend",
     "lint": "npm run lint:backend && npm run lint:frontend",
     "lint:backend": "npm run lint --prefix apps/backend",
-    "lint:frontend": "npm run lint --prefix apps/frontend"
+    "lint:frontend": "npm run lint --prefix apps/frontend",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.md": "node eslint/no-em-dash.mjs"
   },
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6"
   }
 }

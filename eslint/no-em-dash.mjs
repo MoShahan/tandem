@@ -1,5 +1,11 @@
-const EM_DASH = "\u2014";
-const HYPHEN = "-";
+import { readdir, readFile, writeFile } from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+export const EM_DASH = "\u2014";
+export const HYPHEN = "-";
+
+export const replaceEmDashes = (text) => text.replaceAll(EM_DASH, HYPHEN);
 
 const checkNode = (context, node) => {
   const sourceCode = context.sourceCode;
@@ -64,3 +70,48 @@ export const tandemEslintPlugin = {
     "no-em-dash": noEmDashRule,
   },
 };
+
+const thisFile = fileURLToPath(import.meta.url);
+const invokedAsCli =
+  Boolean(process.argv[1]) &&
+  path.normalize(thisFile) === path.normalize(path.resolve(process.argv[1]));
+
+if (invokedAsCli) {
+  const repoRoot = fileURLToPath(new URL("..", import.meta.url));
+  const skipDirs = new Set([".git", "dist", "node_modules"]);
+  const requested = process.argv.slice(2).filter((value) => !value.startsWith("-"));
+
+  const walkMarkdownFiles = async (dir) => {
+    const entries = await readdir(dir, { withFileTypes: true });
+    const files = [];
+
+    for (const entry of entries) {
+      if (entry.isDirectory()) {
+        if (!skipDirs.has(entry.name)) {
+          files.push(...(await walkMarkdownFiles(path.join(dir, entry.name))));
+        }
+        continue;
+      }
+
+      if (entry.name.endsWith(".md")) {
+        files.push(path.join(dir, entry.name));
+      }
+    }
+
+    return files;
+  };
+
+  const files =
+    requested.length > 0
+      ? requested
+          .map((file) => path.resolve(process.cwd(), file))
+          .filter((file) => file.endsWith(".md"))
+      : await walkMarkdownFiles(repoRoot);
+
+  for (const file of files) {
+    const original = await readFile(file, "utf8");
+    if (original.includes(EM_DASH)) {
+      await writeFile(file, replaceEmDashes(original), "utf8");
+    }
+  }
+}
