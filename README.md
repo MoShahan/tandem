@@ -28,7 +28,7 @@ Tandem is a **multi-tenant sales platform** where each organization (tenant) get
 
 | Feature | Today |
 | ------- | ----- |
-| **Org switcher** | One email can have membership rows in more than one org in the database. Login still binds the session to a **single** org. There is no picker in the UI and no `POST /auth/switch-organization`. Planned in Plan 8. Details: [Architecture — Multi-Org Readiness](docs/architecture.md#multi-org-readiness). |
+| **Org switcher** | One email can have membership rows in more than one org in the database. Login still binds the session to a **single** org. There is no picker in the UI and no `POST /auth/switch-organization`. Planned in Plan 8. Details: [Architecture - Multi-Org Readiness](docs/architecture.md#multi-org-readiness). |
 | **Invite existing email into a second org** | Adding an email that already has a Tandem user fails. Later, the second company adds a **membership only** (same login, different role). Needs the org picker. Public list: [`/upcoming`](https://tandemcrm.vercel.app/upcoming). |
 | **Per-org deactivate** | Users pages activate/deactivate global `users.status` (the whole login). `organization_members.status` exists but is unused. Later, with the org switcher, an admin can remove someone from this company without locking them out of another. Public list: [`/upcoming`](https://tandemcrm.vercel.app/upcoming). |
 | **Forgot password / admin reset** | Login has no Forgot password. Admins cannot set a temporary password; they can only activate or deactivate. Admin set-password is Plan 7.10; self-service email reset is Plan 7.11. Public list: [`/upcoming`](https://tandemcrm.vercel.app/upcoming). |
@@ -36,7 +36,7 @@ Tandem is a **multi-tenant sales platform** where each organization (tenant) get
 | **Sending emails** | Alerts stay **in-app** (bell + notifications page). The API does not send mail for a new lead, assignment, welcome, password reset, or the org-admin login when a company is created. Public list: [`/upcoming`](https://tandemcrm.vercel.app/upcoming). |
 | **Customizable pipeline** | Every org uses the same stages today, including **site visit**. Later each organization will name its own statuses. Public list: [`/upcoming`](https://tandemcrm.vercel.app/upcoming). |
 | **Auto-assignment** | A leader (or anyone with assign permission) picks the owner by hand. Round-robin or least-loaded distribution of new walk-ins is **not** in the product. Public list: [`/upcoming`](https://tandemcrm.vercel.app/upcoming). |
-| **Redis (unread badge + more than one API)** | The bell counts unread alerts with a Postgres `COUNT` every 60s, so a new assignment can sit unseen for a minute. Alerts use an in-process bus, so only one API instance is safe — a restart can drop an alert, and a failed bell write is logged and given up. Redis later caches the badge, lets polling drop, shares events across servers, queues jobs so they survive a restart, and retries failed writes — after a custom domain and real customers. Public list: [`/upcoming`](https://tandemcrm.vercel.app/upcoming). |
+| **Redis (unread badge + more than one API)** | The bell counts unread alerts with a Postgres `COUNT` every 60s, so a new assignment can sit unseen for a minute. Alerts use an in-process bus, so only one API instance is safe - a restart can drop an alert, and a failed bell write is logged and given up. Redis later caches the badge, lets polling drop, shares events across servers, queues jobs so they survive a restart, and retries failed writes - after a custom domain and real customers. Public list: [`/upcoming`](https://tandemcrm.vercel.app/upcoming). |
 | **Audit / notification archival** | Bell and audit rows stay forever. Retention ships after a custom domain and real customers. Public list: [`/upcoming`](https://tandemcrm.vercel.app/upcoming). |
 | **Mobile apps** | Website only. Phone browser can open it; no App Store or Play Store app yet. Public list: [`/upcoming`](https://tandemcrm.vercel.app/upcoming). |
 | **Custom domain** | Stay on `tandemcrm.vercel.app` + `tandem-api-4eal.onrender.com`. Login cookies are third-party. A Tandem hostname (first-party cookies) is later. Public list: [`/upcoming`](https://tandemcrm.vercel.app/upcoming). |
@@ -148,7 +148,7 @@ Do not put Neon connection strings, `JWT_SECRET`, or Render/Vercel tokens in thi
 
 ### Vercel deploy notifications
 
-[`.github/workflows/vercel-deploy-notify.yml`](.github/workflows/vercel-deploy-notify.yml) runs after Vercel finishes a GitHub-connected deploy. It pings **Discord** and/or **Telegram** on success (🚀) or failure (💥) only — pending, canceled, skipped, and ignored deploys are silent.
+[`.github/workflows/vercel-deploy-notify.yml`](.github/workflows/vercel-deploy-notify.yml) runs after Vercel finishes a GitHub-connected deploy. It pings **Discord** and/or **Telegram** on success (🚀) or failure (💥) only - pending, canceled, skipped, and ignored deploys are silent.
 
 Each message includes project, environment, branch, commit, author, duration, PR (if any), and the deployment URL. The workflow file must be on the **default branch** or Vercel events never reach it.
 
@@ -206,9 +206,9 @@ Full UI screenshots by role and feature area are in the [Product guide - UI scre
 
 ## Documentation
 
-- [How Tandem works](https://tandemcrm.vercel.app/guide) — public, no-login product story (`/guide`)
-- [Upcoming features](https://tandemcrm.vercel.app/upcoming) — public roadmap (`/upcoming`)
-- [Product guide](docs/product-guide.md) — stakeholder/QA reference (roles, permissions, lists, seed accounts, [screenshots](docs/product-guide.md#20-ui-screenshots))
+- [How Tandem works](https://tandemcrm.vercel.app/guide) - public, no-login product story (`/guide`)
+- [Upcoming features](https://tandemcrm.vercel.app/upcoming) - public roadmap (`/upcoming`)
+- [Product guide](docs/product-guide.md) - stakeholder/QA reference (roles, permissions, lists, seed accounts, [screenshots](docs/product-guide.md#20-ui-screenshots))
 - [API specification (OpenAPI)](docs/openapi.yaml) - import into [Swagger Editor](https://editor.swagger.io) to browse and try endpoints
 - [Architecture](docs/architecture.md) - system design, auth, tenancy, multi-org readiness, notifications, scaling
 - [Database schema](docs/database-schema.md) - table-level reference, columns, enums, and relationships

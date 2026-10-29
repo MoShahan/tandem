@@ -1,10 +1,10 @@
 # Product Guide
 
-Stakeholder and QA reference for **Tandem** — a multi-tenant sales CRM / Sales OS. Use this file to check what shipped: roles, the permission catalog, pipeline rules, list/search/sort behavior, seed logins, and UI screenshots.
+Stakeholder and QA reference for **Tandem** - a multi-tenant sales CRM / Sales OS. Use this file to check what shipped: roles, the permission catalog, pipeline rules, list/search/sort behavior, seed logins, and UI screenshots.
 
 **If you want the non-technical story**, open **[How Tandem works](https://tandemcrm.vercel.app/guide)** (no login). Locally that is [`/guide`](http://localhost:5173/guide). Planned work that is **not in the product yet** is **[Upcoming features](https://tandemcrm.vercel.app/upcoming)** (`/upcoming`).
 
-**Audience:** stakeholders, QA, and anyone reviewing acceptance details — not first-time readers of the product.
+**Audience:** stakeholders, QA, and anyone reviewing acceptance details - not first-time readers of the product.
 
 **Related technical docs:**
 
@@ -61,18 +61,18 @@ Tandem is a **multi-tenant sales platform**. Each **organization** (tenant) has 
 
 ### What is out of scope in the MVP
 
-- **Sending emails** — assignment, new lead, welcome, password reset, and org-admin credentials when a company is created stay in-app until the email channel ships. SMS and push are also out of scope. See [§17 Future scope](#17-future-scope)
+- **Sending emails** - assignment, new lead, welcome, password reset, and org-admin credentials when a company is created stay in-app until the email channel ships. SMS and push are also out of scope. See [§17 Future scope](#17-future-scope)
 - Real-time delivery (WebSockets / SSE)
-- **Per-tenant databases** — shared Postgres with `organizationId` today. A database per company is upcoming. See [§17 Future scope](#17-future-scope)
-- **Microservices** — one Express API today. Splitting into services is upcoming. See [§17 Future scope](#17-future-scope)
-- **Mobile apps** — website only today (phone browser works; no App Store / Play Store app). See [§17 Future scope](#17-future-scope)
+- **Per-tenant databases** - shared Postgres with `organizationId` today. A database per company is upcoming. See [§17 Future scope](#17-future-scope)
+- **Microservices** - one Express API today. Splitting into services is upcoming. See [§17 Future scope](#17-future-scope)
+- **Mobile apps** - website only today (phone browser works; no App Store / Play Store app). See [§17 Future scope](#17-future-scope)
 - External CRM integrations
-- **Org switcher** — one person in two organizations, pick which one after login (schema ready; not in the UI or API). See [§17 Future scope](#17-future-scope) and [Architecture — Multi-Org Readiness](architecture.md#multi-org-readiness)
-- **Invite existing email into a second org** — adding an email that already exists fails. Membership-only invite is upcoming. See [§17 Future scope](#17-future-scope)
-- **Forgot password / admin reset** — no Forgot password on login; admins cannot set a temporary password. See [§17 Future scope](#17-future-scope)
-- **SSO / Google login** — email and a Tandem password only. See [§17 Future scope](#17-future-scope)
-- **Auto-assignment** — a person assigns each lead. Round-robin or least-loaded distribution is not in the product. See [§17 Future scope](#17-future-scope)
-- **Redis** — unread badge is a Postgres count every 60s; alerts are in-process, so only one API instance is safe. Shorter polling waits on Redis. See [§17 Future scope](#17-future-scope)
+- **Org switcher** - one person in two organizations, pick which one after login (schema ready; not in the UI or API). See [§17 Future scope](#17-future-scope) and [Architecture - Multi-Org Readiness](architecture.md#multi-org-readiness)
+- **Invite existing email into a second org** - adding an email that already exists fails. Membership-only invite is upcoming. See [§17 Future scope](#17-future-scope)
+- **Forgot password / admin reset** - no Forgot password on login; admins cannot set a temporary password. See [§17 Future scope](#17-future-scope)
+- **SSO / Google login** - email and a Tandem password only. See [§17 Future scope](#17-future-scope)
+- **Auto-assignment** - a person assigns each lead. Round-robin or least-loaded distribution is not in the product. See [§17 Future scope](#17-future-scope)
+- **Redis** - unread badge is a Postgres count every 60s; alerts are in-process, so only one API instance is safe. Shorter polling waits on Redis. See [§17 Future scope](#17-future-scope)
 
 See [Future scope](#17-future-scope) for planned evolution.
 
@@ -83,7 +83,7 @@ See [Future scope](#17-future-scope) for planned evolution.
 ### Platform users
 
 - **Who:** Platform administrators (`platform_admin` role)
-- **Org membership:** None — no `organization_members` rows
+- **Org membership:** None - no `organization_members` rows
 - **Access:** Cross-tenant APIs under `/platform/*`, platform audit, notifications (always available, no org module gate)
 - **Typical tasks:** Provision organizations, suspend tenants, toggle feature modules, manage other platform admins
 
@@ -105,7 +105,7 @@ Platform admins suspend or reactivate organizations from the organization list o
 
 ### Multi-tenant strategy
 
-Tandem uses **shared-database, row-level multi-tenancy** — a deliberate MVP choice that balances simplicity with strong isolation.
+Tandem uses **shared-database, row-level multi-tenancy** - a deliberate MVP choice that balances simplicity with strong isolation.
 
 | Approach | Used? | Notes |
 | -------- | ----- | ----- |
@@ -122,7 +122,7 @@ Tandem uses **shared-database, row-level multi-tenancy** — a deliberate MVP ch
 3. Org-scoped services call `requireOrganizationId()` and repositories add `WHERE organizationId = …` to every query.
 4. Platform admins (`orgId = null`) use separate `/platform/*` APIs with explicit `platform:*` permissions.
 
-This model keeps deployment simple (one API, one database) while making tenant boundaries enforceable in code. See [Architecture — Multi-Tenant Design](architecture.md#multi-tenant-design) for the technical diagram.
+This model keeps deployment simple (one API, one database) while making tenant boundaries enforceable in code. See [Architecture - Multi-Tenant Design](architecture.md#multi-tenant-design) for the technical diagram.
 
 ### Tenant data isolation
 
@@ -197,7 +197,7 @@ A platform admin with `platform:users:write`:
 
 - Global user record created (email, name, password)
 - `platform_admin` role assigned via `user_roles`
-- `must_change_password = true` — a welcome notification asks them to change it; they can ignore it and keep the password they were given
+- `must_change_password = true` - a welcome notification asks them to change it; they can ignore it and keep the password they were given
 - **Welcome notification** (`WELCOME_CHANGE_PASSWORD`) created, linking to `/account`
 - **Audit event** `PLATFORM_USER_CREATED` logged to platform audit
 - Password must meet strength rules (same as all user passwords)
@@ -213,7 +213,7 @@ There is no public signup. All platform admins must be seeded or created by an e
 | **View list**             | Requires `platform:users:read`                         |
 | **Create**                | Requires `platform:users:write`                        |
 | **Activate / deactivate** | Requires `platform:users:write`                        |
-| **Self-deactivation**     | Blocked — you cannot deactivate your own account       |
+| **Self-deactivation**     | Blocked - you cannot deactivate your own account       |
 | **Last admin protection** | Cannot deactivate the last active platform admin       |
 | **Email uniqueness**      | Email must be unique across all users (platform + org) |
 
@@ -301,14 +301,14 @@ Roles are **data-driven**, not hard-coded in application logic:
 | **Assignment** | One role per org membership on `organization_members`; platform admins get `platform_admin` via `user_roles` |
 | **Built-in roles** | Defined in application code (`defaultRoles.ts`) and **seeded** when an org is created; slugs are protected from deletion |
 | **Custom roles** | Org admins create new roles and pick permissions from the catalog via the Roles UI |
-| **Membership scope** | Each role has `TEAM` or `ORGANIZATION` scope — team roles require team membership and can only be assigned from team flows |
+| **Membership scope** | Each role has `TEAM` or `ORGANIZATION` scope - team roles require team membership and can only be assigned from team flows |
 | **Grant scope** | Some permissions are tagged `team` or `org_wide` in the catalog; role service validates that team-scoped roles cannot receive org-wide-only permissions |
 
 Team leaders creating members see only **team-assignable** roles (`executive`, `team_lead`). Org admins assigning from the Users page see **org-assignable** roles.
 
 ### RBAC implementation strategy
 
-Authorization uses **two enforcement layers** — coarse gates at the route, fine-grained scoping in services:
+Authorization uses **two enforcement layers** - coarse gates at the route, fine-grained scoping in services:
 
 ```text
 Request → rate limit (`/api/v1`) → authenticate → requireOrgModule (if applicable) → requirePermission → service data scope → repository (organizationId filter)
@@ -318,10 +318,10 @@ Rate limits (per client IP, in this API process): **300 requests / minute** on `
 
 | Layer | Question answered | Example |
 | ----- | ----------------- | ------- |
-| **1 — Route middleware** | Can this user perform this *type* of action? | `requirePermission('leads:write')` on `POST /leads` |
-| **2 — Service scoping** | Can this user access *this specific record*? | Executive with `leads:read` sees only assigned leads; team lead with `leads:read:team` sees team leads |
+| **1 - Route middleware** | Can this user perform this *type* of action? | `requirePermission('leads:write')` on `POST /leads` |
+| **2 - Service scoping** | Can this user access *this specific record*? | Executive with `leads:read` sees only assigned leads; team lead with `leads:read:team` sees team leads |
 
-**Frontend mirrors backend** for UX (sidebar visibility, route guards) but is **advisory only** — the API is authoritative.
+**Frontend mirrors backend** for UX (sidebar visibility, route guards) but is **advisory only** - the API is authoritative.
 
 | Mechanism | Purpose |
 | --------- | ------- |
@@ -329,7 +329,7 @@ Rate limits (per client IP, in this API process): **300 requests / minute** on `
 | `authSelectors` (`selectHasPermission`, `selectHasModule`) | Conditional UI rendering |
 | `leadAccess.service` / `user.service` | Record-level list and single-record filters |
 
-Permission changes take effect on the **next request** — the JWT is not the source of truth; the database role assignment is reloaded on every authenticated call.
+Permission changes take effect on the **next request** - the JWT is not the source of truth; the database role assignment is reloaded on every authenticated call.
 
 ### Role summary
 
@@ -368,7 +368,7 @@ Permission changes take effect on the **next request** — the JWT is not the so
 | `dashboard:org`  | Organization-wide dashboard        |
 | `audit:read`     | View organization audit trail      |
 
-Org admins do **not** get activity logging or lead write/status permissions by default — they are administrators, not sales operators. They do get the company dashboard so they can see numbers.
+Org admins do **not** get activity logging or lead write/status permissions by default - they are administrators, not sales operators. They do get the company dashboard so they can see numbers.
 
 #### Executive
 
@@ -456,15 +456,15 @@ Full list of permissions available when creating custom roles or understanding b
 | `roles:read`              | View roles             | Org-wide    | View roles and permissions          |
 | `roles:read:team`         | View team roles        | Team        | View team-assignable roles          |
 | `roles:write`             | Manage roles           | Org-wide    | Create/update roles and permissions |
-| `leads:read`              | View own leads         | —           | Leads assigned to user              |
+| `leads:read`              | View own leads         | -           | Leads assigned to user              |
 | `leads:read:team`         | View leads in team     | Team        | Leads on caller's team              |
 | `leads:read:org`          | View all org leads     | Org-wide    | All leads in organization           |
 | `leads:write`             | Manage leads           | Org-wide    | Create and update leads             |
-| `leads:status:write`      | Update own lead status | —           | Status changes on assigned leads    |
+| `leads:status:write`      | Update own lead status | -           | Status changes on assigned leads    |
 | `leads:status:write:team` | Update leads in team   | Team        | Status changes on team leads        |
-| `leads:assignable`        | Can be assigned leads  | —           | User may be lead owner              |
-| `activities:write`        | Log activities         | —           | Create activities on leads          |
-| `dashboard:me`            | My dashboard           | —           | Personal sales analytics            |
+| `leads:assignable`        | Can be assigned leads  | -           | User may be lead owner              |
+| `activities:write`        | Log activities         | -           | Create activities on leads          |
+| `dashboard:me`            | My dashboard           | -           | Personal sales analytics            |
 | `dashboard:team`          | Team dashboard         | Team        | Team sales analytics                |
 | `dashboard:org`           | Organization dashboard | Org-wide    | Org-wide sales analytics            |
 | `audit:read`              | View audit trail       | Org-wide    | Organization audit trail            |
@@ -475,24 +475,24 @@ Full list of permissions available when creating custom roles or understanding b
 
 | Feature             | Route(s)                      | Who can access                                       | Module          |
 | ------------------- | ----------------------------- | ---------------------------------------------------- | --------------- |
-| Login               | `/login`                      | Guests                                               | —               |
-| Account             | `/account`                    | Authenticated                                        | —               |
+| Login               | `/login`                      | Guests                                               | -               |
+| Account             | `/account`                    | Authenticated                                        | -               |
 | Dashboard           | `/dashboard`                  | Dashboard permission                                 | `dashboards`    |
 | Leads list          | `/leads`                      | Any lead read permission                             | `sales`     |
 | Lead detail         | `/leads/:id`                  | Lead read scope for that record                      | `sales`     |
-| Users               | `/users`                      | `users:read`                                         | —               |
-| Teams               | `/teams`, `/teams/:id`        | `teams:read`                                         | —               |
-| My team             | `/my-team`                    | `users:read:team` (without `teams:read`)             | —               |
-| Roles               | `/roles`                      | `roles:write`                                        | —               |
-| Org audit           | `/audit`                      | `audit:read`                                         | —               |
+| Users               | `/users`                      | `users:read`                                         | -               |
+| Teams               | `/teams`, `/teams/:id`        | `teams:read`                                         | -               |
+| My team             | `/my-team`                    | `users:read:team` (without `teams:read`)             | -               |
+| Roles               | `/roles`                      | `roles:write`                                        | -               |
+| Org audit           | `/audit`                      | `audit:read`                                         | -               |
 | Notifications       | Bell, `/notifications`        | Authenticated; org users need `notifications` module | `notifications` |
-| Platform overview   | `/platform`                   | `platform:orgs:read`                                 | —               |
-| Platform orgs       | `/platform/organizations`     | `platform:orgs:read`                                 | —               |
-| Platform org detail | `/platform/organizations/:id` | `platform:orgs:read`                                 | —               |
-| Platform admins     | `/platform/admins`            | `platform:users:read`                                | —               |
-| Platform audit      | `/platform/audit`             | `platform:audit:read`                                | —               |
-| Privacy / Terms     | `/privacy`, `/terms`          | Public                                               | —               |
-| Home                | `/home`                       | Fallback landing                                     | —               |
+| Platform overview   | `/platform`                   | `platform:orgs:read`                                 | -               |
+| Platform orgs       | `/platform/organizations`     | `platform:orgs:read`                                 | -               |
+| Platform org detail | `/platform/organizations/:id` | `platform:orgs:read`                                 | -               |
+| Platform admins     | `/platform/admins`            | `platform:users:read`                                | -               |
+| Platform audit      | `/platform/audit`             | `platform:audit:read`                                | -               |
+| Privacy / Terms     | `/privacy`, `/terms`          | Public                                               | -               |
+| Home                | `/home`                       | Fallback landing                                     | -               |
 
 Visual reference for major screens is in [§20 UI screenshots](#20-ui-screenshots).
 
@@ -510,7 +510,7 @@ Visual reference for major screens is in [§20 UI screenshots](#20-ui-screenshot
 | Source                       | Optional lead source                          |
 | Project                      | Optional project/property reference           |
 | Team                         | Team the lead belongs to (required on create) |
-| Assigned user                | Executive or other assignable user (optional). Assignment is **manual** — there is no round-robin or least-loaded auto-assign |
+| Assigned user                | Executive or other assignable user (optional). Assignment is **manual** - there is no round-robin or least-loaded auto-assign |
 | Status                       | Pipeline stage (see below)                    |
 | Lost reason                  | Required when status is Lost                  |
 | Deal value                   | Optional number stored on win                 |
@@ -549,13 +549,13 @@ Every lead status change is **tracked and visible** on the lead detail page.
 | **Status history API** | `GET /api/v1/leads/:id/status-history` builds a timeline from audit records |
 | **Lead detail UI** | **Status history** section shows a chronological timeline: initial creation (→ New) plus each transition (from → to) with who changed it and when |
 
-Status history is derived from the **audit trail**, not a separate `lead_status_history` table — a single source of truth for compliance and UI. Initial creation appears as the first entry (from `LEAD_CREATED` audit or lead `createdAt` fallback).
+Status history is derived from the **audit trail**, not a separate `lead_status_history` table - a single source of truth for compliance and UI. Initial creation appears as the first entry (from `LEAD_CREATED` audit or lead `createdAt` fallback).
 
 Status changes also emit a `LEAD_STATUS_CHANGED` **domain event** (for notifications) and appear in the org audit trail as `LEAD_STATUS_CHANGED`.
 
 ### Lead detail page (`/leads/:id`)
 
-Not a table — a detail view with:
+Not a table - a detail view with:
 
 | Section           | Content                                                                                                      |
 | ----------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -593,8 +593,8 @@ Users with `activities:write` permission (default: **Executive**).
 
 ### Required fields
 
-- **Type** — one of the types above
-- **Notes** — free-text description of the interaction
+- **Type** - one of the types above
+- **Notes** - free-text description of the interaction
 
 ### Side effects
 
@@ -624,11 +624,11 @@ lead.service / activity.service  →  eventBus.emit(domain event)  →  notifica
 | **In-process event bus** | A lightweight `EventEmitter` dispatches events after successful DB writes (`LEAD_CREATED`, `LEAD_ASSIGNED`, `LEAD_REASSIGNED`, `LEAD_STATUS_CHANGED`, `ACTIVITY_LOGGED`) |
 | **Dedicated handler** | `notification.handler` subscribes at server startup, resolves recipients, checks the `notifications` org module, and bulk-inserts notification rows |
 | **Fire-and-forget** | Handler errors are caught and logged; they do not fail the originating lead/activity operation |
-| **Welcome notifications** | Account welcome alerts (`WELCOME_CHANGE_PASSWORD`) are created by `welcomeNotification.service` during user provisioning — the only path that writes notifications outside the event handler |
+| **Welcome notifications** | Account welcome alerts (`WELCOME_CHANGE_PASSWORD`) are created by `welcomeNotification.service` during user provisioning - the only path that writes notifications outside the event handler |
 
 This keeps the Sales module independent of notification delivery. Disabling the `notifications` module stops the handler from persisting lead-event alerts without changing lead or activity code.
 
-See [Architecture — Notification Design](architecture.md#notification-design) for the full pipeline diagram.
+See [Architecture - Notification Design](architecture.md#notification-design) for the full pipeline diagram.
 
 ### Notification types
 
@@ -639,7 +639,7 @@ See [Architecture — Notification Design](architecture.md#notification-design) 
 | `LEAD_REASSIGNED`         | Lead reassigned                | "{name} is no longer assigned to you"                | Previous assignee (excl. actor)           | Yes             |
 | `LEAD_STATUS_CHANGED`     | Lead status updated            | "{name} is now {status}"                             | Current assignee (excl. actor)            | Yes             |
 | `ACTIVITY_LOGGED`         | New activity on lead           | "{actor} logged a {type} on {name}"                  | Team leaders (excl. actor if team leader) | Yes             |
-| `WELCOME_CHANGE_PASSWORD` | Welcome — change your password | Prompt to change default password                    | New user                                  | **No** (always) |
+| `WELCOME_CHANGE_PASSWORD` | Welcome - change your password | Prompt to change default password                    | New user                                  | **No** (always) |
 
 ### Click behavior
 
@@ -743,7 +743,7 @@ The API picks the highest applicable view for the user's permissions.
 
 ### Widget catalog by view
 
-#### Personal dashboard (`me`) — Executive
+#### Personal dashboard (`me`) - Executive
 
 | Widget key                | Label                       | Width | Description                                                |
 | ------------------------- | --------------------------- | ----- | ---------------------------------------------------------- |
@@ -756,7 +756,7 @@ The API picks the highest applicable view for the user's permissions.
 | `recent_activities`       | Recent activities           | Half  | Latest interactions (card list)                            |
 | `recent_activities_table` | Recent activities (table)   | Half  | Tabular recent interactions                                |
 
-#### Team dashboard (`team`) — Team Leader
+#### Team dashboard (`team`) - Team Leader
 
 All personal widgets **plus:**
 
@@ -767,7 +767,7 @@ All personal widgets **plus:**
 
 Team-specific copy adjusts metrics (e.g. "leads in team", unassigned count).
 
-#### Organization dashboard (`org`) — Director, Sales Manager, Org Admin
+#### Organization dashboard (`org`) - Director, Sales Manager, Org Admin
 
 All shared widgets **plus:**
 
@@ -793,7 +793,7 @@ These widgets render tables with **no search, sort, filter, or pagination**:
 
 ## 14. Account settings
 
-Route: `/account` — available to all authenticated users.
+Route: `/account` - available to all authenticated users.
 
 | Section          | Capabilities                                                                 |
 | ---------------- | ---------------------------------------------------------------------------- |
@@ -825,7 +825,7 @@ For shared behavior (debounce timing, page sizes, URL sync), see [Shared list UX
 | Team    | Yes      | Team name or empty             |
 | Status  | Yes      | Active / Inactive badge        |
 | Created | Yes      | Default sort: **Created desc** |
-| Actions | —        | Shown if `users:write`         |
+| Actions | -        | Shown if `users:write`         |
 
 | Feature          | Behavior                                                                           |
 | ---------------- | ---------------------------------------------------------------------------------- |
@@ -861,7 +861,7 @@ For shared behavior (debounce timing, page sizes, URL sync), see [Shared list UX
 
 ---
 
-### Team detail — Members (`/teams/:id`)
+### Team detail - Members (`/teams/:id`)
 
 **Access:** `teams:read`
 
@@ -887,7 +887,7 @@ Same table component as My Team.
 
 ---
 
-### My Team — Members (`/my-team`)
+### My Team - Members (`/my-team`)
 
 **Access:** `users:read:team` without `teams:read`
 
@@ -934,7 +934,7 @@ List content is scoped by permission (own / team / org leads).
 
 **Access:** `roles:write`
 
-**Not a data table** — split-pane master/detail layout.
+**Not a data table** - split-pane master/detail layout.
 
 | List item shows                            | Detail panel shows                    |
 | ------------------------------------------ | ------------------------------------- |
@@ -948,7 +948,7 @@ List content is scoped by permission (own / team / org leads).
 | **Search**     | None                                                            |
 | **Sort**       | None (API returns full list; new roles sorted by name on add)   |
 | **Filters**    | None (team-scoped users see only team-assignable roles via API) |
-| **Pagination** | None — full client-side list                                    |
+| **Pagination** | None - full client-side list                                    |
 | **Actions**    | Create role, delete non-protected roles, edit permissions       |
 
 ---
@@ -959,7 +959,7 @@ List content is scoped by permission (own / team / org leads).
 
 | Column  | Sortable               |
 | ------- | ---------------------- |
-| Expand  | —                      |
+| Expand  | -                      |
 | Time    | No                     |
 | Actor   | No (name + email)      |
 | Action  | No (color-coded badge) |
@@ -1056,7 +1056,7 @@ Includes cross-tenant events such as `PLATFORM_USER_CREATED`.
 
 **Access:** Authenticated; org users need `notifications` module
 
-**Not a `<Table>`** — card-style list rows.
+**Not a `<Table>`** - card-style list rows.
 
 | Row content      | Notes                        |
 | ---------------- | ---------------------------- |
@@ -1092,7 +1092,7 @@ Includes cross-tenant events such as `PLATFORM_USER_CREATED`.
 
 ### Organization detail (`/platform/organizations/:id`)
 
-**Not a list page** — form-based detail view.
+**Not a list page** - form-based detail view.
 
 | Section              | Purpose                                           |
 | -------------------- | ------------------------------------------------- |
@@ -1129,7 +1129,7 @@ Pages **without** debounced search: Notifications (filter toggles immediately), 
 | **Default page size**   | 10                                                     |
 | **Page size options**   | 10, 20, 50                                             |
 | **Max page size (API)** | 100                                                    |
-| **Type**                | Server-side — each page change refetches from API      |
+| **Type**                | Server-side - each page change refetches from API      |
 | **UI component**        | Shared `ListPagination` (prev/next + page size select) |
 | **Result summary**      | Toolbar shows "Showing X–Y of Z"                       |
 
@@ -1141,7 +1141,7 @@ Pages **without** debounced search: Notifications (filter toggles immediately), 
 | **Mechanism**       | Click sortable column header                                      |
 | **Toggle**          | Switches between ascending and descending                         |
 | **Default**         | Usually `createdAt` descending                                    |
-| **Execution**       | Server-side sort — header click updates URL and refetches         |
+| **Execution**       | Server-side sort - header click updates URL and refetches         |
 
 Pages **without** sort: Audit (org + platform), Notifications, Roles, Dashboard tables.
 
@@ -1158,29 +1158,29 @@ Pages **without** sort: Audit (org + platform), Notifications, Roles, Dashboard 
 
 ## 17. Future scope
 
-Items below are **not implemented** in the MVP but are documented as evolution paths in [Architecture — Scaling considerations](architecture.md#scaling-considerations).
+Items below are **not implemented** in the MVP but are documented as evolution paths in [Architecture - Scaling considerations](architecture.md#scaling-considerations).
 
 ### Upcoming: org switcher (not in the product)
 
 **Not present now.** A person logs into **one organization**. There is no picker, no “switch company,” and no `POST /auth/switch-organization`.
 
-The schema already allows the same email to have more than one `organization_members` row (different role and team per org). The app does not use that yet. When this ships: picker after login if there are multiple memberships, `POST /auth/switch-organization` to re-issue the JWT with a new `orgId`, list memberships on `/auth/me`. See [Architecture — Multi-Org Readiness](architecture.md#multi-org-readiness). Until then, see [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+The schema already allows the same email to have more than one `organization_members` row (different role and team per org). The app does not use that yet. When this ships: picker after login if there are multiple memberships, `POST /auth/switch-organization` to re-issue the JWT with a new `orgId`, list memberships on `/auth/me`. See [Architecture - Multi-Org Readiness](architecture.md#multi-org-readiness). Until then, see [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
 
 ### Upcoming: invite existing email into a second org (not in the product)
 
 **Not present now.** Creating a user with an email that already exists returns **email already exists**. Tandem will not add a second membership.
 
-When this ships: the second org adds an `organization_members` row only (same user, same password, a role for that company). That is useless without the org picker. See [Architecture — Multi-Org Readiness](architecture.md#multi-org-readiness) and [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+When this ships: the second org adds an `organization_members` row only (same user, same password, a role for that company). That is useless without the org picker. See [Architecture - Multi-Org Readiness](architecture.md#multi-org-readiness) and [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
 
 ### Upcoming: per-org membership status (not in the product)
 
 **Not present now.** Users pages **activate / deactivate** the global `users.status`. That turns the login off everywhere. `organization_members.status` already exists but the product does not use it.
 
-When this ships (with the org switcher): an admin can deactivate someone in **this** company without locking them out of another. See [Architecture — Multi-Org Readiness](architecture.md#multi-org-readiness) and [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+When this ships (with the org switcher): an admin can deactivate someone in **this** company without locking them out of another. See [Architecture - Multi-Org Readiness](architecture.md#multi-org-readiness) and [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
 
 ### Upcoming: customizable pipeline per organization (not in the product)
 
-**Not present now.** Every organization uses the same statuses, including site visit. You can skip, go back, mark lost early, and reopen — but you cannot rename or replace those stages yet.
+**Not present now.** Every organization uses the same statuses, including site visit. You can skip, go back, mark lost early, and reopen - but you cannot rename or replace those stages yet.
 
 When this ships: each org will configure its own pipeline labels. Until then, see the public list at [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
 
@@ -1188,7 +1188,7 @@ When this ships: each org will configure its own pipeline labels. Until then, se
 
 **Not present now.** Notifications are **in-app only** (bell, 60-second poll). The API does not send email when a lead is created or assigned, when a user is welcomed, for password reset, or when a platform admin creates an organization (org-admin credentials stay out of band). If someone never opens Tandem, they will not hear about a new lead.
 
-When this ships: a mail worker for assignment, welcome, new-org admin credentials, and later self-service reset. SMS and push stay out of scope unless listed separately. See [Architecture — Notification Design](architecture.md#notification-design) and [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+When this ships: a mail worker for assignment, welcome, new-org admin credentials, and later self-service reset. SMS and push stay out of scope unless listed separately. See [Architecture - Notification Design](architecture.md#notification-design) and [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
 
 ### Upcoming: forgot password / admin reset (not in the product)
 
@@ -1212,13 +1212,13 @@ When this ships: new leads on a team can rotate to the next assignable executive
 
 **Not present now.** `GET /notifications/unread-count` runs `COUNT(*)` in Postgres on every 60-second poll. There is no cache for unread counts or the permission catalog. In-app alerts use an in-process event bus, so a second API instance would miss events.
 
-When this ships (after a custom domain and real customers): Redis holds the badge number (and similar lookups) and shares notification events across servers (pub/sub or a queue). That queue also remembers the job so a restart does not drop an alert, and retries if writing the bell fails (today that failure is logged and dropped). The unread poll can then drop from 60 seconds to a few seconds without hammering Postgres. Push (SSE or websocket) stays later. Until then, keep a **single** API instance. See [`/upcoming`](https://tandemcrm.vercel.app/upcoming) and [Architecture — Scaling considerations](architecture.md#scaling-considerations).
+When this ships (after a custom domain and real customers): Redis holds the badge number (and similar lookups) and shares notification events across servers (pub/sub or a queue). That queue also remembers the job so a restart does not drop an alert, and retries if writing the bell fails (today that failure is logged and dropped). The unread poll can then drop from 60 seconds to a few seconds without hammering Postgres. Push (SSE or websocket) stays later. Until then, keep a **single** API instance. See [`/upcoming`](https://tandemcrm.vercel.app/upcoming) and [Architecture - Scaling considerations](architecture.md#scaling-considerations).
 
 ### Notifications and real-time
 
 - WebSocket or SSE push instead of 60-second polling
-- Durable event queue (Bull, SQS, or Redis) with retries and dead-letter handling — see [Upcoming: Redis](#upcoming-redis-not-in-the-product)
-- Sending emails (assignment, welcome, later password reset) — see [Upcoming: sending emails](#upcoming-sending-emails-not-in-the-product)
+- Durable event queue (Bull, SQS, or Redis) with retries and dead-letter handling - see [Upcoming: Redis](#upcoming-redis-not-in-the-product)
+- Sending emails (assignment, welcome, later password reset) - see [Upcoming: sending emails](#upcoming-sending-emails-not-in-the-product)
 - SMS notification channel
 - Separate notification worker service
 
@@ -1227,7 +1227,7 @@ When this ships (after a custom domain and real customers): Redis holds the badg
 - Containerized deployment (backend + CDN frontend + managed Postgres)
 - CI/CD pipeline
 - Structured logging and metrics (observability)
-- Redis caching for unread counts and permission catalog — see [Upcoming: Redis](#upcoming-redis-not-in-the-product)
+- Redis caching for unread counts and permission catalog - see [Upcoming: Redis](#upcoming-redis-not-in-the-product)
 
 ### Upcoming: audit and notification archival (not in the product)
 
@@ -1291,7 +1291,7 @@ When this ships: a large customer can get their own database. Until then, see [`
 | **Notification**        | In-app alert for a user                                                |
 | **Audit log**           | Immutable record of a system or user action                            |
 | **Widget**              | Dashboard panel showing a metric, chart, or table                      |
-| **Terminal status**     | Won or Lost — closes the lead                                          |
+| **Terminal status**     | Won or Lost - closes the lead                                          |
 
 ---
 

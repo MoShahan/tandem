@@ -4,7 +4,7 @@ PostgreSQL schema for Tandem, managed with Prisma.
 
 **Source of truth:** [`apps/backend/prisma/schema.prisma`](../apps/backend/prisma/schema.prisma)
 
-Org user access is modeled via **`organization_members`** (not a column on `users`). Platform admins use **`user_roles`** only. The table can hold more than one membership per user; the product still uses **one org per login**. Org switcher is **upcoming**, not shipped. See [Architecture — Multi-Org Readiness](architecture.md#multi-org-readiness).
+Org user access is modeled via **`organization_members`** (not a column on `users`). Platform admins use **`user_roles`** only. The table can hold more than one membership per user; the product still uses **one org per login**. Org switcher is **upcoming**, not shipped. See [Architecture - Multi-Org Readiness](architecture.md#multi-org-readiness).
 
 ## Overview
 
@@ -155,7 +155,7 @@ Global user identity (email, password, profile). Org access is via `organization
 | `created_at`           | TIMESTAMPTZ  | NOT NULL                      |
 | `updated_at`           | TIMESTAMPTZ  | NOT NULL                      |
 
-**Notes:** New users provisioned with a default password are created with `must_change_password = true` and receive a `WELCOME_CHANGE_PASSWORD` notification. The flag is **not** a login gate — the app does not force `/account`. Platform admins have no `organization_members` rows.
+**Notes:** New users provisioned with a default password are created with `must_change_password = true` and receive a `WELCOME_CHANGE_PASSWORD` notification. The flag is **not** a login gate - the app does not force `/account`. Platform admins have no `organization_members` rows.
 
 ---
 
@@ -208,7 +208,7 @@ Per-user saved dashboard widget visibility and ordering.
 | ------------ | ----------- | ---------------------------------------- |
 | `user_id`    | UUID        | PK, FK → `users.id` ON DELETE CASCADE    |
 | `view`       | TEXT        | NOT NULL (`me`, `team`, or `org`)        |
-| `widgets`    | JSONB       | NOT NULL — array of `{ key, order, visible }` |
+| `widgets`    | JSONB       | NOT NULL - array of `{ key, order, visible }` |
 | `updated_at` | TIMESTAMPTZ | NOT NULL                                 |
 
 ---
@@ -296,7 +296,7 @@ Platform-admin role assignment only. Org users get roles via `organization_membe
 | `user_id` | UUID | PK, FK → `users.id` ON DELETE CASCADE |
 | `role_id` | UUID | PK, FK → `roles.id` ON DELETE CASCADE |
 
-**Unique:** `user_id` — each platform admin has at most one role.
+**Unique:** `user_id` - each platform admin has at most one role.
 
 ---
 
@@ -324,7 +324,7 @@ Junction table: teams ↔ users, scoped per organization.
 | `user_id`         | UUID | PK, FK → `users.id` ON DELETE CASCADE                                    |
 | `organization_id` | UUID | NOT NULL, FK → `organization_members` ON DELETE CASCADE                |
 
-**Unique:** `(user_id, organization_id)` — one team per user per org  
+**Unique:** `(user_id, organization_id)` - one team per user per org  
 **Indexes:** `user_id`
 
 ---

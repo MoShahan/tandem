@@ -4,8 +4,8 @@ System architecture for Tandem - a multi-tenant sales CRM / Sales OS.
 
 **Related documentation:**
 
-- [Database schema](database-schema.md) — table-level reference (includes `organization_members`; see Multi-Tenant Design and Multi-Org Readiness)
-- [ER diagram](er-diagram.md) — entity relationships
+- [Database schema](database-schema.md) - table-level reference (includes `organization_members`; see Multi-Tenant Design and Multi-Org Readiness)
+- [ER diagram](er-diagram.md) - entity relationships
 
 ---
 
@@ -25,7 +25,7 @@ Tandem is a multi-tenant sales platform that supports multiple organizations wit
 - API: `http://localhost:3000`
 - Frontend: `http://localhost:5173`
 
-**Production:** SPA [https://tandemcrm.vercel.app](https://tandemcrm.vercel.app) (Vercel) → API [https://tandem-api-4eal.onrender.com](https://tandem-api-4eal.onrender.com) (Render service `tandemcrm-api`) → Neon Postgres (`us-east-2`, no public URL). Auth cookies stay third-party on `vercel.app` + `onrender.com`. A custom Tandem domain (first-party cookies) is **upcoming** — see [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+**Production:** SPA [https://tandemcrm.vercel.app](https://tandemcrm.vercel.app) (Vercel) → API [https://tandem-api-4eal.onrender.com](https://tandem-api-4eal.onrender.com) (Render service `tandemcrm-api`) → Neon Postgres (`us-east-2`, no public URL). Auth cookies stay third-party on `vercel.app` + `onrender.com`. A custom Tandem domain (first-party cookies) is **upcoming** - see [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
 
 The backend follows a consistent layering pattern: **routes → controllers → services → repositories → Prisma**. Cross-cutting concerns (authentication, RBAC, org module gates, audit logging, domain events) sit alongside domain services rather than in separate deployable services. Splitting the API into microservices is **upcoming**.
 
@@ -94,7 +94,7 @@ sequenceDiagram
 | Concern               | Source of truth                                                                                           |
 | --------------------- | --------------------------------------------------------------------------------------------------------- |
 | CORS + cookie parsing | [`apps/backend/src/app.ts`](../apps/backend/src/app.ts)                                                   |
-| Axios credentials     | [`apps/frontend/src/lib/api-client.ts`](../apps/frontend/src/lib/api-client.ts) — `withCredentials: true` |
+| Axios credentials     | [`apps/frontend/src/lib/api-client.ts`](../apps/frontend/src/lib/api-client.ts) - `withCredentials: true` |
 | Route map             | [`apps/backend/src/routes/index.ts`](../apps/backend/src/routes/index.ts)                                 |
 
 ### Backend layering example (Leads)
@@ -166,9 +166,9 @@ Enforced by [`requireOrgModule.ts`](../apps/backend/src/middleware/requireOrgMod
 
 ### Boundary rules
 
-1. **Platform vs org** — Platform users (no `organization_members` rows) access cross-tenant APIs under `/api/v1/platform/*` and receive notifications without an org module gate. Org users never pass a tenant ID in URLs; the tenant is implicit from JWT `orgId` in the authenticated session.
-2. **UI gating is advisory** — Frontend route guards and sidebar visibility improve UX. The backend middleware and service-layer scoping are authoritative.
-3. **Audit vs notifications** — Audit logs are written synchronously by domain services for compliance ([`audit.service.ts`](../apps/backend/src/services/audit.service.ts)). Notifications are async, event-driven user alerts ([`notification.handler.ts`](../apps/backend/src/handlers/notification.handler.ts)).
+1. **Platform vs org** - Platform users (no `organization_members` rows) access cross-tenant APIs under `/api/v1/platform/*` and receive notifications without an org module gate. Org users never pass a tenant ID in URLs; the tenant is implicit from JWT `orgId` in the authenticated session.
+2. **UI gating is advisory** - Frontend route guards and sidebar visibility improve UX. The backend middleware and service-layer scoping are authoritative.
+3. **Audit vs notifications** - Audit logs are written synchronously by domain services for compliance ([`audit.service.ts`](../apps/backend/src/services/audit.service.ts)). Notifications are async, event-driven user alerts ([`notification.handler.ts`](../apps/backend/src/handlers/notification.handler.ts)).
 
 ### Module dependency diagram
 
@@ -203,11 +203,11 @@ Authentication uses a **dual-cookie model**: a short-lived stateless access JWT 
 | Topic                 | Implementation                                                                                            |
 | --------------------- | --------------------------------------------------------------------------------------------------------- |
 | Access token payload  | `{ sub: userId, orgId: string \| null }`                                                                  |
-| Access token signing  | [`jwt.ts`](../apps/backend/src/lib/jwt.ts) — `JWT_SECRET`, `JWT_EXPIRES_IN` (from env; example `1d` local, set `15m` on Render) |
-| Refresh token         | Opaque random string; SHA-256 hash stored in `refresh_tokens` — [`refreshToken.ts`](../apps/backend/src/lib/refreshToken.ts) |
+| Access token signing  | [`jwt.ts`](../apps/backend/src/lib/jwt.ts) - `JWT_SECRET`, `JWT_EXPIRES_IN` (from env; example `1d` local, set `15m` on Render) |
+| Refresh token         | Opaque random string; SHA-256 hash stored in `refresh_tokens` - [`refreshToken.ts`](../apps/backend/src/lib/refreshToken.ts) |
 | Refresh token lifetime | `REFRESH_TOKEN_EXPIRES_IN` (default `7d`)                                                              |
 | Cookie names          | `access_token`, `refresh_token`                                                                           |
-| Cookie options        | httpOnly, `sameSite: "none"`, configurable `secure` — [`cookie.ts`](../apps/backend/src/config/cookie.ts) |
+| Cookie options        | httpOnly, `sameSite: "none"`, configurable `secure` - [`cookie.ts`](../apps/backend/src/config/cookie.ts) |
 | CORS                  | `credentials: true` on backend; frontend sends cookies via `withCredentials: true`                        |
 
 ### Auth endpoints
@@ -275,7 +275,7 @@ sequenceDiagram
 
 ### Security notes
 
-- **JWT `orgId` is the active tenant.** The access token carries `{ sub: userId, orgId }`. `authenticate` resolves full context from the database using both values — org users load their `organization_members` row for that org; platform admins use `orgId: null`. Role and permission changes take effect on the next request without re-login.
+- **JWT `orgId` is the active tenant.** The access token carries `{ sub: userId, orgId }`. `authenticate` resolves full context from the database using both values - org users load their `organization_members` row for that org; platform admins use `orgId: null`. Role and permission changes take effect on the next request without re-login.
 - **Cookie-based auth** mitigates XSS token theft compared to `localStorage`, but requires aligned `FRONTEND_URL`, CORS credentials, and `COOKIE_SECURE` in production.
 
 ---
@@ -299,7 +299,7 @@ flowchart TD
   DataScope -->|allowed| Response[200 + data]
 ```
 
-### Layer 1 — Route middleware
+### Layer 1 - Route middleware
 
 | Middleware             | File                                                                                | Semantics                                          |
 | ---------------------- | ----------------------------------------------------------------------------------- | -------------------------------------------------- |
@@ -311,13 +311,13 @@ flowchart TD
 | `requireAnyPermission` | [`requireAnyPermission.ts`](../apps/backend/src/middleware/requireAnyPermission.ts) | Caller must have **any** listed permission (OR)    |
 | `requireOrgModule`     | [`requireOrgModule.ts`](../apps/backend/src/middleware/requireOrgModule.ts)         | Org must have the feature module enabled           |
 
-`AuthContext` shape: [`types/auth.ts`](../apps/backend/src/types/auth.ts) — `user` (global identity), `organization` (active tenant), `membership` (role, permissions, team for that org), `modules`.
+`AuthContext` shape: [`types/auth.ts`](../apps/backend/src/types/auth.ts) - `user` (global identity), `organization` (active tenant), `membership` (role, permissions, team for that org), `modules`.
 
-### Layer 2 — Service data scoping
+### Layer 2 - Service data scoping
 
 Middleware answers "can this user perform this action?" Services answer "can this user access **this specific record**?"
 
-**Leads** — [`leadAccess.service.ts`](../apps/backend/src/services/leadAccess.service.ts):
+**Leads** - [`leadAccess.service.ts`](../apps/backend/src/services/leadAccess.service.ts):
 
 | Permission        | List scope               | Single-record access  |
 | ----------------- | ------------------------ | --------------------- |
@@ -327,7 +327,7 @@ Middleware answers "can this user perform this action?" Services answer "can thi
 
 Assignment is **manual** (a user with `leads:write` picks the owner). Round-robin or least-loaded auto-assignment is **upcoming**, not shipped. Public list: [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
 
-**Users** — [`user.service.ts`](../apps/backend/src/services/user.service.ts): similar team vs org-wide pattern with `users:read` and `users:read:team`.
+**Users** - [`user.service.ts`](../apps/backend/src/services/user.service.ts): similar team vs org-wide pattern with `users:read` and `users:read:team`.
 
 Cross-tenant record access returns `404 Not found` (not `403`) to avoid leaking existence of records in other organizations.
 
@@ -342,11 +342,11 @@ User (global identity: email, password, name, phone)
                     └── TeamMember (0..1 per org)
 ```
 
-- **Org access** — `organization_members` is the source of truth for which orgs a user belongs to and their role in each org.
-- **Platform admins** — No `organization_members` rows; role stored in `user_roles` (one platform role per user).
-- **Team membership** — Scoped per org via `team_members` unique on `(user_id, organization_id)`.
-- **Permissions** — Global catalog with scope `PLATFORM` or `ORGANIZATION`. Keys defined in [`permissions.ts`](../apps/backend/src/constants/permissions.ts); metadata in [`permissionCatalog.ts`](../apps/backend/src/constants/permissionCatalog.ts).
-- **Role management** — [`role.service.ts`](../apps/backend/src/services/role.service.ts) validates permission keys and enforces team vs org-wide grant rules.
+- **Org access** - `organization_members` is the source of truth for which orgs a user belongs to and their role in each org.
+- **Platform admins** - No `organization_members` rows; role stored in `user_roles` (one platform role per user).
+- **Team membership** - Scoped per org via `team_members` unique on `(user_id, organization_id)`.
+- **Permissions** - Global catalog with scope `PLATFORM` or `ORGANIZATION`. Keys defined in [`permissions.ts`](../apps/backend/src/constants/permissions.ts); metadata in [`permissionCatalog.ts`](../apps/backend/src/constants/permissionCatalog.ts).
+- **Role management** - [`role.service.ts`](../apps/backend/src/services/role.service.ts) validates permission keys and enforces team vs org-wide grant rules.
 
 ### Default roles
 
@@ -368,7 +368,7 @@ Built-in role slugs are protected from deletion. Custom roles can be created by 
 | Mechanism                   | File                                                                                                                                                                    |
 | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Route-level permission gate | [`RequirePermission.tsx`](../apps/frontend/src/features/auth/components/RequirePermission.tsx)                                                                          |
-| Selectors                   | [`authSelectors.ts`](../apps/frontend/src/features/auth/authSelectors.ts) — `selectHasPermission`, `selectHasAnyPermission`, `selectHasModule`, `selectIsPlatformAdmin` |
+| Selectors                   | [`authSelectors.ts`](../apps/frontend/src/features/auth/authSelectors.ts) - `selectHasPermission`, `selectHasAnyPermission`, `selectHasModule`, `selectIsPlatformAdmin` |
 | Sidebar visibility          | [`AppSidebar.tsx`](../apps/frontend/src/layouts/AppSidebar.tsx)                                                                                                         |
 
 ---
@@ -398,7 +398,7 @@ flowchart LR
 
 1. JWT is verified; `sub` + `orgId` load membership context from the database.
 2. Controllers pass `req.authUser.organization.id` into services.
-3. Services call `requireOrganizationId()` — platform users without an org context receive `403 Organization context is required`.
+3. Services call `requireOrganizationId()` - platform users without an org context receive `403 Organization context is required`.
 4. Repositories scope every query with `organizationId`.
 
 ### Tenant-scoped tables
@@ -419,7 +419,7 @@ flowchart LR
 | User type      | Membership                         | API scope                         | Cross-tenant access                |
 | -------------- | ---------------------------------- | --------------------------------- | ---------------------------------- |
 | Platform admin | No `organization_members` rows     | `/api/v1/platform/*`, notifications | Yes, with `platform:*` permissions |
-| Org user       | One `organization_members` row today | `/api/v1/{users,teams,leads,...}` | No — implicit tenant from JWT `orgId` |
+| Org user       | One `organization_members` row today | `/api/v1/{users,teams,leads,...}` | No - implicit tenant from JWT `orgId` |
 
 Platform administrators are managed via `GET/POST /api/v1/platform/users` and `PATCH /api/v1/platform/users/:id/status` ([`platformUser.service.ts`](../apps/backend/src/services/platformUser.service.ts)). New platform admins are created with `must_change_password = true` and receive a welcome notification.
 
@@ -451,7 +451,7 @@ Organizations with `status: SUSPENDED` block login for all org users. Enforced i
 | Same email across orgs | `users.email` is globally unique; org access is via `organization_members` |
 | Different role per org | `organization_members.role_id` |
 | Different team per org | `team_members` unique on `(user_id, organization_id)` |
-| Zero orgs | Platform admins only — no membership rows |
+| Zero orgs | Platform admins only - no membership rows |
 | Profile (name, phone) | Global on `users` |
 
 ### Current behavior (single-org MVP)
@@ -498,7 +498,7 @@ Public list: [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
 
 Notifications use an **event-driven write, REST read (polling)** model. There are no WebSockets, SSE, or external message queues in the MVP.
 
-The MVP uses domain events + in-process event bus + one notification handler + Postgres + REST polling. It deliberately avoids Redis, external pub/sub, message queues, and push channels to keep the stack simple for a single-node deployment, at the cost of durability, multi-instance support, and real-time delivery. **Sending emails is an upcoming feature, not in the product.** Alerts only appear in the in-app bell. **Redis** (unread-count cache, shorter poll than 60s, permission catalog, pub/sub so more than one API instance can run, and a queue so alerts survive a restart) is also **upcoming** — see [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+The MVP uses domain events + in-process event bus + one notification handler + Postgres + REST polling. It deliberately avoids Redis, external pub/sub, message queues, and push channels to keep the stack simple for a single-node deployment, at the cost of durability, multi-instance support, and real-time delivery. **Sending emails is an upcoming feature, not in the product.** Alerts only appear in the in-app bell. **Redis** (unread-count cache, shorter poll than 60s, permission catalog, pub/sub so more than one API instance can run, and a queue so alerts survive a restart) is also **upcoming** - see [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
 
 ### Design rationale
 
@@ -521,7 +521,7 @@ flowchart LR
 | Step                 | File                                                                                                                                         | Role                                                                                         |
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
 | Event types          | [`domainEvents.ts`](../apps/backend/src/events/domainEvents.ts)                                                                              | `LEAD_CREATED`, `LEAD_ASSIGNED`, `LEAD_REASSIGNED`, `LEAD_STATUS_CHANGED`, `ACTIVITY_LOGGED` |
-| Welcome alerts       | [`welcomeNotification.service.ts`](../apps/backend/src/services/welcomeNotification.service.ts)                                                 | `WELCOME_CHANGE_PASSWORD` — created on user/org-admin/platform-admin provisioning and ensured on login |
+| Welcome alerts       | [`welcomeNotification.service.ts`](../apps/backend/src/services/welcomeNotification.service.ts)                                                 | `WELCOME_CHANGE_PASSWORD` - created on user/org-admin/platform-admin provisioning and ensured on login |
 | Emitters             | [`lead.service.ts`](../apps/backend/src/services/lead.service.ts), [`activity.service.ts`](../apps/backend/src/services/activity.service.ts) | Publish after successful DB writes                                                           |
 | Event bus            | [`eventBus.ts`](../apps/backend/src/lib/eventBus.ts)                                                                                         | In-process Node `EventEmitter`; fire-and-forget async handlers                               |
 | Handler registration | [`registerHandlers.ts`](../apps/backend/src/lib/registerHandlers.ts)                                                                         | Wired at server startup                                                                      |
@@ -548,7 +548,7 @@ Base path: `/api/v1/notifications` (requires auth).
 | Caller            | Gating                                                                 |
 | ----------------- | ---------------------------------------------------------------------- |
 | Org user          | `notifications` module must be enabled ([`requireNotificationsAccess.ts`](../apps/backend/src/middleware/requireNotificationsAccess.ts)) |
-| Platform user     | No module gate — org context is absent                                 |
+| Platform user     | No module gate - org context is absent                                 |
 
 | Method  | Path            | Purpose                                                   |
 | ------- | --------------- | --------------------------------------------------------- |
@@ -589,7 +589,7 @@ sequenceDiagram
 
 | Concern          | Implementation                                                                                                           |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| Polling interval | 60 seconds — [`useNotificationPolling.ts`](../apps/frontend/src/features/notifications/hooks/useNotificationPolling.ts)  |
+| Polling interval | 60 seconds - [`useNotificationPolling.ts`](../apps/frontend/src/features/notifications/hooks/useNotificationPolling.ts)  |
 | Dropdown         | Fetches latest 10 on open (not on every poll)                                                                            |
 | Full page        | [`NotificationsPage.tsx`](../apps/frontend/src/features/notifications/pages/NotificationsPage.tsx) with URL query params |
 | UI gating        | Bell shown when authenticated and (`notifications` module enabled **or** no org context) |
@@ -601,12 +601,12 @@ Users created with a default password (org admin during org provisioning, org us
 
 ### Limitations
 
-- Events are **not durable** — a process crash between emit and DB write can lose notifications.
-- **No retry or dead-letter queue** — handler failures are logged only. Retry is **upcoming** with Redis ([`/upcoming`](https://tandemcrm.vercel.app/upcoming)).
-- **No email or SMS channels** — in-app only. Sending email (assignment, new lead, welcome, password reset, org-admin credentials when a company is created) is **upcoming**, not shipped.
-- **No forgot-password / admin reset** — login has no reset link; `change-password` needs the current password; user screens only activate/deactivate. Upcoming (`/upcoming`, Plan 7.10 then 7.11).
-- **Password-only login** — no Google / SSO. Upcoming (`/upcoming`).
-- **Polling latency** — users see new alerts within ~60 seconds (or immediately when opening the bell dropdown for the list).
+- Events are **not durable** - a process crash between emit and DB write can lose notifications.
+- **No retry or dead-letter queue** - handler failures are logged only. Retry is **upcoming** with Redis ([`/upcoming`](https://tandemcrm.vercel.app/upcoming)).
+- **No email or SMS channels** - in-app only. Sending email (assignment, new lead, welcome, password reset, org-admin credentials when a company is created) is **upcoming**, not shipped.
+- **No forgot-password / admin reset** - login has no reset link; `change-password` needs the current password; user screens only activate/deactivate. Upcoming (`/upcoming`, Plan 7.10 then 7.11).
+- **Password-only login** - no Google / SSO. Upcoming (`/upcoming`).
+- **Polling latency** - users see new alerts within ~60 seconds (or immediately when opening the bell dropdown for the list).
 
 ---
 
@@ -622,7 +622,7 @@ The codebase is optimized for MVP delivery and single-instance local development
 | API instances   | Single-node monolith; in-process event bus does not work across multiple instances                                          |
 | Notifications   | Fire-and-forget handlers; no retry; silent loss on crash or transient DB error                                              |
 | Client delivery | 60-second polling → `N_users / 60s` unread-count requests                                                                   |
-| Caching         | None — every poll runs `COUNT(*)` against PostgreSQL                                                                        |
+| Caching         | None - every poll runs `COUNT(*)` against PostgreSQL                                                                        |
 | Rate limiting   | In-memory per process: 300 req/min and 60 writes/min per IP on `/api/v1`; 20 login/refresh / 15 min. `/health` is open. Counts reset if you run more than one API instance. |
 | Database        | Single Postgres; no read replicas or connection-pool tuning beyond defaults                                                 |
 | Data growth     | `notifications` and `audit_logs` tables grow unbounded with no archival strategy                                            |
@@ -631,14 +631,14 @@ The codebase is optimized for MVP delivery and single-instance local development
 
 | Concern                        | Current              | Recommended path                                                                                                                                         |
 | ------------------------------ | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Horizontal API                 | Single instance      | JWT is already stateless; Redis Pub/Sub or transactional outbox for multi-instance fan-out — **upcoming** ([`/upcoming`](https://tandemcrm.vercel.app/upcoming)) |
-| Notifications                  | In-process + polling | Redis queue / outbox so alerts survive a restart — **upcoming** ([`/upcoming`](https://tandemcrm.vercel.app/upcoming)); WebSocket/SSE push later; separate email worker |
+| Horizontal API                 | Single instance      | JWT is already stateless; Redis Pub/Sub or transactional outbox for multi-instance fan-out - **upcoming** ([`/upcoming`](https://tandemcrm.vercel.app/upcoming)) |
+| Notifications                  | In-process + polling | Redis queue / outbox so alerts survive a restart - **upcoming** ([`/upcoming`](https://tandemcrm.vercel.app/upcoming)); WebSocket/SSE push later; separate email worker |
 | DB load                        | Single Postgres      | Connection pool tuning, read replicas for list endpoints; indexes exist on `notifications.[userId, readAt]` and `audit_logs.[organizationId, createdAt]` |
-| Caching                        | None                 | Redis for unread counts and permission catalog — **upcoming** ([`/upcoming`](https://tandemcrm.vercel.app/upcoming))                                      |
+| Caching                        | None                 | Redis for unread counts and permission catalog - **upcoming** ([`/upcoming`](https://tandemcrm.vercel.app/upcoming))                                      |
 | Deployment                     | Local dev only       | Containerize backend, static frontend on CDN, managed Postgres; secrets for `JWT_SECRET`, `DATABASE_URL`, `DIRECT_URL`, `COOKIE_SECURE`, `FRONTEND_URL`  |
 | Observability                  | Console logs         | Structured logging and metrics                                                                                                                           |
-| Audit / notification retention | Unbounded            | Time-based archival after custom domain + real customers — **upcoming** ([`/upcoming`](https://tandemcrm.vercel.app/upcoming))                            |
-| Service split                  | One Express process  | Separate services if traffic needs it — **upcoming** ([`/upcoming`](https://tandemcrm.vercel.app/upcoming))                                               |
-| Tenant isolation               | Shared Postgres      | A database per company for large tenants — **upcoming** ([`/upcoming`](https://tandemcrm.vercel.app/upcoming))                                           |
+| Audit / notification retention | Unbounded            | Time-based archival after custom domain + real customers - **upcoming** ([`/upcoming`](https://tandemcrm.vercel.app/upcoming))                            |
+| Service split                  | One Express process  | Separate services if traffic needs it - **upcoming** ([`/upcoming`](https://tandemcrm.vercel.app/upcoming))                                               |
+| Tenant isolation               | Shared Postgres      | A database per company for large tenants - **upcoming** ([`/upcoming`](https://tandemcrm.vercel.app/upcoming))                                           |
 
 Graceful shutdown waits for `server.close` (in-flight requests) with a 10s timeout, then disconnects Prisma and ends the pool. Render sends `SIGTERM` on deploy; a second signal is ignored while shutdown is already running.

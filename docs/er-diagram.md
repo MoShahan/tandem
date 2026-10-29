@@ -4,7 +4,7 @@ Entity-relationship diagram for the Tandem PostgreSQL database.
 
 **Source of truth:** [`apps/backend/prisma/schema.prisma`](../apps/backend/prisma/schema.prisma)
 
-For membership and auth context, see [Architecture — Multi-Org Readiness](architecture.md#multi-org-readiness). Org switcher (one person, two companies) is **upcoming**, not in the product.
+For membership and auth context, see [Architecture - Multi-Org Readiness](architecture.md#multi-org-readiness). Org switcher (one person, two companies) is **upcoming**, not in the product.
 
 ## Full diagram
 
@@ -264,9 +264,9 @@ erDiagram
 
 ## Key constraints
 
-- **Org role per membership** — `organization_members.role_id` defines the user's role in that org.
-- **Platform role** — `user_roles` is for platform admins only (`user_id` unique).
-- **One team per org** — `team_members` unique on `(user_id, organization_id)`.
-- **Leads are team-scoped** — every lead requires a team; team delete is `RESTRICT` when leads exist.
-- **Protected references** — lead creator and activity author use `ON DELETE RESTRICT`.
-- **Optional assignee** — lead assignee uses `ON DELETE SET NULL`.
+- **Org role per membership** - `organization_members.role_id` defines the user's role in that org.
+- **Platform role** - `user_roles` is for platform admins only (`user_id` unique).
+- **One team per org** - `team_members` unique on `(user_id, organization_id)`.
+- **Leads are team-scoped** - every lead requires a team; team delete is `RESTRICT` when leads exist.
+- **Protected references** - lead creator and activity author use `ON DELETE RESTRICT`.
+- **Optional assignee** - lead assignee uses `ON DELETE SET NULL`.
