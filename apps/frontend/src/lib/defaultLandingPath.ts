@@ -23,7 +23,7 @@ export const selectDefaultLandingPath = (state: RootState): string => {
   }
 
   if (selectIsPlatformAdmin(state)) {
-    return "/platform/organizations";
+    return "/platform";
   }
 
   if (selectHasAnyPermission([PERMISSIONS.PLATFORM_AUDIT_READ])(state)) {

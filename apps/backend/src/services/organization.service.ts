@@ -24,6 +24,7 @@ import type {
   OrganizationResponse,
   PaginatedOrganizationsResponse,
   ParsedListOrganizationsQuery,
+  PlatformStatsResponse,
   UpdateOrganizationInput,
   UpdateOrganizationStatusInput,
 } from "../types/organization";
@@ -218,6 +219,10 @@ const validateCreateInput = async (input: CreateOrganizationInput) => {
 
 export const organizationService = {
   parseListQuery,
+
+  getPlatformStats: async (): Promise<PlatformStatsResponse> => {
+    return organizationRepository.getPlatformStats();
+  },
 
   listOrganizations: async (
     rawQuery: Record<string, unknown>,

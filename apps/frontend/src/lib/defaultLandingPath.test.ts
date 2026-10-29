@@ -48,9 +48,9 @@ describe("selectDefaultLandingPath", () => {
     expect(selectDefaultLandingPath(state)).toBe("/dashboard");
   });
 
-  it("returns platform organizations for platform admin", () => {
+  it("returns platform overview for platform admin", () => {
     const state = asRootState(platformAdminState());
-    expect(selectDefaultLandingPath(state)).toBe("/platform/organizations");
+    expect(selectDefaultLandingPath(state)).toBe("/platform");
   });
 
   it("returns platform audit when platform audit read permission is present", () => {

@@ -5,6 +5,7 @@ import {
   fetchOrganization,
   fetchOrganizations,
   fetchPlatformAuditLogs,
+  fetchPlatformStats,
   platformReducer,
   updateOrganization,
   updateOrganizationStatus,
@@ -23,13 +24,14 @@ vi.mock("./platformService", () => ({
     updateOrganization: vi.fn(),
     updateOrganizationStatus: vi.fn(),
     listAuditLogs: vi.fn(),
+    getPlatformStats: vi.fn(),
   },
 }));
 
 const mockOrganization = (overrides?: Partial<Organization>): Organization => ({
   id: "org-1",
-  name: "HiLite Builders",
-  code: "HB",
+  name: "Wayne Enterprises",
+  code: "WE",
   logoUrl: null,
   description: null,
   status: "ACTIVE",
@@ -132,8 +134,8 @@ describe("platformSlice", () => {
       organizationId: "org-1",
       organization: {
         id: "org-1",
-        name: "HiLite Builders",
-        code: "HB",
+        name: "Wayne Enterprises",
+        code: "WE",
       },
       actorId: "user-1",
       actor: {
@@ -161,6 +163,23 @@ describe("platformSlice", () => {
     expect(state.auditListStatus).toBe("success");
     expect(state.auditLogs).toEqual([auditLog]);
     expect(state.auditListQuery).toEqual(query);
+  });
+
+  it("loads platform overview stats", () => {
+    const stats = {
+      organizationCount: 5,
+      activeOrganizationCount: 4,
+      activeUserCount: 18,
+      leadCount: 42,
+    };
+
+    const state = platformReducer(
+      platformReducer(undefined, fetchPlatformStats.pending("")),
+      fetchPlatformStats.fulfilled(stats, ""),
+    );
+
+    expect(state.statsStatus).toBe("success");
+    expect(state.stats).toEqual(stats);
   });
 
   it("stores list errors", () => {

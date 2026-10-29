@@ -17,6 +17,19 @@ const getAuditContext = (req: Request) => ({
   requestContext: getAuditRequestContext(req),
 });
 
+export const getPlatformStats = async (
+  _req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const stats = await organizationService.getPlatformStats();
+    return res.json(stats);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const listOrganizations = async (
   req: Request,
   res: Response,

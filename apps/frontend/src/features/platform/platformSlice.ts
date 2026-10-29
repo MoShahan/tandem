@@ -38,7 +38,15 @@ const initialState: PlatformState = {
   platformUsersListQuery: null,
   platformUsersListStatus: "idle",
   platformUsersListError: null,
+  stats: null,
+  statsStatus: "idle",
+  statsError: null,
 };
+
+export const fetchPlatformStats = createAsyncThunk(
+  "platform/fetchPlatformStats",
+  async () => platformService.getPlatformStats(),
+);
 
 export const fetchOrganizations = createAsyncThunk(
   "platform/fetchOrganizations",
@@ -178,6 +186,19 @@ const platformSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchPlatformStats.pending, (state) => {
+        state.statsStatus = "loading";
+        state.statsError = null;
+      })
+      .addCase(fetchPlatformStats.fulfilled, (state, action) => {
+        state.stats = action.payload;
+        state.statsStatus = "success";
+      })
+      .addCase(fetchPlatformStats.rejected, (state, action) => {
+        state.statsStatus = "error";
+        state.statsError =
+          action.error.message ?? "Failed to load platform overview";
+      })
       .addCase(fetchOrganizations.pending, (state, action) => {
         state.listStatus = "loading";
         state.listError = null;

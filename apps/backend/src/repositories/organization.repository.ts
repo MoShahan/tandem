@@ -188,4 +188,32 @@ export const organizationRepository = {
       ...organizationWithUserCount,
     });
   },
+
+  getPlatformStats: async () => {
+    const [
+      organizationCount,
+      activeOrganizationCount,
+      activeUserCount,
+      leadCount,
+    ] = await Promise.all([
+      prisma.organization.count(),
+      prisma.organization.count({
+        where: { status: OrganizationStatus.ACTIVE },
+      }),
+      prisma.organizationMember.count({
+        where: {
+          status: UserStatus.ACTIVE,
+          user: { status: UserStatus.ACTIVE },
+        },
+      }),
+      prisma.lead.count(),
+    ]);
+
+    return {
+      organizationCount,
+      activeOrganizationCount,
+      activeUserCount,
+      leadCount,
+    };
+  },
 };

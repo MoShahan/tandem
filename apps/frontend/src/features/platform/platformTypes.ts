@@ -125,6 +125,9 @@ export type PlatformState = {
   platformUsersListQuery: PlatformUserListQuery | null;
   platformUsersListStatus: "idle" | "loading" | "success" | "error";
   platformUsersListError: string | null;
+  stats: PlatformStats | null;
+  statsStatus: "idle" | "loading" | "success" | "error";
+  statsError: string | null;
 };
 
 export type PlatformUserStatus = "ACTIVE" | "INACTIVE";
@@ -172,4 +175,11 @@ export type CreatePlatformUserInput = {
 
 export type UpdatePlatformUserStatusInput = {
   status: PlatformUserStatus;
+};
+
+export type PlatformStats = {
+  organizationCount: number;
+  activeOrganizationCount: number;
+  activeUserCount: number;
+  leadCount: number;
 };

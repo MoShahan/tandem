@@ -62,3 +62,11 @@ export const selectPlatformUsersListStatus = (state: RootState) =>
 
 export const selectPlatformUsersListError = (state: RootState) =>
   state.platform.platformUsersListError;
+
+export const selectPlatformStats = (state: RootState) => state.platform.stats;
+
+export const selectPlatformStatsStatus = (state: RootState) =>
+  state.platform.statsStatus;
+
+export const selectPlatformStatsError = (state: RootState) =>
+  state.platform.statsError;

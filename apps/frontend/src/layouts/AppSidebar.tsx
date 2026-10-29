@@ -73,8 +73,8 @@ export const AppSidebar = () => {
     canViewPlatformAudit || canViewPlatformAdmins || isPlatformAdmin;
 
   return (
-    <Sidebar collapsible="icon" variant="inset">
-      <SidebarHeader className="px-3 py-4">
+    <Sidebar collapsible="icon" variant="sidebar">
+      <SidebarHeader className="flex h-14 flex-row items-center border-b p-0 px-3">
         <div className="flex items-center gap-3">
           <TandemLogo className="size-8" />
           <div className="flex min-w-0 flex-col group-data-[collapsible=icon]:hidden">
@@ -87,7 +87,6 @@ export const AppSidebar = () => {
           </div>
         </div>
       </SidebarHeader>
-      <SidebarSeparator className="mx-0 w-full" />
       <SidebarContent className="px-2 py-3">
         {hasPlatformSection ? (
           <SidebarGroup>
@@ -96,6 +95,21 @@ export const AppSidebar = () => {
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
+                {isPlatformAdmin ? (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={location.pathname === "/platform"}
+                      tooltip="Overview"
+                      className="rounded-lg data-[active=true]:bg-sidebar-accent data-[active=true]:font-medium data-[active=true]:shadow-sm"
+                    >
+                      <NavLink to="/platform">
+                        <LayoutDashboard />
+                        <span>Overview</span>
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ) : null}
                 {isPlatformAdmin ? (
                   <SidebarMenuItem>
                     <SidebarMenuButton
@@ -273,7 +287,7 @@ export const AppSidebar = () => {
       {user ? (
         <>
           <SidebarSeparator className="mx-0 w-full" />
-          <SidebarFooter className="p-3">
+          <SidebarFooter className="p-2">
             <UserMenu />
           </SidebarFooter>
         </>

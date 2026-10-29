@@ -9,6 +9,7 @@ vi.mock("../repositories/organization.repository", () => ({
     createWithOrgAdmin: vi.fn(),
     update: vi.fn(),
     updateStatus: vi.fn(),
+    getPlatformStats: vi.fn(),
   },
 }));
 
@@ -49,5 +50,23 @@ describe("organizationService.listOrganizationOptions", () => {
     expect(result.organizations).toEqual([
       { id: "org-1", name: "Acme", code: "acme" },
     ]);
+  });
+});
+
+describe("organizationService.getPlatformStats", () => {
+  it("returns org, active-user, and lead counts", async () => {
+    vi.mocked(organizationRepository.getPlatformStats).mockResolvedValue({
+      organizationCount: 5,
+      activeOrganizationCount: 4,
+      activeUserCount: 18,
+      leadCount: 42,
+    });
+
+    await expect(organizationService.getPlatformStats()).resolves.toEqual({
+      organizationCount: 5,
+      activeOrganizationCount: 4,
+      activeUserCount: 18,
+      leadCount: 42,
+    });
   });
 });

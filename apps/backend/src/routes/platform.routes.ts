@@ -10,6 +10,7 @@ import {
   createOrganization,
   getOrganization,
   getOrganizationModules,
+  getPlatformStats,
   listOrganizationOptions,
   listOrganizations,
   updateOrganization,
@@ -48,6 +49,7 @@ const platformUsersWrite = [
   requirePermission(PERMISSIONS.PLATFORM_USERS_WRITE),
 ];
 
+router.get("/stats", ...platformRead, getPlatformStats);
 router.get("/audit", ...platformAuditRead, listPlatformAuditLogs);
 
 router.get("/users", ...platformUsersRead, listPlatformUsers);

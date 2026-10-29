@@ -91,3 +91,10 @@ export type ListOrganizationOptionsQuery = {
 export type OrganizationOptionsResponse = {
   organizations: OrganizationOption[];
 };
+
+export type PlatformStatsResponse = {
+  organizationCount: number;
+  activeOrganizationCount: number;
+  activeUserCount: number;
+  leadCount: number;
+};

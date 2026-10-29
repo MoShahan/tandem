@@ -17,6 +17,7 @@ import type {
   OrganizationOptionsResult,
   PlatformAuditListQuery,
   PlatformUser,
+  PlatformStats,
   PlatformUserListQuery,
   UpdatePlatformUserStatusInput,
   UpdateOrganizationInput,
@@ -24,6 +25,11 @@ import type {
 import type { ListAuditLogsResult } from "@/features/audit/auditTypes";
 
 export const platformService = {
+  getPlatformStats: async (): Promise<PlatformStats> => {
+    const response = await apiClient.get("/api/v1/platform/stats");
+    return unwrapResponse<PlatformStats>(response);
+  },
+
   listOrganizations: async (
     query: OrganizationListQuery,
   ): Promise<ListOrganizationsResult> => {
