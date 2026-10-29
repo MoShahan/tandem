@@ -101,6 +101,16 @@ export const GuidePage = () => {
             <p>
               Each company on Tandem is an <strong>organization</strong>, like a
               separate office. Company A cannot see Company B’s people or leads.
+              You work in one company per login. Switching companies if the
+              same person is in two offices, and inviting an email that already
+              has a Tandem login into a second company, are{" "}
+              <Link
+                to="/upcoming"
+                className="font-medium text-foreground underline underline-offset-4"
+              >
+                upcoming features
+              </Link>{" "}
+              — not in the product yet.
             </p>
             <p>
               A <strong>platform admin</strong> is Tandem staff (or whoever
@@ -140,20 +150,29 @@ export const GuidePage = () => {
           <Prose>
             <p>
               The pipeline is the path a lead walks from “we just heard of them”
-              to “the deal is done.” In Tandem that path is one step at a time.
-              You cannot skip ahead or go backwards today.
+              to “the deal is done.” You can skip a stage, go backwards, or mark
+              lost from any open step — a lead can go cold on day one. You can
+              reopen a won or lost lead if they come back.
             </p>
           </Prose>
           <GuidePipeline />
           <Prose>
             <p>
-              <strong>Closed</strong> means the deal is finished. You cannot
-              edit, reassign, or move a won or lost lead. That is intentional.
+              <strong>Closed</strong> means the deal is finished until you
+              reopen it. While it is closed you cannot edit, reassign, or log
+              activities. Marking lost asks for a reason. Marking won can store
+              a deal value. Open leads can have an expected close date.
             </p>
             <p>
-              This pipeline is shaped around property and site visits. It still
-              works for other kinds of sales, but “site visit” may feel odd if
-              you sell software. Statuses are not configurable yet.
+              This pipeline includes <strong>site visit</strong> stages. That
+              stays for now. Naming your own statuses per company is an{" "}
+              <Link
+                to="/upcoming"
+                className="font-medium text-foreground underline underline-offset-4"
+              >
+                upcoming feature
+              </Link>
+              .
             </p>
           </Prose>
         </section>
@@ -163,7 +182,17 @@ export const GuidePage = () => {
           <Prose>
             <p>
               <strong>Assignment</strong> answers one question: which
-              salesperson is responsible for this person right now?
+              salesperson is responsible for this person right now? Today a
+              team leader picks that person by hand. Automatically handing new
+              walk-ins around the team (next in line, or whoever has the fewest
+              open leads) is an{" "}
+              <Link
+                to="/upcoming"
+                className="font-medium text-foreground underline underline-offset-4"
+              >
+                upcoming feature
+              </Link>
+              .
             </p>
           </Prose>
           <GuideAssignmentFlow />
@@ -302,6 +331,25 @@ export const GuidePage = () => {
             <p>
               A <strong>notification</strong> is a bell for you - “this lead was
               assigned to you.” It is a to-do prompt, not a legal record.
+              Tandem does not send email yet — not for a new lead, an
+              assignment, a welcome, a password reset, or the org-admin login
+              when a company is created. If you never open the app, you will
+              not hear about a new lead. Sending emails is an{" "}
+              <Link
+                to="/upcoming"
+                className="font-medium text-foreground underline underline-offset-4"
+              >
+                upcoming feature
+              </Link>
+              . There is no Forgot password on login, and an admin cannot set a
+              new password for you yet. Signing in with Google is also{" "}
+              <Link
+                to="/upcoming"
+                className="font-medium text-foreground underline underline-offset-4"
+              >
+                upcoming
+              </Link>
+              .
             </p>
             <p>
               An <strong>audit log</strong> is a compliance record - “this user
@@ -318,7 +366,8 @@ export const GuidePage = () => {
             <p>
               There are three heights of dashboard: <strong>my numbers</strong>{" "}
               (executive), <strong>my team</strong> (team leader), and{" "}
-              <strong>whole company</strong> (director). You can show, hide, and
+              <strong>whole company</strong> (director, sales manager, and org
+              admin). You can show, hide, and
               reorder widgets. The layout is saved per person.
             </p>
           </Prose>

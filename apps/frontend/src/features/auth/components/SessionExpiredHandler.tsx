@@ -6,7 +6,7 @@ import { registerSessionExpiredHandler } from "@/lib/api-client";
 
 import { logout } from "../authSlice";
 
-const PUBLIC_PATHS = ["/login", "/privacy", "/terms", "/guide"];
+const PUBLIC_PATHS = ["/", "/login", "/privacy", "/terms", "/guide", "/upcoming"];
 
 const isPublicPath = (pathname: string) =>
   PUBLIC_PATHS.some(

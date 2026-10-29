@@ -35,6 +35,25 @@ describe("GuidePage", () => {
       screen.getByRole("heading", { name: "How Tandem works" }),
     ).toBeInTheDocument();
     expect(
+      screen.getByText(/switching companies if the same person is in two offices/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/inviting an email that already has a tandem login/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/tandem does not send email yet/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/org-admin login when a company is created/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/there is no forgot password on login/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/signing in with google/i),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/you can reopen a won or lost lead/i)).toBeInTheDocument();
+    expect(
       screen.getByRole("heading", { name: "What a lead is" }),
     ).toBeInTheDocument();
     expect(
@@ -42,6 +61,9 @@ describe("GuidePage", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByText(/which salesperson is responsible/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/automatically handing new walk-ins/i),
     ).toBeInTheDocument();
     expect(screen.getByText(/the sale happened/i)).toBeInTheDocument();
     expect(
@@ -64,7 +86,7 @@ describe("GuidePage", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("Capture a walk-in")).toBeInTheDocument();
     expect(
-      screen.getByText(/she cannot create a lead of her own/i),
+      screen.getByText(/creates them as her own lead/i),
     ).toBeInTheDocument();
     expect(screen.getAllByText("Priya Shah").length).toBeGreaterThan(0);
     expect(
@@ -82,5 +104,8 @@ describe("GuidePage", () => {
     expect(
       screen.queryByRole("link", { name: "Back to login" }),
     ).not.toBeInTheDocument();
+    expect(
+      screen.getAllByRole("link", { name: /upcoming/i }).length,
+    ).toBeGreaterThan(0);
   });
 });

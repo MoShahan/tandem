@@ -77,7 +77,7 @@ export const NotFoundPage = () => {
       <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur-sm">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
           <Link
-            to="/login"
+            to="/"
             className="flex items-center gap-3 transition-opacity hover:opacity-80"
           >
             <TandemLogo className="size-8" />

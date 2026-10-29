@@ -2,7 +2,7 @@ import type { LegalPageContent } from "../types";
 
 export const termsAndConditionsContent: LegalPageContent = {
   title: "Terms & Conditions",
-  lastUpdated: "October 28, 2026",
+  lastUpdated: "October 29, 2026",
   disclaimer:
     "This document is sample legal copy for Tandem, a personal full-stack project.",
   otherLegalPage: {
@@ -86,7 +86,7 @@ export const termsAndConditionsContent: LegalPageContent = {
     {
       title: "Contact",
       paragraphs: [
-        "If you have questions about these Terms & Conditions, contact us at legal@hilite.com.",
+        "If you have questions about these Terms & Conditions, contact us at tandem.legal@yopmail.com.",
       ],
     },
   ],

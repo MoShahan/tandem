@@ -12,7 +12,7 @@ export const GuidePipeline = () => {
     <div className="space-y-4">
       <GuideFigure
         label="The path a lead walks"
-        caption="One step at a time. From negotiation the deal either becomes won or lost, and then it is closed."
+        caption="Usual path, not a one-way lock. You can skip, go back, mark lost early, or reopen."
       >
         <div className="flex flex-col items-center gap-2">
           <div className="flex w-full flex-wrap items-center justify-center gap-y-2">
@@ -51,7 +51,7 @@ export const GuidePipeline = () => {
         ))}
         <li className="flex items-center gap-2 rounded-lg border border-dashed bg-muted px-3 py-2 text-xs text-muted-foreground sm:col-span-2">
           Closed ({closedSteps.map((step) => step.status === "WON" ? "Won" : "Lost").join(" / ")})
-          cannot be edited, reassigned, or moved.
+          cannot be edited or reassigned until you reopen.
         </li>
       </ol>
     </div>

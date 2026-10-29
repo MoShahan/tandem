@@ -40,6 +40,9 @@ describe("SessionExpiredHandler", () => {
     mockNavigate.mockReset();
     onSessionExpired.mockClear();
 
+    const originalPath = window.location.pathname;
+    window.history.replaceState({}, "", "/dashboard");
+
     const { store } = renderWithProviders(
       <Routes>
         <Route path="/dashboard" element={<SessionExpiredHandler />} />
@@ -57,8 +60,9 @@ describe("SessionExpiredHandler", () => {
     expect(store.getState().auth.status).toBe("unauthenticated");
     expect(mockNavigate).toHaveBeenCalledWith("/login", {
       replace: true,
-      state: { from: "/" },
+      state: { from: "/dashboard" },
     });
+    window.history.replaceState({}, "", originalPath);
   });
 
   it("does not send public pages to login after an anonymous /me 401", async () => {
@@ -70,6 +74,24 @@ describe("SessionExpiredHandler", () => {
 
     renderWithProviders(<SessionExpiredHandler />, {
       route: "/guide",
+    });
+
+    const handler = onSessionExpired.mock.calls[0]?.[0];
+    await handler?.();
+
+    expect(mockNavigate).not.toHaveBeenCalled();
+    window.history.replaceState({}, "", originalPath);
+  });
+
+  it("does not send the public landing to login after an anonymous /me 401", async () => {
+    mockNavigate.mockReset();
+    onSessionExpired.mockClear();
+
+    const originalPath = window.location.pathname;
+    window.history.replaceState({}, "", "/");
+
+    renderWithProviders(<SessionExpiredHandler />, {
+      route: "/",
     });
 
     const handler = onSessionExpired.mock.calls[0]?.[0];

@@ -233,7 +233,13 @@ export const LoginPage = () => {
           >
             Terms &amp; Conditions
           </Link>
-          .
+          .{" "}
+          <Link
+            to="/upcoming"
+            className="underline underline-offset-4 transition-colors hover:text-foreground"
+          >
+            Upcoming features
+          </Link>
         </p>
       </div>
     </div>

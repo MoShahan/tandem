@@ -131,7 +131,7 @@ export const GuideNotifyVsAudit = () => (
 export const GuideDashboardScopes = () => (
   <GuideFigure
     label="Dashboards nest like zoom levels"
-    caption="An executive sees personal numbers. A team leader zooms out to the team. A director zooms out to the company."
+    caption="An executive sees personal numbers. A team leader zooms out to the team. Directors, sales managers, and org admins zoom out to the company."
   >
     <div className={`space-y-2 rounded-xl border p-3 ${GUIDE_WELL}`}>
       <p className="text-center text-[11px] uppercase tracking-wide text-muted-foreground">

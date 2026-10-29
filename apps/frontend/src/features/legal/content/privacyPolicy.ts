@@ -2,7 +2,7 @@ import type { LegalPageContent } from "../types";
 
 export const privacyPolicyContent: LegalPageContent = {
   title: "Privacy Policy",
-  lastUpdated: "October 28, 2026",
+  lastUpdated: "October 29, 2026",
   disclaimer:
     "This document is sample legal copy for Tandem, a personal full-stack project.",
   otherLegalPage: {
@@ -60,7 +60,7 @@ export const privacyPolicyContent: LegalPageContent = {
     {
       title: "Your Rights",
       paragraphs: [
-        "Depending on applicable law, you may have the right to access, correct, or request deletion of your personal information. For organization-managed accounts, contact your organization administrator first. You may also contact us at privacy@hilite.com for platform-level requests.",
+        "Depending on applicable law, you may have the right to access, correct, or request deletion of your personal information. For organization-managed accounts, contact your organization administrator first. You may also contact us at tandem.privacy@yopmail.com for platform-level requests.",
       ],
     },
     {
@@ -78,7 +78,7 @@ export const privacyPolicyContent: LegalPageContent = {
     {
       title: "Contact",
       paragraphs: [
-        "If you have questions about this Privacy Policy or our data practices, contact us at privacy@hilite.com.",
+        "If you have questions about this Privacy Policy or our data practices, contact us at tandem.privacy@yopmail.com.",
       ],
     },
   ],

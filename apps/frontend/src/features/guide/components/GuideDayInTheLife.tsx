@@ -5,7 +5,7 @@ import { GUIDE_WELL, GuideFigure } from "./GuideFigure";
 export const GuideDayInTheLife = () => (
   <GuideFigure
     label="Same morning, two jobs"
-    caption="Kavya fills the team pile and hands work out. Asha works only what she was given. That split is why “executive” here means salesperson, not CEO."
+    caption="Kavya fills the team pile and hands work out. Asha works her assigned leads and can capture a walk-in of her own. That split is why “executive” here means salesperson, not CEO."
   >
     <div className="grid gap-4 lg:grid-cols-2">
       {DAY_IN_THE_LIFE.map((day) => (

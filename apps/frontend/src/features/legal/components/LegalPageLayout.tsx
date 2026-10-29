@@ -28,7 +28,7 @@ export const LegalPageLayout = ({
       <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur-sm">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
           <Link
-            to="/login"
+            to="/"
             className="flex items-center gap-3 transition-opacity hover:opacity-80"
           >
             <TandemLogo className="size-8" />
@@ -80,6 +80,12 @@ export const LegalPageLayout = ({
               className="underline underline-offset-4 transition-colors hover:text-foreground"
             >
               How Tandem works
+            </Link>
+            <Link
+              to="/upcoming"
+              className="underline underline-offset-4 transition-colors hover:text-foreground"
+            >
+              Upcoming
             </Link>
           </div>
           <Link

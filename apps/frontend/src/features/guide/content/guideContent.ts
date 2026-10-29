@@ -64,31 +64,31 @@ export const ROLE_ROWS = [
     role: "Org admin",
     scope: "company",
     realLife: "Office, HR, or operations admin",
-    does: "Users, teams, roles, and the audit log. Not a salesperson by default.",
+    does: "Users, teams, roles, audit, and company numbers. Not a salesperson by default.",
   },
   {
     role: "Director",
     scope: "company",
     realLife: "Head of sales",
-    does: "Sees every lead and the company dashboard.",
+    does: "Sees every lead, the company dashboard, and the audit log.",
   },
   {
     role: "Sales manager",
     scope: "company",
     realLife: "Sales manager across teams",
-    does: "Creates and edits leads company-wide. No dashboard by default.",
+    does: "Creates and edits leads company-wide and uses the company dashboard.",
   },
   {
     role: "Team leader",
     scope: "company",
     realLife: "Supervisor of one sales team",
-    does: "Creates leads for the team, assigns owners, adds members, team dashboard.",
+    does: "Creates leads, assigns owners, can own a lead, logs cover calls, team dashboard.",
   },
   {
     role: "Executive",
     scope: "company",
     realLife: "Salesperson, agent, or closer — not a CEO",
-    does: "Works assigned leads and logs activities. Cannot create leads by default.",
+    does: "Works assigned leads, logs activities, and captures their own walk-ins.",
   },
 ] as const;
 
@@ -112,8 +112,9 @@ export const ROLE_PROFILES: GuideRoleProfile[] = [
     realWorld:
       "The person who runs the product for several companies — like an IT operator or the founder of Tandem. They are not the head of sales inside a builder or dealership.",
     inTandem:
-      "Creates and suspends organizations, turns Sales, Dashboards, and Notifications on or off, and manages other platform admins.",
+      "Sees a platform overview (companies, active users, leads), creates and suspends organizations, turns Sales, Dashboards, and Notifications on or off, and manages other platform admins.",
     can: [
+      "See counts across every company",
       "Create, edit, and suspend companies",
       "Switch modules on or off",
       "Manage platform admins and read platform audit",
@@ -131,16 +132,16 @@ export const ROLE_PROFILES: GuideRoleProfile[] = [
     realWorld:
       "The office manager, HR, or operations person who adds staff and keeps the org chart tidy. They rarely call customers.",
     inTandem:
-      "Adds users, builds teams, creates custom roles, and reads the audit log. They can see every lead but cannot edit the pipeline by default.",
+      "Adds users, builds teams, creates custom roles, reads the audit log, and opens the company dashboard. They can see every lead but cannot edit the pipeline by default.",
     can: [
       "Create and edit users, teams, and roles",
       "Read the company audit log",
       "See all leads (read only)",
+      "Open the company dashboard",
     ],
     cannot: [
       "Create or move leads",
       "Log activities",
-      "Open a sales dashboard",
     ],
   },
   {
@@ -151,15 +152,15 @@ export const ROLE_PROFILES: GuideRoleProfile[] = [
     realWorld:
       "Head of sales. They care about the whole pipeline: which teams are winning, where deals stall, and whether targets will be hit. They do not usually own individual walk-ins.",
     inTandem:
-      "Reads users, teams, and roles. Creates and edits leads anywhere in the company. Uses the organization dashboard.",
+      "Reads users, teams, and roles. Creates and edits leads anywhere in the company. Uses the organization dashboard and the audit log.",
     can: [
       "See and edit every lead",
       "Open the company-wide dashboard",
+      "Read the company audit log",
       "Read who is on which team (cannot hire or change roles)",
     ],
     cannot: [
       "Add users or change permissions",
-      "Read the audit log",
     ],
   },
   {
@@ -170,10 +171,12 @@ export const ROLE_PROFILES: GuideRoleProfile[] = [
     realWorld:
       "The person who keeps several teams moving — coaching team leaders, unblocking stuck deals, and watching numbers across the floor. In many companies they sit between the director and the team leaders.",
     inTandem:
-      "Creates and edits leads anywhere in the company. They have no dashboard in the default role (a known gap if they live in reports).",
-    can: ["See and edit every lead in the company"],
+      "Creates and edits leads anywhere in the company and uses the organization dashboard — the person who lives in reports.",
+    can: [
+      "See and edit every lead in the company",
+      "Open the company-wide dashboard",
+    ],
     cannot: [
-      "Open any dashboard by default",
       "Add users, teams, or roles",
     ],
   },
@@ -185,9 +188,11 @@ export const ROLE_PROFILES: GuideRoleProfile[] = [
     realWorld:
       "Supervisor of one sales unit — “North site team,” “Channel partners,” and so on. They take walk-ins, decide who works each person, and cover for executives who are out.",
     inTandem:
-      "Creates leads for their team, assigns or reassigns owners, can add people to that team, and uses the team dashboard. They cannot see other teams’ leads.",
+      "Creates leads for their team, assigns or reassigns owners, can own a lead themselves, logs activities on leads they own, and uses the team dashboard. They cannot see other teams’ leads.",
     can: [
       "Create leads for their team and assign owners",
+      "Own a lead when they cover for someone",
+      "Log activities on leads they own",
       "Add or edit members of their own team",
       "Move status on the team’s leads",
       "Open the team dashboard",
@@ -205,15 +210,16 @@ export const ROLE_PROFILES: GuideRoleProfile[] = [
     realWorld:
       "The salesperson — agent, closer, or “executive” in Indian real-estate language. They call, visit, negotiate, and close. They are not C-level. In Tandem, executives are the team members.",
     inTandem:
-      "Works only the leads assigned to them, logs calls and visits, moves status, and uses a personal dashboard. They cannot create leads; the team leader puts work on their plate.",
+      "Works the leads assigned to them, captures walk-ins they sourced (those leads are assigned to them), logs calls and visits, moves status, and uses a personal dashboard.",
     can: [
       "See and update their assigned leads",
+      "Create a walk-in for their team (they own it)",
       "Log activities",
       "Open a personal dashboard",
     ],
     cannot: [
-      "Create leads",
       "See the team pile or other people’s leads",
+      "Reassign work to someone else",
       "Add teammates",
     ],
   },
@@ -311,7 +317,7 @@ export const DAY_IN_THE_LIFE: GuideDayInTheLife[] = [
       },
     ],
     limit:
-      "If Kavya calls a customer herself, she cannot log that activity unless an org admin grants it. Team leaders create and assign; executives keep the diary.",
+      "If Kavya covers a call, she assigns the lead to herself first, then logs it. The diary stays with the current owner.",
   },
   {
     id: "executive",
@@ -322,7 +328,7 @@ export const DAY_IN_THE_LIFE: GuideDayInTheLife[] = [
       {
         time: "9:25",
         title: "See what is on her plate",
-        body: "Asha opens My dashboard, then Leads. Priya Shah is new and assigned to her. Rohan’s leads are hidden. She cannot create a lead of her own.",
+        body: "Asha opens My dashboard, then Leads. Priya Shah is new and assigned to her. Rohan’s leads are hidden.",
       },
       {
         time: "9:30",
@@ -336,11 +342,11 @@ export const DAY_IN_THE_LIFE: GuideDayInTheLife[] = [
       },
       {
         time: "14:00",
-        title: "Stay in her lane",
-        body: "A second couple walks in. Asha cannot add them. She tells Kavya, who creates the lead and may assign it to Asha or to Rohan.",
+        title: "Capture her own walk-in",
+        body: "A second couple walks in. Asha creates them as her own lead. If they should go to Rohan, she still asks Kavya to reassign.",
       },
     ],
     limit:
-      "Executives work assigned leads, log activities, and close or lose deals. Intake and assignment stay with the team leader.",
+      "Executives work their own leads, log activities, and can capture walk-ins. They cannot see the team pile or reassign work.",
   },
 ];

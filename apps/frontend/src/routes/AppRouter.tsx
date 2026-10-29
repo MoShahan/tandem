@@ -9,7 +9,7 @@ import { ProtectedRoute } from "@/features/auth/components/ProtectedRoute";
 import { RequirePermission } from "@/features/auth/components/RequirePermission";
 import { SessionExpiredHandler } from "@/features/auth/components/SessionExpiredHandler";
 import { AppLayout } from "@/layouts/AppLayout";
-import { DefaultLandingRedirect } from "@/routes/DefaultLandingRedirect";
+import { RootRoute } from "@/routes/RootRoute";
 
 const LoginPage = lazy(() =>
   import("@/features/auth/pages/LoginPage").then((module) => ({
@@ -20,6 +20,12 @@ const LoginPage = lazy(() =>
 const DashboardPage = lazy(() =>
   import("@/features/dashboard/pages/DashboardPage").then((module) => ({
     default: module.DashboardPage,
+  })),
+);
+
+const PlatformDashboardPage = lazy(() =>
+  import("@/features/platform/pages/PlatformDashboardPage").then((module) => ({
+    default: module.PlatformDashboardPage,
   })),
 );
 
@@ -119,6 +125,12 @@ const GuidePage = lazy(() =>
   })),
 );
 
+const UpcomingPage = lazy(() =>
+  import("@/features/upcoming/pages/UpcomingPage").then((module) => ({
+    default: module.UpcomingPage,
+  })),
+);
+
 const HomePage = lazy(() =>
   import("@/pages/HomePage").then((module) => ({
     default: module.HomePage,
@@ -165,11 +177,12 @@ export const AppRouter = () => {
           <Route element={<GuestRoute />}>
             <Route path="/login" element={<LoginPage />} />
           </Route>
+          <Route path="/" element={<RootRoute />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/guide" element={<GuidePage />} />
+          <Route path="/upcoming" element={<UpcomingPage />} />
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<DefaultLandingRedirect />} />
             <Route
               path="/home"
               element={
@@ -307,6 +320,14 @@ export const AppRouter = () => {
                 <PlatformAuditLayout>
                   <PlatformAuditPage />
                 </PlatformAuditLayout>
+              }
+            />
+            <Route
+              path="/platform"
+              element={
+                <PlatformAdminLayout>
+                  <PlatformDashboardPage />
+                </PlatformAdminLayout>
               }
             />
             <Route

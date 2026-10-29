@@ -16,13 +16,16 @@ export const GuidePageLayout = ({ children }: GuidePageLayoutProps) => {
       <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur-sm">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-3 px-6 py-4">
           <Link
-            to="/guide"
+            to="/"
             className="flex min-w-0 items-center gap-3 transition-opacity hover:opacity-80"
           >
             <TandemLogo className="size-8" />
             <span className="truncate text-sm font-medium">Tandem</span>
           </Link>
           <div className="flex items-center gap-2">
+            <Button asChild size="sm" variant="ghost">
+              <Link to="/upcoming">Upcoming</Link>
+            </Button>
             <ThemeToggle />
             <Button asChild size="sm">
               <Link to="/login">Log in</Link>
@@ -46,6 +49,12 @@ export const GuidePageLayout = ({ children }: GuidePageLayoutProps) => {
             className="underline underline-offset-4 transition-colors hover:text-foreground"
           >
             Terms &amp; Conditions
+          </Link>
+          <Link
+            to="/upcoming"
+            className="underline underline-offset-4 transition-colors hover:text-foreground"
+          >
+            Upcoming
           </Link>
         </div>
       </footer>
