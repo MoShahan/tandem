@@ -127,6 +127,26 @@ Health: `GET https://tandem-api-4eal.onrender.com/health`
 
 Do not put Neon connection strings, `JWT_SECRET`, or Render/Vercel tokens in this file.
 
+### Vercel deploy notifications
+
+[`.github/workflows/vercel-deploy-notify.yml`](.github/workflows/vercel-deploy-notify.yml) runs after Vercel finishes a GitHub-connected deploy. It pings **Discord** and/or **Telegram** on success (🚀) or failure (💥) only — pending, canceled, skipped, and ignored deploys are silent.
+
+Each message includes project, environment, branch, commit, author, duration, PR (if any), and the deployment URL. The workflow file must be on the **default branch** or Vercel events never reach it.
+
+Optional GitHub Actions secrets (Settings → Secrets and variables → Actions). Missing ones are skipped; the job stays green so this file can be copied to other repos:
+
+| Secret | Used for |
+| ------ | -------- |
+| `DISCORD_WEBHOOK_URL` | Discord channel webhook |
+| `TELEGRAM_BOT_TOKEN` | Telegram bot from [@BotFather](https://t.me/BotFather) |
+| `TELEGRAM_CHAT_ID` | Telegram chat or channel id (needs `TELEGRAM_BOT_TOKEN` too) |
+
+- Both Discord and Telegram secrets set → send to both
+- Only one app configured → send there
+- Neither configured, or both sends fail → comment on the commit instead (and still write the Actions job summary)
+
+Do not put webhook URLs or bot tokens in this file.
+
 ### Other useful commands
 
 | Command               | Description                                            |
