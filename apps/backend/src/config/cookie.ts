@@ -11,7 +11,7 @@ const sessionCookieOptions = (): CookieOptions => ({
   httpOnly: true,
   secure: env.cookieSecure,
   // SameSite=None requires Secure. Local HTTP uses COOKIE_SECURE=false, so Lax.
-  // Production (COOKIE_SECURE=true) keeps None for Vercel ↔ Render until Plan 5.
+  // Production (COOKIE_SECURE=true) keeps None for Vercel ↔ Render (no custom domain).
   sameSite: env.cookieSecure ? "none" : "lax",
   path: "/",
 });

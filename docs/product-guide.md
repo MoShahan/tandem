@@ -2,7 +2,7 @@
 
 Stakeholder and QA reference for **Tandem** — a multi-tenant sales CRM / Sales OS. Use this file to check what shipped: roles, the permission catalog, pipeline rules, list/search/sort behavior, seed logins, and UI screenshots.
 
-**If you want the non-technical story**, open **[How Tandem works](https://tandemcrm.vercel.app/guide)** (no login). Locally that is [`/guide`](http://localhost:5173/guide). That page is the human tour. This markdown file is not.
+**If you want the non-technical story**, open **[How Tandem works](https://tandemcrm.vercel.app/guide)** (no login). Locally that is [`/guide`](http://localhost:5173/guide). Planned work that is **not in the product yet** is **[Upcoming features](https://tandemcrm.vercel.app/upcoming)** (`/upcoming`).
 
 **Audience:** stakeholders, QA, and anyone reviewing acceptance details — not first-time readers of the product.
 
@@ -57,14 +57,22 @@ Tandem is a **multi-tenant sales platform**. Each **organization** (tenant) has 
 | **Notifications**  | In-app alerts for lead events and account welcome                                                                |
 | **Audit trails**   | Append-only compliance logs at org and platform scope                                                            |
 | **Platform admin** | Create/suspend orgs, manage modules, manage platform admins                                                      |
+| **Rate limiting**  | `/api/v1`: 300 req/min and 60 writes/min per IP; login/refresh 20 / 15 min. `/health` is open. 429 when exceeded |
 
 ### What is out of scope in the MVP
 
-- Email, SMS, or push notification channels
+- **Sending emails** — assignment, new lead, welcome, password reset, and org-admin credentials when a company is created stay in-app until the email channel ships. SMS and push are also out of scope. See [§17 Future scope](#17-future-scope)
 - Real-time delivery (WebSockets / SSE)
-- Per-tenant databases or subdomain routing
-- Mobile apps
+- **Per-tenant databases** — shared Postgres with `organizationId` today. A database per company is upcoming. See [§17 Future scope](#17-future-scope)
+- **Microservices** — one Express API today. Splitting into services is upcoming. See [§17 Future scope](#17-future-scope)
+- **Mobile apps** — website only today (phone browser works; no App Store / Play Store app). See [§17 Future scope](#17-future-scope)
 - External CRM integrations
+- **Org switcher** — one person in two organizations, pick which one after login (schema ready; not in the UI or API). See [§17 Future scope](#17-future-scope) and [Architecture — Multi-Org Readiness](architecture.md#multi-org-readiness)
+- **Invite existing email into a second org** — adding an email that already exists fails. Membership-only invite is upcoming. See [§17 Future scope](#17-future-scope)
+- **Forgot password / admin reset** — no Forgot password on login; admins cannot set a temporary password. See [§17 Future scope](#17-future-scope)
+- **SSO / Google login** — email and a Tandem password only. See [§17 Future scope](#17-future-scope)
+- **Auto-assignment** — a person assigns each lead. Round-robin or least-loaded distribution is not in the product. See [§17 Future scope](#17-future-scope)
+- **Redis** — unread badge is a Postgres count every 60s; alerts are in-process, so only one API instance is safe. Shorter polling waits on Redis. See [§17 Future scope](#17-future-scope)
 
 See [Future scope](#17-future-scope) for planned evolution.
 
@@ -82,7 +90,7 @@ See [Future scope](#17-future-scope) for planned evolution.
 ### Organization users
 
 - **Who:** Everyone inside a tenant (org admin, executives, team leaders, etc.)
-- **Org membership:** At least one `organization_members` row (exactly one in the MVP)
+- **Org membership:** Exactly one `organization_members` row in the product today. Extra memberships are an upcoming org-switcher feature, not shipped.
 - **Access:** Org-scoped APIs (`/users`, `/teams`, `/leads`, etc.); active tenant comes from the session JWT (`orgId`)
 - **Typical tasks:** Manage users/teams, work leads, view dashboards, read org audit
 
@@ -103,7 +111,7 @@ Tandem uses **shared-database, row-level multi-tenancy** — a deliberate MVP ch
 | -------- | ----- | ----- |
 | **Single PostgreSQL database** | Yes | All tenants share one database instance |
 | **Row-level isolation** | Yes | Tenant data carries an `organizationId` foreign key |
-| **Per-tenant databases or schemas** | No | Avoided for operational complexity in the MVP |
+| **Per-tenant databases or schemas** | No | Shared DB today; a database per company is **upcoming** |
 | **Subdomain-based tenant routing** | No | Tenant is implicit from the authenticated session, not the URL |
 | **Tenant ID in org-scoped API URLs** | No | Org context comes from the JWT / session, not path parameters |
 
@@ -148,6 +156,7 @@ Platform admins operate in the **Platform** section of the sidebar. They do not 
 
 | Area                                         | Route                         | Required permission                            |
 | -------------------------------------------- | ----------------------------- | ---------------------------------------------- |
+| Platform overview (orgs, active users, leads)| `/platform`                   | `platform:orgs:read`                           |
 | View/create/update organizations             | `/platform/organizations`     | `platform:orgs:read` / `platform:orgs:write`   |
 | Organization detail (edit, suspend, modules) | `/platform/organizations/:id` | `platform:orgs:write` for mutations            |
 | View/create platform admins                  | `/platform/admins`            | `platform:users:read` / `platform:users:write` |
@@ -188,7 +197,7 @@ A platform admin with `platform:users:write`:
 
 - Global user record created (email, name, password)
 - `platform_admin` role assigned via `user_roles`
-- `must_change_password = true` - user must change password after first login
+- `must_change_password = true` — a welcome notification asks them to change it; they can ignore it and keep the password they were given
 - **Welcome notification** (`WELCOME_CHANGE_PASSWORD`) created, linking to `/account`
 - **Audit event** `PLATFORM_USER_CREATED` logged to platform audit
 - Password must meet strength rules (same as all user passwords)
@@ -255,8 +264,8 @@ Platform users are **not** gated by org modules for notifications.
 After login, `/` redirects to the **first accessible route** in this priority order:
 
 1. `/dashboard` - if `dashboards` module + any dashboard permission
-2. `/platform/audit` - if `platform:audit:read`
-3. `/platform/organizations` - if platform admin
+2. `/platform` - if platform admin
+3. `/platform/audit` - if `platform:audit:read`
 4. `/leads` - if `sales` module + any lead read permission
 5. `/my-team` - if `users:read:team` and not `teams:read`
 6. `/users` - if `users:read`
@@ -302,8 +311,10 @@ Team leaders creating members see only **team-assignable** roles (`executive`, `
 Authorization uses **two enforcement layers** — coarse gates at the route, fine-grained scoping in services:
 
 ```text
-Request → authenticate → requireOrgModule (if applicable) → requirePermission → service data scope → repository (organizationId filter)
+Request → rate limit (`/api/v1`) → authenticate → requireOrgModule (if applicable) → requirePermission → service data scope → repository (organizationId filter)
 ```
+
+Rate limits (per client IP, in this API process): **300 requests / minute** on `/api/v1`, **60 writes / minute** (POST/PATCH/PUT/DELETE), and **20 login or refresh attempts / 15 minutes**. `/health` is not limited. Exceeding a limit returns **429** `TOO_MANY_REQUESTS`.
 
 | Layer | Question answered | Example |
 | ----- | ----------------- | ------- |
@@ -354,15 +365,17 @@ Permission changes take effect on the **next request** — the JWT is not the so
 | `roles:read`     | View roles and permissions         |
 | `roles:write`    | Create/update/delete custom roles  |
 | `leads:read:org` | View all leads in the organization |
+| `dashboard:org`  | Organization-wide dashboard        |
 | `audit:read`     | View organization audit trail      |
 
-Org admins do **not** get dashboard, activity logging, or lead write/status permissions by default - they are administrators, not sales operators.
+Org admins do **not** get activity logging or lead write/status permissions by default — they are administrators, not sales operators. They do get the company dashboard so they can see numbers.
 
 #### Executive
 
 | Permission           | Purpose                              |
 | -------------------- | ------------------------------------ |
 | `leads:read`         | View leads assigned to self          |
+| `leads:write`        | Create walk-ins (assigned to self)   |
 | `leads:assignable`   | Can be set as lead owner             |
 | `leads:status:write` | Advance status on own assigned leads |
 | `activities:write`   | Log activities on accessible leads   |
@@ -377,25 +390,30 @@ Org admins do **not** get dashboard, activity logging, or lead write/status perm
 | `roles:read:team`         | View team-assignable roles  |
 | `leads:read:team`         | View all leads on own team  |
 | `leads:write`             | Create/update leads on team |
+| `leads:assignable`        | Can be set as lead owner    |
 | `leads:status:write:team` | Change status on team leads |
+| `activities:write`        | Log activities on owned leads |
 | `dashboard:team`          | Team dashboard              |
 
 #### Sales Manager
-
-| Permission       | Purpose                    |
-| ---------------- | -------------------------- |
-| `leads:read:org` | View all org leads         |
-| `leads:write`    | Create/update any org lead |
-
-No dashboard permission by default.
-
-#### Director
 
 | Permission       | Purpose                     |
 | ---------------- | --------------------------- |
 | `leads:read:org` | View all org leads          |
 | `leads:write`    | Create/update any org lead  |
 | `dashboard:org`  | Organization-wide dashboard |
+
+#### Director
+
+| Permission       | Purpose                            |
+| ---------------- | ---------------------------------- |
+| `users:read`     | View all org users                 |
+| `teams:read`     | View teams                         |
+| `roles:read`     | View roles and permissions         |
+| `leads:read:org` | View all org leads                 |
+| `leads:write`    | Create/update any org lead         |
+| `dashboard:org`  | Organization-wide dashboard        |
+| `audit:read`     | View organization audit trail      |
 
 ### Data access scoping (leads and users)
 
@@ -468,6 +486,7 @@ Full list of permissions available when creating custom roles or understanding b
 | Roles               | `/roles`                      | `roles:write`                                        | —               |
 | Org audit           | `/audit`                      | `audit:read`                                         | —               |
 | Notifications       | Bell, `/notifications`        | Authenticated; org users need `notifications` module | `notifications` |
+| Platform overview   | `/platform`                   | `platform:orgs:read`                                 | —               |
 | Platform orgs       | `/platform/organizations`     | `platform:orgs:read`                                 | —               |
 | Platform org detail | `/platform/organizations/:id` | `platform:orgs:read`                                 | —               |
 | Platform admins     | `/platform/admins`            | `platform:users:read`                                | —               |
@@ -491,8 +510,11 @@ Visual reference for major screens is in [§20 UI screenshots](#20-ui-screenshot
 | Source                       | Optional lead source                          |
 | Project                      | Optional project/property reference           |
 | Team                         | Team the lead belongs to (required on create) |
-| Assigned user                | Executive or other assignable user (optional) |
+| Assigned user                | Executive or other assignable user (optional). Assignment is **manual** — there is no round-robin or least-loaded auto-assign |
 | Status                       | Pipeline stage (see below)                    |
+| Lost reason                  | Required when status is Lost                  |
+| Deal value                   | Optional number stored on win                 |
+| Expected close date          | Optional date on the lead                     |
 | Created by                   | User who created the lead                     |
 | Created / updated timestamps | Audit timestamps                              |
 
@@ -508,13 +530,14 @@ Visual reference for major screens is in [§20 UI screenshots](#20-ui-screenshot
 | `WON`                  | Won                  | Terminal         |
 | `LOST`                 | Lost                 | Terminal         |
 
-**Linear progression:** New → Contacted → Visit scheduled → Site visit completed → Negotiation → Won or Lost.
+**Usual path:** New → Contacted → Visit scheduled → Site visit completed → Negotiation → Won or Lost. **Site visit stages stay.** Per-org custom status names are upcoming (`/upcoming`).
 
 **Rules:**
 
-- Terminal statuses (Won, Lost) cannot advance further
-- From Negotiation, only Won or Lost are allowed
-- Won/Lost leads are **closed** - edit, assign, and status advance actions are disabled
+- You can skip, go backwards, or mark Won/Lost from any open stage
+- Closed (Won/Lost) leads cannot be edited, reassigned, or given activities until **reopened**
+- Marking Lost requires a **lost reason**. Marking Won can store an optional **deal value**. Open leads can have an **expected close date**
+- Dashboards show **won value** (sum of deal value on Won leads), not only counts
 
 ### Lead status change tracking
 
@@ -585,7 +608,7 @@ Users with `activities:write` permission (default: **Executive**).
 
 ## 11. Notifications
 
-In-app notifications only. No email or SMS. Delivery uses **REST polling** (every 60 seconds), not WebSockets.
+In-app notifications only. **Sending emails is upcoming, not in the product.** No SMS. Delivery uses **REST polling** (every 60 seconds), not WebSockets.
 
 ### Implementation approach (event-driven, loosely coupled)
 
@@ -708,7 +731,7 @@ Requires **`dashboards` module** plus one of:
 | ------ | ---------------- | ------------ | ---------------------- |
 | `me`   | `dashboard:me`   | Executive    | My dashboard           |
 | `team` | `dashboard:team` | Team Leader  | Team dashboard         |
-| `org`  | `dashboard:org`  | Director     | Organization dashboard |
+| `org`  | `dashboard:org`  | Director, Sales Manager, Org Admin | Organization dashboard |
 
 The API picks the highest applicable view for the user's permissions.
 
@@ -744,7 +767,7 @@ All personal widgets **plus:**
 
 Team-specific copy adjusts metrics (e.g. "leads in team", unassigned count).
 
-#### Organization dashboard (`org`) — Director
+#### Organization dashboard (`org`) — Director, Sales Manager, Org Admin
 
 All shared widgets **plus:**
 
@@ -775,8 +798,8 @@ Route: `/account` — available to all authenticated users.
 | Section          | Capabilities                                                                 |
 | ---------------- | ---------------------------------------------------------------------------- |
 | **Profile**      | Update name; view email (read-only)                                          |
-| **Password**     | Change password (required on first login when `must_change_password` is set) |
-| **Welcome flow** | Welcome notification links here; changing password clears the flag           |
+| **Password**     | Change password from Account (optional). Tandem does not block the rest of the app |
+| **Welcome flow** | Welcome notification links here; changing password clears `must_change_password`. Ignoring it is allowed |
 
 Profile and password changes generate audit events (`AUTH_PROFILE_UPDATED`, `AUTH_PASSWORD_CHANGED`).
 
@@ -859,7 +882,7 @@ Same table component as My Team.
 | **Filters**    | Role dropdown; inline "Clear filters"      |
 | **Sort**       | Server-side                                |
 | **Pagination** | Server; 10 / 20 / 50                       |
-| **Actions**    | Activate / Deactivate; Add member dialog   |
+| **Actions**    | Activate / Deactivate; Add member dialog. A person can only be on one team; adding an email already on a team names that team in the error |
 | **Back link**  | Returns to `/teams` with preserved filters |
 
 ---
@@ -950,6 +973,14 @@ List content is scoped by permission (own / team / org leads).
 | **Sort**       | None                                                                                   |
 | **Pagination** | Server; 10 / 20 / 50                                                                   |
 | **Expand row** | Shows before/after diffs, changed fields, permission changes, request metadata         |
+
+---
+
+### Platform overview (`/platform`)
+
+**Access:** `platform:orgs:read`
+
+Three counts across every company: organizations (with how many are active), people with an active login in a company, and leads created. This is the platform-admin landing page.
 
 ---
 
@@ -1129,31 +1160,108 @@ Pages **without** sort: Audit (org + platform), Notifications, Roles, Dashboard 
 
 Items below are **not implemented** in the MVP but are documented as evolution paths in [Architecture — Scaling considerations](architecture.md#scaling-considerations).
 
+### Upcoming: org switcher (not in the product)
+
+**Not present now.** A person logs into **one organization**. There is no picker, no “switch company,” and no `POST /auth/switch-organization`.
+
+The schema already allows the same email to have more than one `organization_members` row (different role and team per org). The app does not use that yet. When this ships: picker after login if there are multiple memberships, `POST /auth/switch-organization` to re-issue the JWT with a new `orgId`, list memberships on `/auth/me`. See [Architecture — Multi-Org Readiness](architecture.md#multi-org-readiness). Until then, see [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+
+### Upcoming: invite existing email into a second org (not in the product)
+
+**Not present now.** Creating a user with an email that already exists returns **email already exists**. Tandem will not add a second membership.
+
+When this ships: the second org adds an `organization_members` row only (same user, same password, a role for that company). That is useless without the org picker. See [Architecture — Multi-Org Readiness](architecture.md#multi-org-readiness) and [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+
+### Upcoming: per-org membership status (not in the product)
+
+**Not present now.** Users pages **activate / deactivate** the global `users.status`. That turns the login off everywhere. `organization_members.status` already exists but the product does not use it.
+
+When this ships (with the org switcher): an admin can deactivate someone in **this** company without locking them out of another. See [Architecture — Multi-Org Readiness](architecture.md#multi-org-readiness) and [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+
+### Upcoming: customizable pipeline per organization (not in the product)
+
+**Not present now.** Every organization uses the same statuses, including site visit. You can skip, go back, mark lost early, and reopen — but you cannot rename or replace those stages yet.
+
+When this ships: each org will configure its own pipeline labels. Until then, see the public list at [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+
+### Upcoming: sending emails (not in the product)
+
+**Not present now.** Notifications are **in-app only** (bell, 60-second poll). The API does not send email when a lead is created or assigned, when a user is welcomed, for password reset, or when a platform admin creates an organization (org-admin credentials stay out of band). If someone never opens Tandem, they will not hear about a new lead.
+
+When this ships: a mail worker for assignment, welcome, new-org admin credentials, and later self-service reset. SMS and push stay out of scope unless listed separately. See [Architecture — Notification Design](architecture.md#notification-design) and [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+
+### Upcoming: forgot password / admin reset (not in the product)
+
+**Not present now.** Login has no Forgot password link. `POST /api/v1/auth/change-password` needs the **current** password. Org and platform user screens only **activate / deactivate**. An admin cannot set a temporary password.
+
+When this ships: Plan 7.10 is admin set-password (no email). Plan 7.11 is self-service reset once Tandem can send mail. Until then, see [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+
+### Upcoming: Sign in with Google / SSO (not in the product)
+
+**Not present now.** Sign-in is email plus a Tandem password. There is no Google button and no company SSO.
+
+When this ships: an organization that is ready can sign in without a Tandem password. Until then, see [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+
+### Upcoming: auto-assignment (not in the product)
+
+**Not present now.** Team leaders and managers still leave new leads unassigned unless they pick an owner. Executives who capture their own walk-in are assigned to themselves so they can see the lead. There is no round-robin, least-loaded, or rule that spreads walk-ins across a team.
+
+When this ships: new leads on a team can rotate to the next assignable executive, or go to whoever has the fewest open leads. Until then, see the public list at [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+
+### Upcoming: Redis (not in the product)
+
+**Not present now.** `GET /notifications/unread-count` runs `COUNT(*)` in Postgres on every 60-second poll. There is no cache for unread counts or the permission catalog. In-app alerts use an in-process event bus, so a second API instance would miss events.
+
+When this ships (after a custom domain and real customers): Redis holds the badge number (and similar lookups) and shares notification events across servers (pub/sub or a queue). That queue also remembers the job so a restart does not drop an alert, and retries if writing the bell fails (today that failure is logged and dropped). The unread poll can then drop from 60 seconds to a few seconds without hammering Postgres. Push (SSE or websocket) stays later. Until then, keep a **single** API instance. See [`/upcoming`](https://tandemcrm.vercel.app/upcoming) and [Architecture — Scaling considerations](architecture.md#scaling-considerations).
+
 ### Notifications and real-time
 
 - WebSocket or SSE push instead of 60-second polling
-- Durable event queue (Redis, Bull, SQS) with retries and dead-letter handling
-- Email and SMS notification channels
+- Durable event queue (Bull, SQS, or Redis) with retries and dead-letter handling — see [Upcoming: Redis](#upcoming-redis-not-in-the-product)
+- Sending emails (assignment, welcome, later password reset) — see [Upcoming: sending emails](#upcoming-sending-emails-not-in-the-product)
+- SMS notification channel
 - Separate notification worker service
 
 ### Platform and operations
 
 - Containerized deployment (backend + CDN frontend + managed Postgres)
 - CI/CD pipeline
-- Rate limiting on API
 - Structured logging and metrics (observability)
-- Redis caching for unread counts and permission catalog
+- Redis caching for unread counts and permission catalog — see [Upcoming: Redis](#upcoming-redis-not-in-the-product)
+
+### Upcoming: audit and notification archival (not in the product)
+
+**Not present now.** Bell rows and audit rows stay forever. There is no retention job.
+
+When this ships: after Tandem is live on a custom domain with real customers, old notifications are dropped and old audit logs are archived. See [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+
+### Upcoming: iPhone and Android apps (not in the product)
+
+**Not present now.** Tandem is a website. A phone browser can open it; there is no native app.
+
+When this ships: App Store and Play Store apps for salespeople on site. Until then, see [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+
+### Upcoming: custom domain (not in the product)
+
+**Not present now.** The SPA is `tandemcrm.vercel.app` and the API is `tandem-api-4eal.onrender.com`. Auth cookies are third-party (`SameSite=None; Secure`).
+
+When this ships: app and API on a Tandem hostname so cookies are first-party. Until then, see [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+
+### Upcoming: split the API into services (not in the product)
+
+**Not present now.** One Express process serves auth, leads, dashboards, and alerts.
+
+When this ships: those areas can split into separate services if traffic needs it. Until then, see [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
+
+### Upcoming: a database per company (not in the product)
+
+**Not present now.** Every organization shares one Postgres; isolation is `organizationId` on rows.
+
+When this ships: a large customer can get their own database. Until then, see [`/upcoming`](https://tandemcrm.vercel.app/upcoming).
 
 ### Data and compliance
 
-- Time-based archival or partitioning for `audit_logs` and `notifications`
 - Read replicas for heavy list endpoints
-
-### Lead assignment (potential)
-
-- **Round-robin assignment** — automatically distribute new or unassigned leads across executives in rotation
-- **Least-loaded assignment** — assign to the executive with the fewest open leads in the team
-- Configurable assignment rules per team or organization
 
 ### Product extensions (potential)
 
@@ -1162,12 +1270,8 @@ Items below are **not implemented** in the MVP but are documented as evolution p
 - Reporting exports and scheduled reports
 - Deal value / revenue tracking
 - Task reminders and follow-up scheduling
-- Mobile-optimized or native apps
-- SSO / OAuth login
 - Fine-grained custom roles UI for org admins (partially exists)
 - Webhook integrations for external CRMs
-- **Multi-org users** — same email in multiple organizations with different roles/teams per org (schema ready; see [Architecture — Multi-Org Readiness](architecture.md#multi-org-readiness))
-- Org picker and switch-organization after login
 
 ---
 
@@ -1247,6 +1351,7 @@ Screenshots live under `docs/assets/screenshots/`, grouped by public pages, shar
 
 | Screen               | Route                              |
 | -------------------- | ---------------------------------- |
+| Platform overview    | `/platform`                        |
 | Organizations list   | `/platform/organizations`          |
 | Create organization  | `/platform/organizations` (dialog) |
 | Organization detail  | `/platform/organizations/:id`      |

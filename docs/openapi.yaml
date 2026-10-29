@@ -40,6 +40,10 @@ info:
     { "success": false, "message": "Human-readable message", "data": { "code": "ERROR_CODE", "details": [] } }
     ```
 
+    ## Rate limiting
+
+    `/api/v1` is limited per client IP in this API process: **300 requests / minute**, **60 writes / minute** (POST, PATCH, PUT, DELETE), and **20 login or refresh attempts / 15 minutes**. `/health` is not limited. Over the limit returns **429** `TOO_MANY_REQUESTS` with `RateLimit` headers.
+
     ## Multi-tenancy
 
     Organization users never pass a tenant ID in URLs — the active tenant is encoded in the JWT
@@ -68,8 +72,12 @@ info:
 servers:
   - url: http://localhost:3000
     description: Local development
+  - url: https://tandem-api-4eal.onrender.com
+    description: Production
 
 tags:
+  - name: Health
+    description: Liveness and readiness (not rate limited)
   - name: Auth
     description: Session management and profile
   - name: Permissions
@@ -92,6 +100,70 @@ tags:
     description: Cross-tenant platform administration
 
 paths:
+  /health:
+    get:
+      tags: [Health]
+      summary: Liveness
+      description: Returns process liveness. Not rate limited. Not wrapped beyond the standard success envelope.
+      operationId: getHealth
+      security: []
+      responses:
+        "200":
+          description: Process is up
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiSuccessEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        required: [ok]
+                        properties:
+                          ok:
+                            type: boolean
+                            enum: [true]
+
+  /health/ready:
+    get:
+      tags: [Health]
+      summary: Readiness
+      description: Pings Postgres. Not rate limited. Returns 503 when the database is unreachable.
+      operationId: getHealthReady
+      security: []
+      responses:
+        "200":
+          description: Process and database are up
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiSuccessEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        required: [ok, db]
+                        properties:
+                          ok:
+                            type: boolean
+                            enum: [true]
+                          db:
+                            type: boolean
+                            enum: [true]
+        "503":
+          description: Database unavailable
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorResponse"
+              example:
+                success: false
+                message: Database unavailable
+                data:
+                  code: SERVICE_UNAVAILABLE
+
   /api/v1/auth/login:
     post:
       tags: [Auth]
@@ -108,8 +180,8 @@ paths:
             schema:
               $ref: "#/components/schemas/LoginRequest"
             example:
-              email: admin@hilitebuilders.com
-              password: HBuilders@123
+              email: tandem.admin@yopmail.com
+              password: Admin@123
       responses:
         "200":
           description: Login successful; session cookies set
@@ -131,6 +203,8 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "400":
           $ref: "#/components/responses/BadRequest"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
 
   /api/v1/auth/refresh:
     post:
@@ -156,6 +230,8 @@ paths:
                         $ref: "#/components/schemas/MessageResponse"
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/TooManyRequests"
 
   /api/v1/auth/logout:
     post:
@@ -910,7 +986,10 @@ paths:
     post:
       tags: [Leads]
       summary: Create lead
-      description: Creates a new lead. Requires `sales` module and `leads:write`.
+      description: |
+        Creates a new lead. Requires `sales` module and `leads:write`.
+        Team- and org-scoped writers may leave the lead unassigned.
+        Own-scope writers (executives) are assigned to themselves.
       operationId: createLead
       security:
         - accessTokenCookie: []
@@ -981,6 +1060,9 @@ paths:
       description: |
         Updates lead fields and/or status. Requires `sales` module and one of
         `leads:write`, `leads:status:write`, or `leads:status:write:team`.
+        Status may skip, go backwards, or reopen a closed lead. `lostReason` is
+        required when status is `LOST`. Optional `dealValue` (won) and
+        `expectedCloseDate` (YYYY-MM-DD).
       operationId: updateLead
       security:
         - accessTokenCookie: []
@@ -1576,6 +1658,31 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
+  /api/v1/platform/stats:
+    get:
+      tags: [Platform]
+      summary: Platform overview counts
+      description: Returns organization, active user, and lead totals across all tenants. Requires `platform:orgs:read`.
+      operationId: getPlatformStats
+      security:
+        - accessTokenCookie: []
+      responses:
+        "200":
+          description: Platform overview counts
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ApiSuccessEnvelope"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/PlatformStatsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+
   /api/v1/platform/organizations/options:
     get:
       tags: [Platform]
@@ -2008,6 +2115,17 @@ components:
             message: Forbidden
             data:
               code: FORBIDDEN
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiErrorResponse"
+          example:
+            success: false
+            message: Too many requests. Try again later.
+            data:
+              code: TOO_MANY_REQUESTS
     NotFound:
       description: Resource not found
       content:
@@ -2715,6 +2833,9 @@ components:
         - source
         - project
         - status
+        - lostReason
+        - dealValue
+        - expectedCloseDate
         - team
         - assignedTo
         - createdBy
@@ -2741,6 +2862,17 @@ components:
           nullable: true
         status:
           $ref: "#/components/schemas/LeadStatus"
+        lostReason:
+          type: string
+          nullable: true
+        dealValue:
+          type: number
+          nullable: true
+        expectedCloseDate:
+          type: string
+          format: date
+          nullable: true
+          description: YYYY-MM-DD
         team:
           $ref: "#/components/schemas/LeadTeamSummary"
         assignedTo:
@@ -2811,6 +2943,19 @@ components:
           nullable: true
         status:
           $ref: "#/components/schemas/LeadStatus"
+        lostReason:
+          type: string
+          nullable: true
+          description: Required when status is `LOST`
+        dealValue:
+          type: number
+          nullable: true
+          minimum: 0
+        expectedCloseDate:
+          type: string
+          format: date
+          nullable: true
+          description: YYYY-MM-DD, or empty string / null to clear
 
     AssignLeadRequest:
       type: object
@@ -2926,6 +3071,7 @@ components:
         - totalLeads
         - openLeads
         - wonCount
+        - wonValue
         - lostCount
         - closedCount
         - winRate
@@ -2937,6 +3083,9 @@ components:
           type: integer
         wonCount:
           type: integer
+        wonValue:
+          type: number
+          description: Sum of dealValue on won leads in this dashboard scope
         lostCount:
           type: integer
         closedCount:
@@ -3347,6 +3496,21 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/OrganizationOption"
+
+    PlatformStatsResponse:
+      type: object
+      required:
+        [organizationCount, activeOrganizationCount, activeUserCount, leadCount]
+      properties:
+        organizationCount:
+          type: integer
+        activeOrganizationCount:
+          type: integer
+        activeUserCount:
+          type: integer
+          description: Organization members whose membership and user status are ACTIVE
+        leadCount:
+          type: integer
 
     CreateOrganizationOrgAdmin:
       type: object
