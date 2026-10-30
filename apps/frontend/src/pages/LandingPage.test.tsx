@@ -35,15 +35,30 @@ describe("LandingPage", () => {
     expect(
       screen.getByRole("heading", { name: "Streamline your sales operations" }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByText(/Each lead has an owner and a stage/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", {
+        name: "A sales pipeline with leads in New, Talking, Visit, and Closed",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("img", {
+        name: "A lead list with an owner on each row",
+      }),
+    ).toBeInTheDocument();
 
-    const loginLinks = screen.getAllByRole("link", { name: "Log in" });
-    expect(loginLinks.length).toBeGreaterThan(0);
-    expect(loginLinks[0]).toHaveAttribute("href", "/login");
+    expect(screen.getByRole("link", { name: "Log in" })).toHaveAttribute(
+      "href",
+      "/login",
+    );
     expect(
       screen.getByRole("link", { name: "How Tandem works" }),
     ).toHaveAttribute("href", "/guide");
-    expect(
-      screen.getByRole("link", { name: "Upcoming features" }),
-    ).toHaveAttribute("href", "/upcoming");
+    expect(screen.getByRole("link", { name: "Upcoming" })).toHaveAttribute(
+      "href",
+      "/upcoming",
+    );
   });
 });
