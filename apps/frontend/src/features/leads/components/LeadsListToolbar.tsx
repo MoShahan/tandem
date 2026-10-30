@@ -2,7 +2,6 @@ import { Search, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Input } from "@/components/ui/input";
-import { useDebouncedSearch } from "@/hooks/useDebouncedSearch";
 import {
   Select,
   SelectContent,
@@ -10,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useDebouncedSearch } from "@/hooks/useDebouncedSearch";
 import { elevatedSearchClassName } from "@/lib/tableSurface";
 import { cn } from "@/lib/utils";
 

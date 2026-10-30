@@ -4,6 +4,7 @@ import { textLinkClassName } from "@/lib/textLink";
 
 import { GuideActivityStrip } from "../components/GuideActivityStrip";
 import { GuideAssignmentFlow } from "../components/GuideAssignmentFlow";
+import { GuideDayInTheLife } from "../components/GuideDayInTheLife";
 import { GuideHero } from "../components/GuideHero";
 import { GuideLeadCard } from "../components/GuideLeadCard";
 import { GuideOrgDiagram } from "../components/GuideOrgDiagram";
@@ -15,7 +16,6 @@ import {
   GuideRoleProfiles,
 } from "../components/GuideRoleProfiles";
 import { GuideRolesTable } from "../components/GuideRolesTable";
-import { GuideDayInTheLife } from "../components/GuideDayInTheLife";
 import { GuideTeamTree } from "../components/GuideTeamTree";
 import {
   GuideDashboardScopes,
@@ -112,7 +112,7 @@ export const GuidePage = () => {
               >
                 upcoming features
               </Link>{" "}
-              — not in the product yet.
+              - not in the product yet.
             </p>
             <p>
               A <strong>platform admin</strong> is Tandem staff (or whoever
@@ -153,7 +153,7 @@ export const GuidePage = () => {
             <p>
               The pipeline is the path a lead walks from “we just heard of them”
               to “the deal is done.” You can skip a stage, go backwards, or mark
-              lost from any open step — a lead can go cold on day one. You can
+              lost from any open step - a lead can go cold on day one. You can
               reopen a won or lost lead if they come back.
             </p>
           </Prose>
@@ -254,7 +254,7 @@ export const GuidePage = () => {
           <SectionHeading id="roles">Roles</SectionHeading>
           <Prose>
             <p>
-              A role is a job title bundled with permissions — what that person
+              A role is a job title bundled with permissions - what that person
               is allowed to see and do. The most important translation:{" "}
               <strong>executive does not mean CEO</strong>. In Tandem it means
               salesperson. Those people are the <strong>team members</strong>.
@@ -285,9 +285,9 @@ export const GuidePage = () => {
           </h3>
           <Prose>
             <p>
-              If your office has jobs that are not on the list — a coordinator
+              If your office has jobs that are not on the list - a coordinator
               who only captures walk-ins, a founder who only wants numbers, a
-              project desk that watches one building — create a custom role and
+              project desk that watches one building - create a custom role and
               tick the permissions that match. These three are examples, not
               extra built-in roles.
             </p>
@@ -303,7 +303,7 @@ export const GuidePage = () => {
             <p>
               Roles are easier to remember as a morning on the sales floor.
               Kavya is the <strong>team leader</strong>. Asha is the{" "}
-              <strong>executive</strong> — the salesperson, not a CEO. They
+              <strong>executive</strong> - the salesperson, not a CEO. They
               share Priya Shah as a walk-in. They do not share the same buttons.
             </p>
           </Prose>
@@ -333,7 +333,7 @@ export const GuidePage = () => {
             <p>
               A <strong>notification</strong> is a bell for you - “this lead was
               assigned to you.” It is a to-do prompt, not a legal record.
-              Tandem does not send email yet — not for a new lead, an
+              Tandem does not send email yet - not for a new lead, an
               assignment, a welcome, a password reset, or the org-admin login
               when a company is created. If you never open the app, you will
               not hear about a new lead. Sending emails is an{" "}

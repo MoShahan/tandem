@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useDebouncedSearch } from "@/hooks/useDebouncedSearch";
 import {
   Select,
   SelectContent,
@@ -15,6 +14,7 @@ import {
   AUDIT_ACTION_OPTIONS,
   AUDIT_ENTITY_TYPE_OPTIONS,
 } from "@/features/audit/auditTypes";
+import { useDebouncedSearch } from "@/hooks/useDebouncedSearch";
 import { elevatedSearchClassName } from "@/lib/tableSurface";
 import { cn } from "@/lib/utils";
 

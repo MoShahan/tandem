@@ -9,7 +9,6 @@ import { useAppDispatch } from "@/app/hooks";
 import { store } from "@/app/store";
 import { TandemLogo } from "@/components/TandemLogo";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
-import { textLinkClassName } from "@/lib/textLink";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -32,6 +31,7 @@ import { selectAuthUser } from "@/features/auth/authSelectors";
 import { login } from "@/features/auth/authSlice";
 import { resetSessionExpiredState } from "@/lib/api-client";
 import { getApiErrorMessage } from "@/lib/apiError";
+import { textLinkClassName } from "@/lib/textLink";
 
 type LoginFormValues = LoginInput;
 

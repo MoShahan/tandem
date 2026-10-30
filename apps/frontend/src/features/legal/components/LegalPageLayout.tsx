@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 
 import { TandemLogo } from "@/components/TandemLogo";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
-
 import { textLinkClassName } from "@/lib/textLink";
 
 import type { LegalSection } from "../types";

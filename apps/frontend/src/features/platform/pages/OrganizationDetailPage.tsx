@@ -438,7 +438,7 @@ export const OrganizationDetailPage = () => {
               <div className="md:col-span-2">
                 <dt className="text-sm text-muted-foreground">Description</dt>
                 <dd className="mt-1 text-sm font-medium whitespace-pre-wrap">
-                  {organization.description?.trim() ? organization.description : "—"}
+                  {organization.description?.trim() ? organization.description : "-"}
                 </dd>
               </div>
               <div className="md:col-span-2">
@@ -454,7 +454,7 @@ export const OrganizationDetailPage = () => {
                       {organization.logoUrl}
                     </a>
                   ) : (
-                    "—"
+                    "-"
                   )}
                 </dd>
               </div>
