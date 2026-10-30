@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 
+import { textLinkClassName } from "@/lib/textLink";
+
 import { GuideActivityStrip } from "../components/GuideActivityStrip";
 import { GuideAssignmentFlow } from "../components/GuideAssignmentFlow";
 import { GuideHero } from "../components/GuideHero";
@@ -106,7 +108,7 @@ export const GuidePage = () => {
               has a Tandem login into a second company, are{" "}
               <Link
                 to="/upcoming"
-                className="font-medium text-foreground underline underline-offset-4"
+                className={textLinkClassName}
               >
                 upcoming features
               </Link>{" "}
@@ -168,7 +170,7 @@ export const GuidePage = () => {
               stays for now. Naming your own statuses per company is an{" "}
               <Link
                 to="/upcoming"
-                className="font-medium text-foreground underline underline-offset-4"
+                className={textLinkClassName}
               >
                 upcoming feature
               </Link>
@@ -188,7 +190,7 @@ export const GuidePage = () => {
               open leads) is an{" "}
               <Link
                 to="/upcoming"
-                className="font-medium text-foreground underline underline-offset-4"
+                className={textLinkClassName}
               >
                 upcoming feature
               </Link>
@@ -337,7 +339,7 @@ export const GuidePage = () => {
               not hear about a new lead. Sending emails is an{" "}
               <Link
                 to="/upcoming"
-                className="font-medium text-foreground underline underline-offset-4"
+                className={textLinkClassName}
               >
                 upcoming feature
               </Link>
@@ -345,7 +347,7 @@ export const GuidePage = () => {
               new password for you yet. Signing in with Google is also{" "}
               <Link
                 to="/upcoming"
-                className="font-medium text-foreground underline underline-offset-4"
+                className={textLinkClassName}
               >
                 upcoming
               </Link>

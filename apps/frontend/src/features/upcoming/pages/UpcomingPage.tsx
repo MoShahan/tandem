@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 import { GuidePageLayout } from "@/features/guide/components/GuidePageLayout";
+import { textLinkClassName } from "@/lib/textLink";
 
 import { UPCOMING_FEATURES } from "../content/upcomingFeatures";
 
@@ -18,7 +19,7 @@ export const UpcomingPage = () => {
           includes site visit.{" "}
           <Link
             to="/guide"
-            className="font-medium text-foreground underline underline-offset-4"
+            className={textLinkClassName}
           >
             How Tandem works
           </Link>{" "}

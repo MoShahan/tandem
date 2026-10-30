@@ -30,6 +30,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { getApiErrorDetails, getApiErrorMessage } from "@/lib/apiError";
 import { formatDateTime } from "@/lib/format";
+import { textLinkClassName } from "@/lib/textLink";
 
 import { OrganizationModulesPanel } from "../components/OrganizationModulesPanel";
 import { OrganizationStatusBadge } from "../components/OrganizationStatusBadge";
@@ -448,7 +449,7 @@ export const OrganizationDetailPage = () => {
                       href={organization.logoUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="underline underline-offset-4"
+                      className={textLinkClassName}
                     >
                       {organization.logoUrl}
                     </a>

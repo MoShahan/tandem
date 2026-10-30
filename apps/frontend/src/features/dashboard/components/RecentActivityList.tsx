@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 
 import { formatDateTime } from "@/lib/format";
+import { textLinkClassName } from "@/lib/textLink";
 
 import { ACTIVITY_TYPE_LABELS } from "../dashboardTypes";
 
@@ -34,7 +35,7 @@ export const RecentActivityList = ({ activities }: RecentActivityListProps) => (
                 {" · "}
                 <Link
                   to={`/leads/${activity.leadId}`}
-                  className="font-semibold text-sidebar-primary hover:underline"
+                  className={textLinkClassName}
                 >
                   {activity.leadName}
                 </Link>

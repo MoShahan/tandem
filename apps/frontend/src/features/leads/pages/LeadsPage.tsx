@@ -18,6 +18,7 @@ import { teamsService } from "@/features/teams/teamsService";
 import { usersService } from "@/features/users/usersService";
 import { getApiErrorMessage } from "@/lib/apiError";
 import { PAGE_SIZE_OPTIONS, TABLE_SKELETON_ROW_COUNT } from "@/lib/pagination";
+import { textLinkClassName } from "@/lib/textLink";
 
 import { CreateLeadDialog } from "../components/CreateLeadDialog";
 import { LeadsListToolbar } from "../components/LeadsListToolbar";
@@ -141,7 +142,7 @@ export const LeadsPage = () => {
         ) : null}
       </div>
 
-      <div className="space-y-6 rounded-2xl border bg-card p-5 shadow-sm md:p-6">
+      <div className="space-y-4">
         <LeadsListToolbar
           query={query}
           total={total}
@@ -178,7 +179,7 @@ export const LeadsPage = () => {
                 Create one to start tracking the pipeline, or{" "}
                 <Link
                   to="/guide#what-a-lead-is"
-                  className="font-medium text-foreground underline underline-offset-4"
+                  className={textLinkClassName}
                 >
                   read how leads work
                 </Link>
@@ -228,7 +229,7 @@ export const LeadsPage = () => {
               onPageSizeChange={(pageSize) =>
                 patchQuery({ pageSize, page: 1 })
               }
-              className="border-t pt-4"
+              className="pt-2"
             />
           </>
         ) : null}

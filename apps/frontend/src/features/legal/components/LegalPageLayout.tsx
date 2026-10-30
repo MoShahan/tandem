@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { TandemLogo } from "@/components/TandemLogo";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 
+import { textLinkClassName } from "@/lib/textLink";
+
 import type { LegalSection } from "../types";
 
 type LegalPageLayoutProps = {
@@ -71,26 +73,26 @@ export const LegalPageLayout = ({
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
             <Link
               to={otherLegalPage.href}
-              className="underline underline-offset-4 transition-colors hover:text-foreground"
+              className={textLinkClassName}
             >
               {otherLegalPage.label}
             </Link>
             <Link
               to="/guide"
-              className="underline underline-offset-4 transition-colors hover:text-foreground"
+              className={textLinkClassName}
             >
               How Tandem works
             </Link>
             <Link
               to="/upcoming"
-              className="underline underline-offset-4 transition-colors hover:text-foreground"
+              className={textLinkClassName}
             >
               Upcoming
             </Link>
           </div>
           <Link
             to="/login"
-            className="underline underline-offset-4 transition-colors hover:text-foreground"
+            className={textLinkClassName}
           >
             Back to login
           </Link>

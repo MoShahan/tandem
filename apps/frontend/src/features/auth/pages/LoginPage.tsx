@@ -9,6 +9,7 @@ import { useAppDispatch } from "@/app/hooks";
 import { store } from "@/app/store";
 import { TandemLogo } from "@/components/TandemLogo";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { textLinkClassName } from "@/lib/textLink";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -207,7 +208,7 @@ export const LoginPage = () => {
                     New here?{" "}
                     <Link
                       to="/guide"
-                      className="font-medium text-foreground underline underline-offset-4 hover:text-foreground/80"
+                      className={textLinkClassName}
                     >
                       How Tandem works
                     </Link>
@@ -222,21 +223,21 @@ export const LoginPage = () => {
           By logging in, you agree to our{" "}
           <Link
             to="/privacy"
-            className="underline underline-offset-4 transition-colors hover:text-foreground"
+            className={textLinkClassName}
           >
             Privacy Policy
           </Link>{" "}
           and{" "}
           <Link
             to="/terms"
-            className="underline underline-offset-4 transition-colors hover:text-foreground"
+            className={textLinkClassName}
           >
             Terms &amp; Conditions
           </Link>
           .{" "}
           <Link
             to="/upcoming"
-            className="underline underline-offset-4 transition-colors hover:text-foreground"
+            className={textLinkClassName}
           >
             Upcoming features
           </Link>

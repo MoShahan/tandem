@@ -9,6 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/format";
+import { elevatedTableClassName } from "@/lib/tableSurface";
+import { textLinkClassName } from "@/lib/textLink";
 
 import { ACTIVITY_TYPE_LABELS } from "../dashboardTypes";
 
@@ -33,7 +35,7 @@ export const RecentActivitiesTable = ({
     {activities.length === 0 ? (
       <p className="text-sm text-muted-foreground">No activities logged yet.</p>
     ) : (
-      <div className="overflow-hidden rounded-xl border border-border/60">
+      <div className={elevatedTableClassName}>
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/40 hover:bg-muted/40">
@@ -53,7 +55,7 @@ export const RecentActivitiesTable = ({
                 <TableCell className="font-medium">
                   <Link
                     to={`/leads/${activity.leadId}`}
-                    className="text-sidebar-primary hover:underline"
+                    className={textLinkClassName}
                   >
                     {activity.leadName}
                   </Link>
