@@ -31,9 +31,6 @@
     "lint:frontend": "npm run lint --prefix apps/frontend",
     "prepare": "husky"
   },
-  "lint-staged": {
-    "*.md": "node eslint/no-em-dash.mjs"
-  },
   "devDependencies": {
     "concurrently": "^9.1.2",
     "husky": "^9.1.7",
