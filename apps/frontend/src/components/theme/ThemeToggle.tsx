@@ -33,7 +33,7 @@ export const ThemeToggle = () => {
 
   if (!mounted) {
     return (
-      <div className="py-0.5 pl-1 pr-3" aria-hidden>
+      <div className="flex h-7 items-center pl-1 pr-3" aria-hidden>
         <div
           className="h-4 rounded-full bg-muted/40"
           style={{ width: TRACK_WIDTH }}
@@ -59,7 +59,7 @@ export const ThemeToggle = () => {
   const knobOffset = isDark ? TRACK_WIDTH : 0;
 
   return (
-    <div className="py-0.5 pl-1 pr-3">
+    <div className="flex h-7 items-center pl-1 pr-3">
       <button
         type="button"
         role="switch"
@@ -67,7 +67,7 @@ export const ThemeToggle = () => {
         aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
         onClick={toggleTheme}
         className={cn(
-          "relative h-4 shrink-0 overflow-visible rounded-full transition-[background-color,box-shadow] ease-in-out",
+          "relative flex h-4 shrink-0 items-center overflow-visible rounded-full leading-none transition-[background-color,box-shadow] ease-in-out",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50",
           isDark
             ? "bg-[#2a3042] shadow-[inset_3px_3px_8px_rgba(0,0,0,0.45),inset_-2px_-2px_6px_rgba(255,255,255,0.05)]"
