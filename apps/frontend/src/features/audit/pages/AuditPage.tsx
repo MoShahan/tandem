@@ -46,7 +46,7 @@ export const AuditPage = () => {
         </div>
       </div>
 
-      <div className="space-y-6 rounded-2xl border bg-card p-5 shadow-sm md:p-6">
+      <div className="space-y-4">
         <AuditListToolbar
           query={query}
           total={total}
@@ -109,7 +109,7 @@ export const AuditPage = () => {
               onPageSizeChange={(pageSize) =>
                 patchQuery({ pageSize, page: 1 })
               }
-              className="border-t pt-4"
+              className="pt-2"
             />
           </>
         ) : null}

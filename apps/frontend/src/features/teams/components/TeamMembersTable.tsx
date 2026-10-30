@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/table";
 import { UserStatusBadge } from "@/features/users/components/UserStatusBadge";
 import { formatDate } from "@/lib/format";
+import { elevatedTableClassName } from "@/lib/tableSurface";
 import { cn } from "@/lib/utils";
 
 import type {
@@ -103,7 +104,7 @@ export const TeamMembersTable = ({
   onStatusAction,
 }: TeamMembersTableProps) => {
   return (
-    <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+    <div className={elevatedTableClassName}>
       <Table>
         <TableHeader>
           <TableRow className="border-b hover:bg-transparent">

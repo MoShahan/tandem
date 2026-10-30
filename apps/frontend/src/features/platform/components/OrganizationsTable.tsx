@@ -25,6 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDate } from "@/lib/format";
+import { elevatedTableClassName } from "@/lib/tableSurface";
 import { cn } from "@/lib/utils";
 
 import { OrganizationStatusBadge } from "./OrganizationStatusBadge";
@@ -115,7 +116,7 @@ export const OrganizationsTable = ({
   };
 
   return (
-    <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+    <div className={elevatedTableClassName}>
       <Table>
         <TableHeader>
           <TableRow className="border-b hover:bg-transparent">
@@ -125,6 +126,7 @@ export const OrganizationsTable = ({
               sortBy={sortBy}
               sortOrder={sortOrder}
               onSortChange={onSortChange}
+              className="pl-4"
             />
             <SortableHeader
               label="Status"
@@ -159,7 +161,7 @@ export const OrganizationsTable = ({
               className="cursor-pointer transition-colors hover:bg-muted/40"
               onClick={() => openOrganization(organization)}
             >
-              <TableCell className="py-3">
+              <TableCell className="py-3 pl-4">
                 <div className="flex items-center gap-3">
                   <EntityAvatar
                     name={organization.name}

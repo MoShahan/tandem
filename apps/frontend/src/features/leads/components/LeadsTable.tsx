@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDate } from "@/lib/format";
+import { elevatedTableClassName } from "@/lib/tableSurface";
 import { cn } from "@/lib/utils";
 
 import { LeadStatusBadge } from "./LeadStatusBadge";
@@ -91,7 +92,7 @@ export const LeadsTable = ({
   const navigate = useNavigate();
 
   return (
-    <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+    <div className={elevatedTableClassName}>
       <Table>
         <TableHeader>
           <TableRow className="border-b hover:bg-transparent">

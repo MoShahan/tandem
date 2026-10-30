@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { Button } from "@/components/ui/button";
 import { getApiErrorMessage } from "@/lib/apiError";
+import { statusFilterTrackClassName } from "@/lib/tableSurface";
 import { cn } from "@/lib/utils";
 
 import {
@@ -72,7 +73,7 @@ const ReadFilter = ({
   return (
     <div
       ref={containerRef}
-      className="relative flex rounded-lg border bg-background/80 p-1 shadow-sm"
+      className={statusFilterTrackClassName}
     >
       <div
         aria-hidden
@@ -131,7 +132,7 @@ export const NotificationsListToolbar = ({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-muted/30 p-3">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <ReadFilter
           value={query.filter}
           onChange={(filter) => onQueryChange({ filter, page: 1 })}

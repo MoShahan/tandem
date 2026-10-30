@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatWinRate } from "@/lib/format";
+import { elevatedTableClassName } from "@/lib/tableSurface";
 
 import { DashboardWidgetCard } from "./DashboardWidgetCard";
 
@@ -38,7 +39,7 @@ export const PerformanceStatsTable = ({
     {rows.length === 0 ? (
       <p className="text-sm text-muted-foreground">{emptyMessage}</p>
     ) : (
-      <div className="overflow-hidden rounded-xl border border-border/60">
+      <div className={elevatedTableClassName}>
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/40 hover:bg-muted/40">

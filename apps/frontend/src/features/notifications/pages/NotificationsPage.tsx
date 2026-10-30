@@ -9,6 +9,7 @@ import {
   selectCanAccessNotifications,
 } from "@/features/auth/authSelectors";
 import { PAGE_SIZE_OPTIONS, TABLE_SKELETON_ROW_COUNT } from "@/lib/pagination";
+import { elevatedTableClassName } from "@/lib/tableSurface";
 
 import { NotificationItem } from "../components/NotificationItem";
 import { NotificationsListToolbar } from "../components/NotificationsListToolbar";
@@ -75,7 +76,7 @@ export const NotificationsPage = () => {
         </div>
       </div>
 
-      <div className="space-y-6 rounded-2xl border bg-card p-5 shadow-sm md:p-6">
+      <div className="space-y-4">
         <NotificationsListToolbar
           query={query}
           total={total}
@@ -90,7 +91,7 @@ export const NotificationsPage = () => {
         ) : null}
 
         {isLoading ? (
-          <div className="divide-y rounded-xl border">
+          <div className={`divide-y ${elevatedTableClassName}`}>
             {Array.from({ length: TABLE_SKELETON_ROW_COUNT }).map((_, index) => (
               <div key={index} className="p-3">
                 <Skeleton className="mb-2 h-4 w-1/3" />
@@ -130,7 +131,7 @@ export const NotificationsPage = () => {
 
         {!isLoading && notifications.length > 0 && listMeta ? (
           <>
-            <div className="divide-y rounded-xl border">
+            <div className={`divide-y ${elevatedTableClassName}`}>
               {notifications.map((notification) => (
                 <NotificationItem
                   key={notification.id}
@@ -148,7 +149,7 @@ export const NotificationsPage = () => {
               onPageSizeChange={(pageSize) =>
                 patchQuery({ pageSize, page: 1 })
               }
-              className="border-t pt-4"
+              className="pt-2"
             />
           </>
         ) : null}

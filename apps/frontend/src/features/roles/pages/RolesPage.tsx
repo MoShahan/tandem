@@ -9,6 +9,7 @@ import { PERMISSIONS } from "@/constants/permissions";
 import { selectHasPermission } from "@/features/auth/authSelectors";
 import { getApiErrorMessage } from "@/lib/apiError";
 import { TABLE_SKELETON_ROW_COUNT } from "@/lib/pagination";
+import { elevatedTableClassName } from "@/lib/tableSurface";
 
 import { CreateRoleDialog } from "../components/CreateRoleDialog";
 import { DeleteRoleDialog } from "../components/DeleteRoleDialog";
@@ -105,7 +106,7 @@ export const RolesPage = () => {
         ) : null}
       </div>
 
-      <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
+      <div className={elevatedTableClassName}>
         {status === "error" ? (
           <div className="space-y-4 p-6">
             <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">

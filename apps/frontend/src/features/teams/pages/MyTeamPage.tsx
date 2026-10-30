@@ -137,7 +137,7 @@ export const MyTeamPage = () => {
         ) : null}
       </div>
 
-      <div className="space-y-4 rounded-2xl border bg-card p-5 shadow-sm md:p-6">
+      <div className="space-y-4">
         <h2 className="text-lg font-medium">Members</h2>
 
         <TeamMembersListToolbar
@@ -212,7 +212,7 @@ export const MyTeamPage = () => {
               onPageSizeChange={(pageSize) =>
                 patchQuery({ pageSize, page: 1 })
               }
-              className="border-t pt-4"
+              className="pt-2"
             />
           </>
         ) : null}

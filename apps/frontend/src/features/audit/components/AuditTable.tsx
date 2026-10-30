@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { formatDateTime } from "@/lib/format";
+import { elevatedTableClassName } from "@/lib/tableSurface";
 
 import { AuditActionBadge, AuditDetailRow } from "./AuditDetailRow";
 
@@ -27,7 +28,7 @@ export const AuditTable = ({ auditLogs }: AuditTableProps) => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
-    <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
+    <div className={elevatedTableClassName}>
       <Table className="w-max min-w-full">
         <TableHeader>
           <TableRow className="border-b hover:bg-transparent">

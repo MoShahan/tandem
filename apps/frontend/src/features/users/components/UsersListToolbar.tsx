@@ -10,6 +10,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  elevatedSearchClassName,
+  statusFilterTrackClassName,
+} from "@/lib/tableSurface";
 import { cn } from "@/lib/utils";
 
 import type {
@@ -78,7 +82,7 @@ const StatusFilter = ({
   return (
     <div
       ref={containerRef}
-      className="relative flex rounded-lg border bg-background/80 p-1 shadow-sm"
+      className={statusFilterTrackClassName}
     >
       <div
         aria-hidden
@@ -137,7 +141,7 @@ export const UsersListToolbar = ({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-wrap items-center gap-3 rounded-xl border bg-muted/30 p-3">
+      <div className="flex flex-wrap items-center gap-3">
         <div className="relative min-w-0 flex-1 basis-[180px]">
           <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -145,7 +149,8 @@ export const UsersListToolbar = ({
             onChange={(event) => setSearchInput(event.target.value)}
             placeholder="Search users..."
             className={cn(
-              "border-0 bg-background/80 pl-9 shadow-sm",
+              elevatedSearchClassName,
+              "pl-9",
               searchInput ? "pr-9" : undefined,
             )}
           />

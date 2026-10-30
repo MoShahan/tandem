@@ -15,6 +15,7 @@ import {
   AUDIT_ACTION_OPTIONS,
   AUDIT_ENTITY_TYPE_OPTIONS,
 } from "@/features/audit/auditTypes";
+import { elevatedSearchClassName } from "@/lib/tableSurface";
 import { cn } from "@/lib/utils";
 
 import type { OrganizationOption, PlatformAuditListQuery } from "../platformTypes";
@@ -52,7 +53,7 @@ export const PlatformAuditListToolbar = ({
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-nowrap items-center gap-2 rounded-xl border bg-muted/30 p-3">
+      <div className="flex flex-nowrap items-center gap-2">
         <div className="relative w-[30%] min-w-0 shrink-0">
           <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -60,7 +61,8 @@ export const PlatformAuditListToolbar = ({
             onChange={(event) => setSearchInput(event.target.value)}
             placeholder="Search summary or actor..."
             className={cn(
-              "border-0 bg-background/80 pl-9 shadow-sm",
+              elevatedSearchClassName,
+              "pl-9",
               searchInput ? "pr-9" : undefined,
             )}
           />

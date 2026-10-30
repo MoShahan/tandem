@@ -57,7 +57,7 @@ export const PlatformAuditPage = () => {
         </div>
       </div>
 
-      <div className="space-y-6 rounded-2xl border bg-card p-5 shadow-sm md:p-6">
+      <div className="space-y-4">
         <PlatformAuditListToolbar
           query={query}
           total={total}
@@ -122,7 +122,7 @@ export const PlatformAuditPage = () => {
               pageSizeOptions={PAGE_SIZE_OPTIONS}
               onPageChange={(page) => patchQuery({ page })}
               onPageSizeChange={(pageSize) => patchQuery({ pageSize, page: 1 })}
-              className="border-t pt-4"
+              className="pt-2"
             />
           </>
         ) : null}

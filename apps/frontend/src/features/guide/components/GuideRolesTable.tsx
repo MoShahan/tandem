@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { elevatedTableClassName } from "@/lib/tableSurface";
 import { cn } from "@/lib/utils";
 
 import { ROLE_ROWS } from "../content/guideContent";
@@ -24,7 +25,7 @@ const ScopeBadge = ({
 );
 
 export const GuideRolesTable = () => (
-  <div className="overflow-hidden rounded-xl border bg-card">
+  <div className={elevatedTableClassName}>
     <div className="divide-y sm:hidden">
       {ROLE_ROWS.map((row) => (
         <article key={row.role} className="space-y-2 px-4 py-4">
