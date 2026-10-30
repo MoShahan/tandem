@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { TandemLogo } from "@/components/TandemLogo";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { Button } from "@/components/ui/button";
+import { textLinkClassName } from "@/lib/textLink";
 
 import type { ReactNode } from "react";
 
@@ -23,9 +24,6 @@ export const GuidePageLayout = ({ children }: GuidePageLayoutProps) => {
             <span className="truncate text-sm font-medium">Tandem</span>
           </Link>
           <div className="flex items-center gap-2">
-            <Button asChild size="sm" variant="ghost">
-              <Link to="/upcoming">Upcoming</Link>
-            </Button>
             <ThemeToggle />
             <Button asChild size="sm">
               <Link to="/login">Log in</Link>
@@ -40,19 +38,19 @@ export const GuidePageLayout = ({ children }: GuidePageLayoutProps) => {
         <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-center gap-x-4 gap-y-1 px-6 py-6 text-sm text-muted-foreground">
           <Link
             to="/privacy"
-            className="underline underline-offset-4 transition-colors hover:text-foreground"
+            className={textLinkClassName}
           >
             Privacy Policy
           </Link>
           <Link
             to="/terms"
-            className="underline underline-offset-4 transition-colors hover:text-foreground"
+            className={textLinkClassName}
           >
             Terms &amp; Conditions
           </Link>
           <Link
             to="/upcoming"
-            className="underline underline-offset-4 transition-colors hover:text-foreground"
+            className={textLinkClassName}
           >
             Upcoming
           </Link>

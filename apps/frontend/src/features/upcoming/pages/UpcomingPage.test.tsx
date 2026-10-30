@@ -31,6 +31,14 @@ describe("UpcomingPage", () => {
     expect(
       screen.getByRole("heading", { name: "Upcoming features" }),
     ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "How Tandem works" })).toHaveAttribute(
+      "href",
+      "/guide",
+    );
+    expect(screen.getByRole("link", { name: "Upcoming" })).toHaveAttribute(
+      "href",
+      "/upcoming",
+    );
     expect(
       screen.getByRole("heading", { name: "Sending emails" }),
     ).toBeInTheDocument();
